@@ -30,6 +30,9 @@ end
 ops0.useGPU                 = 0; % if you can use an Nvidia GPU in matlab this accelerates registration approx 3 times. You only need the Nvidia drivers installed (not CUDA).
 ops0.fig                    = 1; % turn off figure generation with 0
 % ops0.diameter               = 12; % most important parameter. Set here, or individually per experiment in make_db file
+ops0.runOriginalPipeline    = 1;
+ops0.findTimeCells          = 1;
+ops0.saveData               = 1;
 
 % root paths for files and temporary storage (ideally an SSD drive. my SSD is C:/)
 ops0.RootStorage            = '/Users/ananth/Desktop/Work/dataSuite2P/'; % Suite2P assumes a folder structure, check out README file
@@ -77,7 +80,11 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
         num2str(db(iexp).sessionType) '_' ...
         num2str(db(iexp).session) ...
         ' - Date: ' db(iexp).date])
-    if 0
+    
+    saveDirec = '/Users/ananth/Desktop/Work/Analysis/Imaging/';
+    saveFolder = [saveDirec db(iexp).mouse_name '/' db(iexp).date '/'];
+    
+    if ops0.runOriginalPipeline
         run_pipeline(db(iexp), ops0);
         % deconvolved data into (dat.)cl.dcell, and neuropil subtraction coef
         % commented out for now, back up ~ 10 May
@@ -105,7 +112,6 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
         figureDetails.transparency = 0.5;
     end
     
-    %trialDetails = getTrialDetails(db(iexp));
     trialDetails = getTrialDetails(db(iexp));
     
     % dF/F - custom
@@ -139,10 +145,11 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
             '-djpeg');
     end
     
-    if 1
+    if ops0.findTimeCells
         % Accept only reliable time cells
         % Tuning and time field fidelity
-        trialPhase = 'CS-Trace-US'; % Crucial
+        %trialPhase = 'CS-Trace-US'; % Crucial
+        trialPhase = 'wholeTrial';
         clear window %for sanity
         window = findWindow(trialPhase, trialDetails);
         timeLockedCells = getTimeLockedCellList(dfbf, 5000, 'AOC' ,'Average', 1, window);
@@ -160,7 +167,8 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
             B(timeLockedCells) = nan;
             B(~isnan(B)) = sumTrialReliability(~isnan(B));
             
-            if ops0.fig
+            %if ops0.fig
+            if 0
                 fig11 = figure(11);
                 set(fig11,'Position',[300,300,1200,500])
                 plot(sumTrialReliability, 'b', 'LineWidth', figureDetails.lineWidth)
@@ -183,7 +191,9 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
         end
         
         % Sorting
-        %trialPhase = 'CS-Trace-US';
+        trialPhase = 'wholeTrial';
+        clear window %for sanity
+        window = findWindow(trialPhase, trialDetails);
         dfbf_timeLockedCells = dfbf(timeLockedCells,:,:);
         dfbf_2D_timeLockedCells = dfbf_2D(timeLockedCells,:,:);
         
@@ -196,12 +206,13 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
             
             if ops0.fig
                 % Sorting based Sequences - plotting
-                trialPhase = 'CS-Trace-US'; % NOTE: this update to "trialPhase" is only for plots
-                clear window %for sanity
-                window = findWindow(trialPhase, trialDetails);
+                %trialPhase = 'CS-Trace-US'; % NOTE: this update to "trialPhase" is only for plots
+                %trialPhase = 'wholeTrial';
+                %clear window %for sanity
+                %window = findWindow(trialPhase, trialDetails);
                 
-                fig5 = figure(7);
-                set(fig5,'Position', [700, 700, 1200, 500]);
+                fig7 = figure(7);
+                set(fig7,'Position', [700, 700, 1200, 500]);
                 subFig1 = subplot(1,2,1);
                 %plot unsorted data
                 plotSequences(db(iexp), dfbf_timeLockedCells(:,:,window), trialPhase, 'Frames', 'Unsorted Cells', figureDetails, 1)
@@ -222,11 +233,28 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
                     '-djpeg');
             end
         end
+        
+        % Data Saving for Custom section
+        if ops0.saveData
+            disp('Saving data ...')
+            if ~isdir(saveFolder)
+                mkdir(saveFolder);
+            end
+            
+            save([saveFolder db(iexp).mouse_name '_' db(iexp).date '.mat' ], ...
+                'window', 'timeLockedCells', ...
+                'trialReliability', 'finalTimeCellList', ...
+                'dfbf_timeLockedCells', 'dfbf_2D_timeLockedCells',...
+                'dfbf_sorted_timeCells', 'dfbf_2D_sorted_timeCells')
+            
+            disp('... done!')
+        end
+        
+    else
+        myData = load([saveFolder db(iexp).mouse_name '_' db(iexp).date '.mat' ]);
     end
 end
 %toc
-%% Data Saving for Custom section
-
 %%
 disp('All done!')
 beep

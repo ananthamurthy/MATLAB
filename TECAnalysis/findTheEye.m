@@ -13,12 +13,12 @@ imageProcessDirec = '/Users/ananth/Desktop/Work/Analysis/Behaviour/ImageProcess/
 %% Operations
 saveData = 1;
 loadData = 0;
-playVideo = 1;
+playVideo = 0;
 
 %% Dataset details
-mice = 22;
-sessionType = 8;
-nSessions = 6;
+mice = 25;
+sessionType = 5;
+nSessions = 7;
 
 nTrials = 1; %default is 1
 startSession = nSessions;
@@ -29,14 +29,14 @@ startFrame = 1;
 %samplingRate = 100; % in Frames Per Second (FPS)
 %trialDuration = 1.5; % in seconds
 %nFrames = floor(samplingRate*trialDuration); %per trial
-
-if sessionType == 6
-    nFrames = 330; %per trial;
-elseif sessionType == 8
-    nFrames = 370; %per trial;
-else
-    nFrames = 330;
-end
+nFrames = 313;
+% if sessionType == 6
+%     nFrames = 330; %per trial;
+% elseif sessionType == 8
+%     nFrames = 370; %per trial;
+% else
+%     nFrames = 330;
+% end
 
 %% Directories
 saveDirec = '/Users/ananth/Desktop/Work/Analysis/Behaviour/ImageProcess/';
@@ -67,7 +67,7 @@ for mouse = 1:length(mice)
             percentile = 65;
             % Crop parameters - please change to requirement
             xmin1 = 220;
-            ymin1 = 60;
+            ymin1 = 25;
             width1 = 200;
             height1 = 150;
             crop = [xmin1 ymin1 width1 height1]; %[xmin ymin width height] of refImage

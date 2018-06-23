@@ -17,23 +17,24 @@ plotFigures = 1;
 playVideo = 0;
 
 %% Dataset details
-mice = [17 18 19 20 21 22];
-sessionType = 8;
+mice = [25];
+sessionType = 5;
 nSessions = 6;
 nTrials = 60; %default is 60
-startSession = nSessions; %single sessions
-%startSession = 1;
+%startSession = nSessions; %single sessions
+startSession = 1;
 startTrial = 1;
 startFrame = 1;
 
 % Video details
-if sessionType == 6
-    nFrames = 330; %per trial;
-elseif sessionType == 8
-    nFrames = 370; %per trial;
-else
-    nFrames = 330;
-end
+nFrames = 313;
+% if sessionType == 6
+%     nFrames = 330; %per trial;
+% elseif sessionType == 8
+%     nFrames = 370; %per trial;
+% else
+%     nFrames = 330;
+% end
 
 %% Directories
 imageProcessDirec = '/Users/ananth/Desktop/Work/Analysis/Behaviour/ImageProcess/';
@@ -162,12 +163,12 @@ for mouse = 1:length(mice)
                         puffUS(trial,frame)= str2double(sprintf(dataLine(commai(4)+1:commai(5)-1),'%s'));
                         %tone(trial,frame) = str2double(sprintf(dataLine(commai(5)+1:commai(6)-1),'%s'));
                         ledCS(trial,frame) = str2double(sprintf(dataLine(commai(6)+1:commai(7)-1),'%s'));
-                        motion1(trial,frame) = str2double(sprintf(dataLine(commai(7)+1:commai(8)-1),'%s'));
-                        motion2(trial,frame) = str2double(sprintf(dataLine(commai(8)+1:commai(9)-1),'%s'));
+                        %motion1(trial,frame) = str2double(sprintf(dataLine(commai(7)+1:commai(8)-1),'%s'));
+                        %motion2(trial,frame) = str2double(sprintf(dataLine(commai(8)+1:commai(9)-1),'%s'));
                         camera(trial,frame) = str2double(sprintf(dataLine(commai(9)+1:commai(10)-1),'%s'));
                         microscope(trial,frame) = str2double(sprintf(dataLine(commai(10)+1:commai(11)-1),'%s'));
-                        speed(trial,frame) = str2double(sprintf(dataLine(commai(14)+1:commai(15)-1),'%s'));
-                        direction(trial,frame) = str2double(sprintf(dataLine(commai(15)+1:end),'%s'));
+                        %speed(trial,frame) = str2double(sprintf(dataLine(commai(14)+1:commai(15)-1),'%s'));
+                        %direction(trial,frame) = str2double(sprintf(dataLine(commai(15)+1:end),'%s'));
                     end
                     
                     if playVideo == 1
