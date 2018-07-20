@@ -9,17 +9,17 @@ clear
 addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions'))
 
 %% Operations (0 == Don't Perform; 1 == Perform)
-saveData = 1;
-doFECAnalysis = 1;
-smoothenStimuli = 1;
-alignFrames = 1; %Turn off if saved data is already aligned.
-plotFigures = 1;
+saveData = 0;
+doFECAnalysis = 0;
+smoothenStimuli = 0;
+alignFrames = 0; %Turn off if saved data is already aligned.
+plotFigures = 0;
 playVideo = 0;
 
 %% Dataset details
-mice = [25];
+mice = [26];
 sessionType = 5;
-nSessions = 6;
+nSessions = 4;
 nTrials = 60; %default is 60
 %startSession = nSessions; %single sessions
 startSession = 1;
@@ -38,8 +38,8 @@ nFrames = 313;
 
 %% Directories
 imageProcessDirec = '/Users/ananth/Desktop/Work/Analysis/Behaviour/ImageProcess/';
-%rawDirec = '/Users/ananth/Desktop/Work/Behaviour/DATA/';
-rawDirec = '/Volumes/ananthamurthy/EyeBlinkBehaviour/';
+rawDirec = '/Users/ananth/Desktop/Work/Behaviour/DATA/';
+%rawDirec = '/Volumes/ananthamurthy/EyeBlinkBehaviour/';
 motionDirec = '/Users/ananth/Desktop/Work/Analysis/Behaviour/Motion/';
 performanceDirec = '/Users/ananth/Desktop/Work/Analysis/Behaviour/Performance/';
 saveDirec = '/Users/ananth/Desktop/Work/Analysis/Behaviour/FEC/';
