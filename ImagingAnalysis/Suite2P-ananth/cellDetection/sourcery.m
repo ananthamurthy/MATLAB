@@ -196,7 +196,7 @@ while 1
         fig2 = figure(2);
         set(fig2,'Position', [700, 700, 1200, 500]);
         [~, iclust, lam] = drawClusters(ops, r, mPix, mLam, Ly, Lx, db);
-        
+                
         drawnow
     end
     
@@ -224,6 +224,11 @@ stat = getFootprint(ops, codes, Ucell, mPix, mLam);
 stat = anatomize(ops, mPix, mLam, stat);
 
 [~, iclust, lam] = drawClusters(ops, r, mPix, mLam, Ly, Lx, db);
+
+fig9 = figure(9);
+set(fig9,'Position',[100,100,1800,750])
+[~, iclust, lam] = drawClusters(ops, r, mPix, mLam, Ly, Lx, db);
+markROIs(stat,ops)
 
 model.L     = L;
 model.S     = S;

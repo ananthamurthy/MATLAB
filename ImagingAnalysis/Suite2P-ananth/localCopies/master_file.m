@@ -3,9 +3,9 @@
 %                findWindow.m
 %                plotdFbyF.m
 % These may be found in "CustomFunctions"
-%tic
-%close all
-%clear
+tic
+close all
+clear
 addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions')) % my custom functions
 %% SET ALL DEFAULT OPTIONS HERE
 
@@ -31,7 +31,7 @@ ops0.useGPU                 = 0; % if you can use an Nvidia GPU in matlab this a
 ops0.fig                    = 1; % turn off figure generation with 0
 % ops0.diameter               = 12; % most important parameter. Set here, or individually per experiment in make_db file
 ops0.runOriginalPipeline    = 0;
-ops0.findTimeCells          = 0;
+ops0.findTimeCells          = 1;
 ops0.saveData               = 1;
 
 % root paths for files and temporary storage (ideally an SSD drive. my SSD is C:/)
@@ -136,13 +136,13 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
         set(fig4,'Position',[300,300,1200,500])
         %subFig1 = subplot(2,1,1);
         %plot unsorted data
-        plotdFbyF(db(iexp), dfbf_2D, trialDetails, 'Frames', 'Unsorted Cells', figureDetails, 1)
+        plotdFbyF(db(iexp), dfbf_2D, trialDetails, 'Frames', 'Unsorted Cells', figureDetails, 0)
         %subFig2 = subplot(2,1,2);
         %plot sorted data
         %plotdFbyF(db(iexp), dfbf_2D_sorted, trialDetails, 'Frames', 'Sorted Cells', figureDetails, 1)
         colormap('cool')
         
-        print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_allTrials_' ...
+        print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_2D_allTrials_' ...
             db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session)],...
             '-djpeg');
     end
@@ -154,10 +154,13 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
         trialPhase = 'wholeTrial';
         clear window %for sanity
         window = findWindow(trialPhase, trialDetails);
-        timeLockedCells = getTimeLockedCellList(dfbf, 5000, 'AOC' ,'Average', 1, window);
-        %timeLockedCells = getTimeLockedCellList(dfbf, 5000, 'Peak' ,'Minima', 1, window);
+        skipFrames = 116; %Skip frame 116, viz., the CS frame. Use skipFrames = 0 to avoid skipping
+        threshold = 1;
+        [timeLockedCells, reliability] = getTimeLockedCellList(dfbf, 5000, 'CaPSTH' ,'IndividualTrials', threshold, window, skipFrames);
+        %[timeLockedCells, reliability] = getTimeLockedCellList(dfbf, 5000, 'AOC' ,'Average', threshold, window, skipFrames);
+        %[timeLockedCells, reliability] = getTimeLockedCellList(dfbf, 5000, 'Peak' ,'Minima', threshold, window, skipFrames);
         
-        if 1
+        if 1  %to be modified
             %Trial reliability
             [trialReliability, finalTimeCellList] = getTrialReliability(dfbf, window);
             sumTrialReliability = sum(trialReliability,2);
@@ -169,8 +172,7 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
             B(timeLockedCells) = nan;
             B(~isnan(B)) = sumTrialReliability(~isnan(B));
             
-            %if ops0.fig
-            if 0
+            if ops0.fig
                 fig11 = figure(11);
                 set(fig11,'Position',[300,300,1200,500])
                 plot(sumTrialReliability, 'b', 'LineWidth', figureDetails.lineWidth)
@@ -200,12 +202,11 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
         dfbf_2D_timeLockedCells = dfbf_2D(timeLockedCells,:,:);
         
         if isempty(timeLockedCells)
-            disp('No time cells found')
+            %disp('No time cells found')
         else
-            [sortedCells, peakIndices] = sortData(dfbf_timeLockedCells(:,:,window), 1);
+            [sortedCells, peakIndices] = sortData(dfbf_timeLockedCells(:,:,window), 0);
             dfbf_sorted_timeCells = dfbf_timeLockedCells(sortedCells,:,:);
             dfbf_2D_sorted_timeCells = dfbf_2D_timeLockedCells(sortedCells,:);
-            
         end
         
         % Data Saving for Custom section
@@ -225,47 +226,60 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
             disp('... done!')
         end
         
-    else
-        myData = load([saveFolder db(iexp).mouse_name '_' db(iexp).date '.mat' ]);
-    end
-    
-    if ops0.fig
-        % Sorting based Sequences - plotting
-        %trialPhase = 'CS-Trace-US'; % NOTE: this update to "trialPhase" is only for plots
-        trialPhase = 'wholeTrial';
-        clear window %for sanity
-        window = findWindow(trialPhase, trialDetails);
+        if ops0.fig
+            % Sorting based Sequences - plotting
+            %trialPhase = 'CS-Trace-US'; % NOTE: this update to "trialPhase" is only for plots
+            trialPhase = 'wholeTrial';
+            clear window %for sanity
+            window = findWindow(trialPhase, trialDetails);
+            
+            fig7 = figure(7);
+            set(fig7,'Position', [700, 700, 1200, 500]);
+            subFig1 = subplot(1,2,1);
+            %plot unsorted data
+            if ops0.findTimeCells
+                plotSequences(db(iexp), dfbf_timeLockedCells(:,:,window), trialPhase, 'Frames', 'Unsorted Cells', figureDetails, 0)
+            else
+                plotSequences(db(iexp), myData.dfbf_timeLockedCells(:,:,window), trialPhase, 'Frames', 'Unsorted Cells', figureDetails, 0)
+            end
+            colormap('cool')
+            
+            subFig2 = subplot(1,2,2);
+            %plot sorted data
+            if ops0.findTimeCells
+                plotSequences(db(iexp), dfbf_sorted_timeCells(:,:,window), trialPhase, 'Frames', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 0)
+            else
+                plotSequences(db(iexp), myData.dfbf_sorted_timeCells(:,:,window), trialPhase, 'Frames', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 0)
+            end
+            colormap('cool')
+            
+            print(['/Users/ananth/Desktop/figs/sort/timeCells_allTrialsAvg_sorted_' ...
+                'threshold' num2str(threshold) '_' ...
+                db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session)],...
+                '-djpeg');
+            
+            fig6 = figure(6);
+            clf
+            set(fig6,'Position',[300,300,1200,500])
+            %plot sorted data
+            if ops0.findTimeCells
+                plotdFbyF(db(iexp), dfbf_2D_sorted_timeCells, trialDetails, 'Frames', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 0)
+            else
+                plotdFbyF(db(iexp), myData.dfbf_2D_sorted_timeCells, trialDetails, 'Frames', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 0)
+            end
+            colormap('cool')
+            print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_2D_allTrials_' ...
+                'threshold' num2str(threshold) '_'...
+                db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_sorted'],...
+                '-djpeg');
+        end
         
-        fig7 = figure(7);
-        set(fig7,'Position', [700, 700, 1200, 500]);
-        subFig1 = subplot(1,2,1);
-        %plot unsorted data
-        %plotSequences(db(iexp), dfbf_timeLockedCells(:,:,window), trialPhase, 'Frames', 'Unsorted Cells', figureDetails, 1)
-        plotSequences(db(iexp), myData.dfbf_timeLockedCells(:,:,window), trialPhase, 'Frames', 'Unsorted Cells', figureDetails, 0)
-        colormap('cool')
-        
-        subFig2 = subplot(1,2,2);
-        %plot sorted data
-        %plotSequences(db(iexp), dfbf_sorted_timeCells(:,:,window), trialPhase, 'Frames', 'Sorted Cells', figureDetails, 0)
-        plotSequences(db(iexp), myData.dfbf_sorted_timeCells(:,:,window), trialPhase, 'Frames', 'Sorted Cells', figureDetails, 0)
-        colormap('cool')
-        
-        print(['/Users/ananth/Desktop/figs/sort/timeCells_allTrialsAvg_sorted_' ...
-            db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session)],...
-            '-djpeg');
-        
-        fig6 = figure(6);
-        clf
-        set(fig6,'Position',[300,300,1200,500])
-        %plot sorted data
-        plotdFbyF(db(iexp), myData.dfbf_2D_sorted_timeCells, trialDetails, 'Frames', 'Sorted Cells', figureDetails, 1)
-        colormap('cool')
-        print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_allTrials_' ...
-            db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_sorted'],...
-            '-djpeg');
+        %     else
+        %         %Verify if this case is operational
+        %         myData = load([saveFolder db(iexp).mouse_name '_' db(iexp).date '.mat' ]);
     end
 end
-%toc
+toc
 %%
 disp('All done!')
 beep

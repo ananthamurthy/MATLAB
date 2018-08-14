@@ -64,5 +64,6 @@ for iter = 1:3
     print(['/Users/ananth/Desktop/figs/segmentation/identifiedCells_' ...
         db.mouse_name '_' db.date], ...
         '-djpeg');
+   
 end
 %%
