@@ -7,6 +7,7 @@ tic
 close all
 clear
 addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions')) % my custom functions
+addpath(genpath('/Users/ananth/Desktop/Work/Analysis/Imaging/')) % analysis output
 %% SET ALL DEFAULT OPTIONS HERE
 
 % UPDATE Christmas 2016: number of clusters determined automatically, but
@@ -32,6 +33,7 @@ ops0.fig                    = 1; % turn off figure generation with 0
 % ops0.diameter               = 12; % most important parameter. Set here, or individually per experiment in make_db file
 ops0.runOriginalPipeline    = 0;
 ops0.findTimeCells          = 1;
+ops0.useEventFrequency      = 1;
 ops0.saveData               = 1;
 
 % root paths for files and temporary storage (ideally an SSD drive. my SSD is C:/)
@@ -155,53 +157,49 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
         clear window %for sanity
         window = findWindow(trialPhase, trialDetails);
         skipFrames = 116; %Skip frame 116, viz., the CS frame. Use skipFrames = 0 to avoid skipping
-        threshold = 1;
-        [timeLockedCells, reliability] = getTimeLockedCellList(dfbf, 5000, 'CaPSTH' ,'IndividualTrials', threshold, window, skipFrames);
-        %[timeLockedCells, reliability] = getTimeLockedCellList(dfbf, 5000, 'AOC' ,'Average', threshold, window, skipFrames);
-        %[timeLockedCells, reliability] = getTimeLockedCellList(dfbf, 5000, 'Peak' ,'Minima', threshold, window, skipFrames);
         
-        if 1  %to be modified
-            %Trial reliability
-            [trialReliability, finalTimeCellList] = getTrialReliability(dfbf, window);
-            sumTrialReliability = sum(trialReliability,2);
-            
-            %Only for plotting:
-            A = nan(1,size(dfbf,1));
-            A(timeLockedCells) = sumTrialReliability(timeLockedCells);
-            B = zeros(1,size(dfbf,1));
-            B(timeLockedCells) = nan;
-            B(~isnan(B)) = sumTrialReliability(~isnan(B));
-            
-            if ops0.fig
-                fig11 = figure(11);
-                set(fig11,'Position',[300,300,1200,500])
-                plot(sumTrialReliability, 'b', 'LineWidth', figureDetails.lineWidth)
-                hold on
-                plot(A, 'r*', 'MarkerSize', figureDetails.markerSize)
-                hold on
-                plot(B, 'go', 'MarkerSize', figureDetails.markerSize)
-                title('Time Cell Analysis - Trial Reliability during ISI', ...
-                    'FontSize', figureDetails.fontSize, ...
-                    'FontWeight', 'bold')
-                xlabel('Cells', ...
-                    'FontSize', figureDetails.fontSize, ...
-                    'FontWeight', 'bold')
-                ylabel('Sum of trials with activity', ...
-                    'FontSize', figureDetails.fontSize, ...
-                    'FontWeight', 'bold')
-                set(gca,'FontSize', figureDetails.fontSize-2)
-                legend('All Cells', 'Time Cells', 'Not Time Cells')
-            end
+        if ops0.useEventFrequency
+            threshold = 2; %Here, threshold is in terms of number of trials
+            [cellRastor, cellFrequency, timeLockedCells, importantTrials] = getFreqBasedTimeCellList(dfbf, threshold, skipFrames);
+        else
+            %Estimate based on comparison principle
+            nShuffles = 5000;
+            threshold = 1;
+            timeLockedCells = getTimeLockedCellList(dfbf, nShuffles, 'AOC' ,'Average', threshold, window, skipFrames);
+            %timeLockedCells = getTimeLockedCellList(dfbf, nShuffles, 'Peak' ,'Minima', threshold, window, skipFrames);
+        end
+        
+        %Reliability
+        
+        if ops0.fig
+            fig11 = figure(11);
+            set(fig11,'Position',[300,300,1200,500])
+            plot(sumTrialReliability, 'b', 'LineWidth', figureDetails.lineWidth)
+            hold on
+            plot(A, 'r*', 'MarkerSize', figureDetails.markerSize)
+            hold on
+            plot(B, 'go', 'MarkerSize', figureDetails.markerSize)
+            title('Time Cell Analysis - Trial Reliability during ISI', ...
+                'FontSize', figureDetails.fontSize, ...
+                'FontWeight', 'bold')
+            xlabel('Cells', ...
+                'FontSize', figureDetails.fontSize, ...
+                'FontWeight', 'bold')
+            ylabel('Sum of trials with activity', ...
+                'FontSize', figureDetails.fontSize, ...
+                'FontWeight', 'bold')
+            set(gca,'FontSize', figureDetails.fontSize-2)
+            legend('All Cells', 'Time Cells', 'Not Time Cells')
         end
         
         % Sorting
         trialPhase = 'wholeTrial';
         clear window %for sanity
         window = findWindow(trialPhase, trialDetails);
-        dfbf_timeLockedCells = dfbf(timeLockedCells,:,:);
-        dfbf_2D_timeLockedCells = dfbf_2D(timeLockedCells,:,:);
+        dfbf_timeLockedCells = dfbf(find(timeLockedCells),:,:);
+        dfbf_2D_timeLockedCells = dfbf_2D(find(timeLockedCells),:,:);
         
-        if isempty(timeLockedCells)
+        if isempty(find(timeLockedCells))
             %disp('No time cells found')
         else
             [sortedCells, peakIndices] = sortData(dfbf_timeLockedCells(:,:,window), 0);
@@ -216,12 +214,20 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
                 mkdir(saveFolder);
             end
             
-            save([saveFolder db(iexp).mouse_name '_' db(iexp).date '.mat' ], ...
-                'window', 'timeLockedCells', ...
-                'trialReliability', 'finalTimeCellList', ...
-                'trialPhase', ...
-                'dfbf_timeLockedCells', 'dfbf_2D_timeLockedCells',...
-                'dfbf_sorted_timeCells', 'dfbf_2D_sorted_timeCells')
+            if ops0.useEventFrequency
+                save([saveFolder db(iexp).mouse_name '_' db(iexp).date '.mat' ], ...
+                    'trialPhase', 'window', ...
+                    'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
+                    'dfbf_timeLockedCells', 'dfbf_2D_timeLockedCells',...
+                    'dfbf_sorted_timeCells', 'dfbf_2D_sorted_timeCells')
+            else
+                save([saveFolder db(iexp).mouse_name '_' db(iexp).date '.mat' ], ...
+                    'window', 'timeLockedCells', ...
+                    'trialReliability', 'finalTimeCellList', ...
+                    'trialPhase', ...
+                    'dfbf_timeLockedCells', 'dfbf_2D_timeLockedCells',...
+                    'dfbf_sorted_timeCells', 'dfbf_2D_sorted_timeCells')
+            end
             
             disp('... done!')
         end
