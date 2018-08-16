@@ -73,7 +73,7 @@ end
 
 %Parameters -
 nPCs = 245;
-mu = 0.6; %Check Mukamel et al., 2009 for details; try the range 0.1 to 0.2
+mu = 0.3; %Check Mukamel et al., 2009 for details; try the range 0.1 to 0.2
 %nIC = length(PCuse); %PCuse is generated during code run
 %nIC = nPCs;
 %f0 = movm; %movm is generated during code run
