@@ -3,13 +3,13 @@
 %to populate a list of the same (getTimeLockedCellList.m).
 function timeLockedCells = getTimeLockedCellList(Data, nShuffles, identificationPrinciple, comparisonPrinciple, threshold, window, skipFrames)
 
-fprintf('Total cells: %i', size(Data,1))
+fprintf('Total cells: %i\n', size(Data,1))
 timeLockedCells = zeros(size(Data,1)); %preallocation
 
 disp('Now, checking for time-locked cells ...')
-fprintf('Identification Principle: %s; Comparison Principle: %s', ...
+fprintf('Identification Principle: %s; Comparison Principle: %s\n', ...
     identificationPrinciple, comparisonPrinciple)
-fprintf('Threshold: %s',num2str(threshold))
+fprintf('Threshold: %s\n',num2str(threshold))
 
 if exist ('skipFrames', 'var')
     %NOTE: Data has 3 dimensions - Cells, Trials and Frames
@@ -32,9 +32,9 @@ for cell = 1:size(Data,1)
     end
     
     if (mod(cell, 10) == 0) && cell ~= size(Data,1)
-        fprintf('... %i cells checked ...', cell)
+        fprintf('... %i cells checked ...\n', cell)
     end
 end
-fprintf('%i time-locked cells found!', length(find(timeLockedCells)))
+fprintf('%i time-locked cells found!\n', length(find(timeLockedCells)))
 disp('... done!')
 
