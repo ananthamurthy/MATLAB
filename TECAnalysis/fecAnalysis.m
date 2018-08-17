@@ -13,16 +13,16 @@ saveData = 0;
 doFECAnalysis = 0;
 smoothenStimuli = 0;
 alignFrames = 0; %Turn off if saved data is already aligned.
-plotFigures = 0;
+plotFigures = 1;
 playVideo = 0;
 
 %% Dataset details
 mice = [26];
 sessionType = 5;
-nSessions = 4;
+nSessions = 1;
 nTrials = 60; %default is 60
-%startSession = nSessions; %single sessions
-startSession = 1;
+startSession = nSessions; %single sessions
+%startSession = 1;
 startTrial = 1;
 startFrame = 1;
 
@@ -383,7 +383,7 @@ for mouse = 1:length(mice)
                     'FontSize', fontSize, ...
                     'FontWeight', 'bold')
             elseif sessionType == 5
-                title([mouseName ' S' num2str(session) ' | Spontaneous | FEC '], ...
+                title([mouseName ' S' num2str(session) ' | 450 ms Trace | FEC '], ...
                     'FontSize', fontSize, ...
                     'FontWeight', 'bold')
             else

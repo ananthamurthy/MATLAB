@@ -158,7 +158,9 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
         skipFrames = 116; %Skip frame 116, viz., the CS frame. Use skipFrames = 0 to avoid skipping
         
         if ops0.useEventFrequency
-            threshold = 2; %Here, threshold is in terms of number of trials
+            %Here, threshold is in terms of number of trials
+            %threshold = 2;
+            threshold = 0.1*(size(dfbf,2)); %threshold is 10% of the session trials
             [cellRastor, cellFrequency, timeLockedCells, importantTrials] = getFreqBasedTimeCellList(dfbf, threshold, skipFrames);
         else
             %Estimate based on comparison principle
@@ -168,29 +170,6 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
             %timeLockedCells = getTimeLockedCellList(dfbf, nShuffles, 'Peak' ,'Minima', threshold, window, skipFrames);
         end
         
-        %Reliability
-        
-        if ops0.fig
-            fig11 = figure(11);
-            set(fig11,'Position',[300,300,1200,500])
-            plot(sumTrialReliability, 'b', 'LineWidth', figureDetails.lineWidth)
-            hold on
-            plot(A, 'r*', 'MarkerSize', figureDetails.markerSize)
-            hold on
-            plot(B, 'go', 'MarkerSize', figureDetails.markerSize)
-            title('Time Cell Analysis - Trial Reliability during ISI', ...
-                'FontSize', figureDetails.fontSize, ...
-                'FontWeight', 'bold')
-            xlabel('Cells', ...
-                'FontSize', figureDetails.fontSize, ...
-                'FontWeight', 'bold')
-            ylabel('Sum of trials with activity', ...
-                'FontSize', figureDetails.fontSize, ...
-                'FontWeight', 'bold')
-            set(gca,'FontSize', figureDetails.fontSize-2)
-            legend('All Cells', 'Time Cells', 'Not Time Cells')
-        end
-        
         % Sorting
         trialPhase = 'wholeTrial';
         clear window %for sanity
@@ -198,10 +177,15 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
         dfbf_timeLockedCells = dfbf(find(timeLockedCells),:,:);
         dfbf_2D_timeLockedCells = dfbf_2D(find(timeLockedCells),:,:);
         
-        if isempty(find(timeLockedCells))
+        if isempty(find(timeLockedCells,1))
             %disp('No time cells found')
         else
-            [sortedCells, peakIndices] = sortData(dfbf_timeLockedCells(:,:,window), 0);
+            if ops0.useEventFrequency
+                %sorting only for identified time cells
+                [sortedCells, peakIndices] = sortFrequencyData(cellFrequency(find(timeLockedCells),:));
+            else
+                [sortedCells, peakIndices] = sortData(dfbf_timeLockedCells(:,:,window), 0);
+            end
             dfbf_sorted_timeCells = dfbf_timeLockedCells(sortedCells,:,:);
             dfbf_2D_sorted_timeCells = dfbf_2D_timeLockedCells(sortedCells,:);
         end
@@ -216,6 +200,7 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
             if ops0.useEventFrequency
                 save([saveFolder db(iexp).mouse_name '_' db(iexp).date '.mat' ], ...
                     'trialPhase', 'window', ...
+                    'threshold', ...
                     'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
                     'dfbf_timeLockedCells', 'dfbf_2D_timeLockedCells',...
                     'dfbf_sorted_timeCells', 'dfbf_2D_sorted_timeCells')
