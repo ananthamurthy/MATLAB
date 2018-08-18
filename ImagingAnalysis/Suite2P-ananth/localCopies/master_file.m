@@ -141,7 +141,7 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
         %subFig2 = subplot(2,1,2);
         %plot sorted data
         %plotdFbyF(db(iexp), dfbf_2D_sorted, trialDetails, 'Frames', 'Sorted Cells', figureDetails, 1)
-        colormap('cool')
+        colormap('jet')
         
         print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_2D_allTrials_' ...
             db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session)],...
@@ -218,50 +218,62 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
         
         if ops0.fig
             % Sorting based Sequences - plotting
-            %trialPhase = 'CS-Trace-US'; % NOTE: this update to "trialPhase" is only for plots
-            trialPhase = 'wholeTrial';
+            csFrame = 116;
             clear window %for sanity
-            window = findWindow(trialPhase, trialDetails);
-            
-            fig7 = figure(7);
-            set(fig7,'Position', [700, 700, 1200, 500]);
+            window = 80:160;
+            xTicks = [0 18 36 54 72];
+            %xTicks = 0:4:window(1);
+            %automate x label generation
+            %actualXlabels = ((window(1):4:window(end))-csFrame)*69; %Since the frame rate is 14.5 Hz (each frame = 69 ms)
+            %temp = cellfun(@num2str,num2cell(actualXlabels(:)),'uniformoutput',false);
+            %temp2 = strjoin(arrayfun(@(actualXlabels) num2str(actualXlabels),n,'UniformOutput',false),',');
+            %xLabels = {'-2484', '-2208', '-1932', '-1656', '-1380', '-1104', '-828', '-552', '-276', '0', '276', '552', '828', '1104','1380', '1656', '1932', '2208', '2484', '2760', '3036'};
+            xLabels = {'-2484', '-1242', '0', '1242', '2484' };
+            fig6 = figure(6);
+            set(fig6,'Position', [700, 700, 1200, 500]);
             subFig1 = subplot(1,2,1);
             %plot unsorted data
             if ops0.findTimeCells
-                plotSequences(db(iexp), dfbf_timeLockedCells(:,:,window), trialPhase, 'Frames', 'Unsorted Cells', figureDetails, 0)
+                plotSequences(db(iexp), dfbf_timeLockedCells(:,:,window), trialPhase, 'Time (ms)', 'Unsorted Cells', figureDetails, 0, xTicks, xLabels)
             else
-                plotSequences(db(iexp), myData.dfbf_timeLockedCells(:,:,window), trialPhase, 'Frames', 'Unsorted Cells', figureDetails, 0)
+                plotSequences(db(iexp), myData.dfbf_timeLockedCells(:,:,window), trialPhase, 'Time (ms)', 'Unsorted Cells', figureDetails, 0, xTicks, xLabels)
             end
-            colormap('cool')
+            colormap('jet')
             
             subFig2 = subplot(1,2,2);
             %plot sorted data
             if ops0.findTimeCells
-                plotSequences(db(iexp), dfbf_sorted_timeCells(:,:,window), trialPhase, 'Frames', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 0)
+                plotSequences(db(iexp), dfbf_sorted_timeCells(:,:,window), trialPhase, 'Time (ms)', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 0, xTicks, xLabels)
             else
-                plotSequences(db(iexp), myData.dfbf_sorted_timeCells(:,:,window), trialPhase, 'Frames', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 0)
+                plotSequences(db(iexp), myData.dfbf_sorted_timeCells(:,:,window), trialPhase, 'Time (ms)', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 0, xTicks, xLabels)
             end
-            colormap('cool')
+            colormap('jet')
             
             print(['/Users/ananth/Desktop/figs/sort/timeCells_allTrialsAvg_sorted_' ...
                 'threshold' num2str(threshold) '_' ...
                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session)],...
                 '-djpeg');
             
-            fig6 = figure(6);
+            %trialPhase = 'CS-Trace-US'; % NOTE: this update to "trialPhase" is only for plots
+            trialPhase = 'wholeTrial';
+            clear window %for sanity
+            window = findWindow(trialPhase, trialDetails);
+            
+            fig7 = figure(7);
             clf
-            set(fig6,'Position',[300,300,1200,500])
+            set(fig7,'Position',[300,300,1200,500])
             %plot sorted data
             if ops0.findTimeCells
                 plotdFbyF(db(iexp), dfbf_2D_sorted_timeCells, trialDetails, 'Frames', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 0)
             else
                 plotdFbyF(db(iexp), myData.dfbf_2D_sorted_timeCells, trialDetails, 'Frames', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 0)
             end
-            colormap('cool')
+            colormap('jet')
             print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_2D_allTrials_' ...
                 'threshold' num2str(threshold) '_'...
                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_sorted'],...
                 '-djpeg');
+            
         end
         
         %     else

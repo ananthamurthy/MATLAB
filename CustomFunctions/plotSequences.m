@@ -1,4 +1,5 @@
-function plotSequences(dataset, Data, trialPhase, xtitle, ytitle, figureDetails, normalizeCell2Max)
+function plotSequences(dataset, Data, trialPhase, xtitle, ytitle,...
+    figureDetails, normalizeCell2Max, xTicks, xLabels)
 
 if size(Data,1)>1
     Data_Avg = squeeze(mean(Data,2)); %Averages across trials
@@ -19,8 +20,8 @@ title([dataset.mouse_name ' ST' ...
     num2str(dataset.session) ' | ', ...
     trialPhase ' | Trial-Averaged'])
 colorbar
-colormap('jet')
 z = colorbar;
+caxis([0 100])
 if normalizeCell2Max == 1
     ylabel(z,'Trial-Averaged Normalized dF/F (%)', ...
         'FontSize', figureDetails.fontSize, ...
@@ -30,19 +31,11 @@ else
         'FontSize', figureDetails.fontSize, ...
         'FontWeight', 'bold')
 end
+xticks(xTicks)
+xticklabels(strcat(xLabels))
 xlabel(xtitle, ...
     'FontSize', figureDetails.fontSize,...
     'FontWeight', 'bold')
-if dataset.sessionType == 1
-    set(gca,'XTick', [1,2,3,4,5,6])
-    set(gca,'XTickLabel', {'CS';''; ''; 'Trace'; ''; 'US'})
-    %     set(gca,'XTick', [1,2,3,4,5])
-    %     set(gca,'XTickLabel', {'CS'; ''; 'Trace'; ''; 'US'})
-elseif dataset.sessionType == 3
-    set(gca,'XTick', [1,2,3,4,5,6,7,8,9])
-    set(gca,'XTickLabel', {'CS';''; ''; ''; 'Trace'; ''; ''; ''; 'US'})
-else
-end
 ylabel(ytitle, ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
