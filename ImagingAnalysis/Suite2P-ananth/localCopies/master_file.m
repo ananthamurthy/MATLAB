@@ -31,7 +31,7 @@ end
 ops0.useGPU                 = 0; % if you can use an Nvidia GPU in matlab this accelerates registration approx 3 times. You only need the Nvidia drivers installed (not CUDA).
 ops0.fig                    = 1; % turn off figure generation with 0
 % ops0.diameter               = 12; % most important parameter. Set here, or individually per experiment in make_db file
-ops0.runOriginalPipeline    = 0;
+ops0.runOriginalPipeline    = 1;
 ops0.findTimeCells          = 1;
 ops0.useEventFrequency      = 1;
 ops0.saveData               = 1;
