@@ -103,7 +103,7 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
     end
     
     % Manual curation
-    %new_main
+    new_main
     
     %Custom Section
     if ops0.fig
@@ -115,7 +115,6 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
     
     trialDetails = getTrialDetails(db(iexp));
     
-    % dF/F - custom
     %Fluorescence Data
     load(['Users/ananth/Desktop/Work/Analysis/Imaging/' ...
         db(iexp).mouse_name '/' db(iexp).date '/' num2str(db(iexp).expts) ...
@@ -126,9 +125,10 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
         db(iexp).mouse_name '/' db(iexp).date '/' num2str(db(iexp).expts) ...
         '/regops_' db(iexp).mouse_name '_' db(iexp).date '.mat'])
     
-    [dfbf, baselines, dfbf_2D] = dodFbyF(db(iexp), Fcell{1,1});
-    
-    %Add section to use only significant events
+    %[dfbf, baselines, dfbf_2D] = dodFbyF(db(iexp), Fcell{1,1});
+    w = 1; %for weighted subtraction
+    F = Fcell{1,1} - w * FcellNeu{1,1};
+    [dfbf, baselines, dfbf_2D] = dodFbyF(db(iexp), F);
     
     if ops0.fig
         %Calcium activity from all trials
@@ -202,6 +202,7 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
                     'trialPhase', 'window', ...
                     'threshold', ...
                     'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
+                    'dfbf', 'baselines', 'dfbf_2D', ...
                     'dfbf_timeLockedCells', 'dfbf_2D_timeLockedCells',...
                     'dfbf_sorted_timeCells', 'dfbf_2D_sorted_timeCells')
             else
