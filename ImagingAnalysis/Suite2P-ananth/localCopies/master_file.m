@@ -1,8 +1,8 @@
 tic
 %close all
 clear
-addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions')) % my custom functions
-addpath(genpath('/Users/ananth/Desktop/Work/Analysis/Imaging/')) % analysis output
+%addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions')) % my custom functions
+%addpath(genpath('/Users/ananth/Desktop/Work/Analysis/Imaging/')) % analysis output
 %% SET ALL DEFAULT OPTIONS HERE
 
 % UPDATE Christmas 2016: number of clusters determined automatically, but
