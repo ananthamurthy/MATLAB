@@ -15,7 +15,7 @@ elseif dataset.sessionType == 2 %No Puff
     trialDetails.traceDuration      = 0.2500; %in seconds
 
 elseif dataset.sessionType == 3 %250 ms trace
-    trialDetails.traceDuration      = 0.3500; %in seconds
+    trialDetails.traceDuration      = 0.2500; %in seconds
 
 elseif dataset.sessionType == 4 %350 ms trace
     trialDetails.traceDuration      = 0.3500; %in seconds

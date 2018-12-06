@@ -55,7 +55,7 @@ for iter = 1:3
     fprintf('%d total ROIs, err %4.4f, thresh %4.4f \n', icell, err(iter), Th)
     if ops.fig
         fig3 = figure(3);
-        set(fig3,'Position', [700, 700, 1200, 500]);
+        %set(fig3,'Position', [700, 700, 1200, 500]);
         [~, iclust, lam] = drawClusters(ops, r, mPix, mLam, Ly, Lx, db);
         %title([num2str(icell) ' cells found | Diameter ' num2str(db.diameter)])
         %disp('But somehow, I still get printed, right?')

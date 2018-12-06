@@ -29,11 +29,11 @@ if ops.fig
     H = reshape(H, Ly, Lx);
     rgb_image = hsv2rgb(cat(3, H, Sat, V));
     
-    subFig1 = subplot(1,2,1);
-    imagesc(ops.mimg)
-    title(['Registered image | Scan Amplitude ' db.scanAmplitude])
-    colormap(subFig1,gray)
-    subplot(1,2,2);
+%     subFig1 = subplot(1,2,1);
+%     imagesc(ops.mimg)
+%     title(['Registered image | Scan Amplitude ' db.scanAmplitude])
+%     colormap(subFig1,gray)
+%     subplot(1,2,2);
     imagesc(rgb_image);
     title(['Identified cells | Diameter ' num2str(ops.diameter)])
     axis off

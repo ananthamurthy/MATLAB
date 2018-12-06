@@ -194,7 +194,7 @@ while 1
         axis off
         
         fig2 = figure(2);
-        set(fig2,'Position', [700, 700, 1200, 500]);
+        %set(fig2,'Position', [700, 700, 1200, 500]);
         [~, iclust, lam] = drawClusters(ops, r, mPix, mLam, Ly, Lx, db);
                 
         drawnow
@@ -226,7 +226,7 @@ stat = anatomize(ops, mPix, mLam, stat);
 [~, iclust, lam] = drawClusters(ops, r, mPix, mLam, Ly, Lx, db);
 
 fig9 = figure(9);
-set(fig9,'Position',[100,100,1800,750])
+%set(fig9,'Position',[100,100,1800,750])
 [~, iclust, lam] = drawClusters(ops, r, mPix, mLam, Ly, Lx, db);
 markROIs(stat,ops)
 
