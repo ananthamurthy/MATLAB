@@ -1,8 +1,6 @@
 tic
 %close all
 clear
-%addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions')) % my custom functions
-%addpath(genpath('/Users/ananth/Desktop/Work/Analysis/Imaging/')) % analysis output
 %% SET ALL DEFAULT OPTIONS HERE
 
 % UPDATE Christmas 2016: number of clusters determined automatically, but
@@ -26,10 +24,6 @@ end
 ops0.useGPU                 = 0; % if you can use an Nvidia GPU in matlab this accelerates registration approx 3 times. You only need the Nvidia drivers installed (not CUDA).
 ops0.fig                    = 1; % turn off figure generation with 0
 % ops0.diameter               = 12; % most important parameter. Set here, or individually per experiment in make_db file
-ops0.runOriginalPipeline    = 1;
-ops0.findTimeCells          = 1;
-ops0.useEventFrequency      = 1;
-ops0.saveData               = 1;
 
 % root paths for files and temporary storage (ideally an SSD drive. my SSD is C:/)
 ops0.RootStorage            = '/Users/ananth/Desktop/Work/dataSuite2P/'; % Suite2P assumes a folder structure, check out README file
@@ -76,26 +70,21 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
         db(iexp).sessionType, ...
         db(iexp).session, ...
         db(iexp).date)
+
+    run_pipeline(db(iexp), ops0);
+    % deconvolved data into (dat.)cl.dcell, and neuropil subtraction coef
+    % commented out for now, back up ~ 10 May
+    % add_deconvolution(ops0, db0(iexp));
     
-    saveDirec = '/Users/ananth/Desktop/Work/Analysis/Imaging/';
-    saveFolder = [saveDirec db(iexp).mouse_name '/' db(iexp).date '/'];
-    
-    if ops0.runOriginalPipeline
-        run_pipeline(db(iexp), ops0);
-        % deconvolved data into (dat.)cl.dcell, and neuropil subtraction coef
-        % commented out for now, back up ~ 10 May
-        % add_deconvolution(ops0, db0(iexp));
+    % add red channel information (if it exists)
+    if isfield(db0,'expred') && ~isempty(db0(iexp).expred)
+        ops0.nchannels_red = db0(iexp).nchannels_red;
         
-        % add red channel information (if it exists)
-        if isfield(db0,'expred') && ~isempty(db0(iexp).expred)
-            ops0.nchannels_red = db0(iexp).nchannels_red;
-            
-            run_REDaddon(iexp, db0, ops0) ; % create redcell array
-            DetectRedCells; % fills dat.cl.redcell and dat.cl.notred
-        end
-        %load(sprintf('%s/F_%s_%s_plane%d.mat', ops0.ResultsSavePath, db(iexp).mouse_name, db(iexp).date, db(iexp).nplanes))
-        %disp('Suite2P pipeline complete!')
+        run_REDaddon(iexp, db0, ops0) ; % create redcell array
+        DetectRedCells; % fills dat.cl.redcell and dat.cl.notred
     end
+    %load(sprintf('%s/F_%s_%s_plane%d.mat', ops0.ResultsSavePath, db(iexp).mouse_name, db(iexp).date, db(iexp).nplanes))
+    %disp('Suite2P pipeline complete!')
     
     % Manual curation
     %new_main

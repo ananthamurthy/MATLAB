@@ -8,23 +8,33 @@
 % These may be found in "CustomFunctions"
 
 tic
-disp('Analyzing for Time Cells')
+disp('Analyzing for Time Cells ...')
 close all
 %clear all
 clear
 
-addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions')) % my custom functions
+%addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions')) % my custom functions
 addpath(genpath('/Users/ananth/Desktop/Work/Analysis/Imaging/')) % analysis output
+
+%% Operations
+ops0.fig                    = 1;
+ops0.findTimeCells          = 1;
+ops0.useEventFrequency      = 1;
+ops0.saveData               = 1;
 
 %Identify Dataset
 make_db; % RUN YOUR OWN MAKE_DB SCRIPT TO RUN HERE
 
+%% Main script
 for iexp = 1:length(db)
     
     fprintf('Analyzing %s_%i_%i - Date: %s\n', db(iexp).mouse_name, ...
         db(iexp).sessionType, ...
         db(iexp).session, ...
         db(iexp).date)
+    
+    saveDirec = '/Users/ananth/Desktop/Work/Analysis/Imaging/';
+    saveFolder = [saveDirec db(iexp).mouse_name '/' db(iexp).date '/'];
     
     %Load Fluorescence Data
     load(['Users/ananth/Desktop/Work/Analysis/Imaging/' ...
