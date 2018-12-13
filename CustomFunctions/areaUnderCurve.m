@@ -1,5 +1,6 @@
 % AUTHOR - Kambadur Ananthamurthy
 % Area Under the Curve
+% Not tested for a while
 
 function [auc_csPlus, auc_csPlusProbe, auc_csMinus] = areaUnderCurve(csPlusTrials, csPlusProbeTrials, csMinusTrials, baselineCorrection, criticalWindow)
 

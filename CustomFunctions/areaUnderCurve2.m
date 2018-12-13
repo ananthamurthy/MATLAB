@@ -1,7 +1,8 @@
 % AUTHOR - Kambadur Ananthamurthy
 % Area Under the Curve of specific data
+% Not tested for a while
 
-function [X, Y, Z] = areaUnderCurve2(csPlusTrials, csPlusProbeTrials, csMinusTrials, sessionType, spontaneousWindow, criticalWindow, blinkThreshold_csPlus, blinkThreshold_csMinus);
+function [X, Y, Z] = areaUnderCurve2(csPlusTrials, csPlusProbeTrials, csMinusTrials, sessionType, spontaneousWindow, criticalWindow, blinkThreshold_csPlus, blinkThreshold_csMinus)
 
 if str2double(sessionType) <=5
     %No-Puff Control

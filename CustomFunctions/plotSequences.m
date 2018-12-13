@@ -1,5 +1,5 @@
 function plotSequences(dataset, Data, trialPhase, xtitle, ytitle,...
-    figureDetails, normalizeCell2Max, xTicks, xLabels)
+    figureDetails, normalizeCell2Max)
 
 if size(Data,1)>1
     Data_Avg = squeeze(mean(Data,2)); %Averages across trials
@@ -31,8 +31,9 @@ else
         'FontSize', figureDetails.fontSize, ...
         'FontWeight', 'bold')
 end
-xticks(xTicks)
-xticklabels(strcat(xLabels))
+%xticks(xTicks)
+%xticklabels(strcat(xLabels))
+%xticklabels(xLabels)
 xlabel(xtitle, ...
     'FontSize', figureDetails.fontSize,...
     'FontWeight', 'bold')

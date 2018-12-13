@@ -1,8 +1,8 @@
+% SET ALL DEFAULT OPTIONS HERE
+
 tic
 %close all
 clear
-%% SET ALL DEFAULT OPTIONS HERE
-
 % UPDATE Christmas 2016: number of clusters determined automatically, but
 % do specify the "diameter" of an average cell for best results. You can do this with either
 % db(iexp).diameter, or ops0.diameter
@@ -35,7 +35,7 @@ ops0.RegFileTiffLocation    = []; %'D:/DATA/'; % leave empty to NOT save registe
 
 % registration options
 ops0.doRegistration         = 1; % skip (0) if data is already registered
-ops0.showTargetRegistration = 0; % shows the image targets for all planes to be registered
+ops0.showTargetRegistration = 1; % shows the image targets for all planes to be registered
 ops0.PhaseCorrelation       = 1; % set to 0 for non-whitened cross-correlation
 ops0.SubPixel               = Inf; % 2 is alignment by 0.5 pixel, Inf is the exact number from phase correlation
 ops0.NimgFirstRegistration  = 500; % number of images to include in the first registration pass
@@ -87,7 +87,7 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
     %disp('Suite2P pipeline complete!')
     
     % Manual curation
-    %new_main
+    new_main
 end
 toc
 %%

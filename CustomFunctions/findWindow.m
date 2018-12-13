@@ -4,10 +4,12 @@ function window = findWindow(trialPhase, trialDetails)
 
 if strcmp(trialPhase, 'Pre')
     On = 1;
-    Off = floor(trialDetails.preDuration * trialDetails.frameRate);
+    Off = floor(trialDetails.preDuration ...
+        * trialDetails.frameRate);
     
 elseif strcmp(trialPhase,'CS')
-    On = floor(trialDetails.preDuration * trialDetails.frameRate) + 1;
+    On = floor(trialDetails.preDuration ...
+        * trialDetails.frameRate) + 1;
     Off = On + floor(trialDetails.csDuration * trialDetails.frameRate);
     
 elseif strcmp(trialPhase, 'Trace')
@@ -31,17 +33,17 @@ elseif strcmp(trialPhase, 'Post')
     Off = On + floor(trialDetails.postDuration * trialDetails.frameRate);
     
 elseif strcmp(trialPhase, 'CS-Trace-US')
-    On = floor((trialDetails.preDuration * trialDetails.frameRate) + 1);
+    On = floor((trialDetails.preDuration ...
+        * trialDetails.frameRate) + 1);
     Off = On + floor((trialDetails.csDuration + ...
         trialDetails.traceDuration + ...
         trialDetails.usDuration) ...
         * trialDetails.frameRate) + 1;
     
 elseif strcmp(trialPhase, 'Trace-US')
-    On = floor(((trialDetails.preDuration + trialDetails.csDuration + 1) ...
+    On = floor(((trialDetails.preDuration + trialDetails.csDuration) ...
         * trialDetails.frameRate) + 1);
-    Off = On + floor((trialDetails.traceDuration + ...
-        trialDetails.usDuration) ...
+    Off = On + floor((trialDetails.traceDuration + trialDetails.usDuration) ...
         * trialDetails.frameRate) + 1;
     
 elseif strcmp(trialPhase, 'wholeTrial')
