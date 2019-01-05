@@ -9,7 +9,7 @@ fprintf('Threshold: %i trials\n', threshold)
 %NOTE: 'Data' is organized as cells, trials, frames
 %A = zeros(1,size(Data,3));
 cellRastor = zeros(size(Data));
-importantTrials = nan(size(Data,1),size(Data,2));
+importantTrials = zeros(size(Data,1),size(Data,2));
 cellFrequency = zeros(size(Data,1),size(Data,3));
 timeLockedCells = zeros(size(Data,1),1); %Important to initialize with "0"
 
