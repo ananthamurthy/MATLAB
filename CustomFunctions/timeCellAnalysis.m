@@ -17,7 +17,7 @@ clear
 addpath(genpath('/Users/ananth/Desktop/Work/Analysis/Imaging')) % analysis output
 
 %% Operations
-ops0.multiDayAnalysis       = 1;
+ops0.multiDayAnalysis       = 0;
 ops0.fig                    = 1;
 ops0.findTimeCells          = 1;
 ops0.useEventFrequency      = 1;
@@ -99,7 +99,7 @@ for iexp = 1:length(db)
     end
     
     if ops0.findTimeCells
-        %Significant Only Traces
+        %Significant-Only Traces
         dfbf_sigOnly = findSigOnly(dfbf);
         
         % Tuning and time field fidelity
@@ -119,6 +119,8 @@ for iexp = 1:length(db)
             threshold = x*(size(dfbf,2)); %threshold is x% of the session trials
             %             window = 116:124;
             %             window = findWindow('Trace-US', trialDetails);
+            %NOTE: Make sure to use significant-only traces else a second
+            %threshold needs to be passed as an argument
             [cellRastor, cellFrequency, timeLockedCells, importantTrials] = ...
                 getFreqBasedTimeCellList(dfbf_sigOnly(:,:,window), threshold, skipFrames);
             

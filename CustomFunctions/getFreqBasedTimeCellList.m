@@ -23,7 +23,7 @@ for cell = 1:size(Data,1)
         end
         
         for frame = 1:size(Data,3)
-            if Data(cell, trial, frame) > 0
+            if Data(cell, trial, frame) > 0 %NOTE: the data should be significant-only
                 cellRastor(cell, trial, frame) = 1; % Rastor plot
                 cellFrequency(cell,frame) = cellFrequency(cell,frame)+1; %Frequency matrix
             end
