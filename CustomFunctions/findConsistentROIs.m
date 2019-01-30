@@ -6,6 +6,7 @@ date1 = '20171003';
 date2 = '20171004';
 regDataset = sprintf('Users/ananth/Desktop/Work/Analysis/Imaging/%s/%s_%s_plane1_%s_%s_plane1_reg.mat', ...
     animal, animal, date1, animal, date2);
+disp(regDataset)
 
 %Daisy-chain
 [overlaps] = cat_overlap();

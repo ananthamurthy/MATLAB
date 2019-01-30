@@ -17,7 +17,7 @@ clear
 addpath(genpath('/Users/ananth/Desktop/Work/Analysis/Imaging')) % analysis output
 
 %% Operations
-ops0.multiDayAnalysis       = 0;
+ops0.multiDayAnalysis       = 0; %For chronic tracking experiments; usually set to 0
 ops0.fig                    = 1;
 ops0.findTimeCells          = 1;
 ops0.useEventFrequency      = 1;
@@ -48,7 +48,7 @@ for iexp = 1:length(db)
         '/regops_' db(iexp).mouse_name '_' db(iexp).date '.mat'])
     
     if ops0.fig
-        figureDetails.fontSize = 16;
+        figureDetails.fontSize = 20;
         figureDetails.lineWidth = 2;
         figureDetails.markerSize = 10;
         figureDetails.transparency = 0.5;
@@ -63,7 +63,7 @@ for iexp = 1:length(db)
         else
             newIndices = overlaps.rois.idcs(:,2);
         end
-        myData = zeros(size(newIndices,1),size(Fcell{1,1},2));
+        %myData = zeros(size(newIndices,1),size(Fcell{1,1},2));
         %myData = fetchData;
         myData = Fcell{1,1}(newIndices,:);
     else
@@ -86,7 +86,7 @@ for iexp = 1:length(db)
         %subFig2 = subplot(2,1,2);
         %plot sorted data
         %plotdFbyF(db(iexp), dfbf_2D_sorted, trialDetails, 'Frames', 'Sorted Cells', figureDetails, 1)
-        colormap('cool')
+        colormap('hot')
         if ops0.multiDayAnalysis
             print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_2D_allTrials_' ...
                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_multiDay'],...
@@ -249,20 +249,20 @@ for iexp = 1:length(db)
             subFig1 = subplot(1,2,1);
             %plot unsorted data
             if ops0.findTimeCells
-                plotSequences(db(iexp), dfbf_timeLockedCells(:,:,window), trialPhase, 'Time (ms)', 'Unsorted Cells', figureDetails, 0)
+                plotSequences(db(iexp), dfbf_timeLockedCells(:,:,window), trialPhase, 'Frames', 'Unsorted Cells', figureDetails, 0)
             else
-                plotSequences(db(iexp), myData.dfbf_timeLockedCells(:,:,window), trialPhase, 'Time (ms)', 'Unsorted Cells', figureDetails, 0)
+                plotSequences(db(iexp), myData.dfbf_timeLockedCells(:,:,window), trialPhase, 'Frames', 'Unsorted Cells', figureDetails, 0)
             end
-            colormap('cool')
+            colormap('hot')
             
             subFig2 = subplot(1,2,2);
             %plot sorted data
             if ops0.findTimeCells
-                plotSequences(db(iexp), dfbf_sorted_timeCells(:,:,window), trialPhase, 'Time (ms)', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 0)
+                plotSequences(db(iexp), dfbf_sorted_timeCells(:,:,window), trialPhase, 'Frames', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 0)
             else
-                plotSequences(db(iexp), myData.dfbf_sorted_timeCells(:,:,window), trialPhase, 'Time (ms)', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 0)
+                plotSequences(db(iexp), myData.dfbf_sorted_timeCells(:,:,window), trialPhase, 'Frames', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 0)
             end
-            colormap('cool')
+            colormap('hot')
             
             if ops0.multiDayAnalysis
                 print(['/Users/ananth/Desktop/figs/sort/timeCells_allTrialsAvg_sorted_' ...
@@ -289,7 +289,7 @@ for iexp = 1:length(db)
             else
                 plotdFbyF(db(iexp), myData.dfbf_2D_sorted_timeCells, trialDetails, 'Frames', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 0)
             end
-            colormap('cool')
+            colormap('hot')
             
             if ops0.multiDayAnalysis
                 print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_2D_allTrials_' ...

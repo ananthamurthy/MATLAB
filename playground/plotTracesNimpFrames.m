@@ -18,7 +18,18 @@
 % colormap('cool')
 % %keyboard
 % %end
-
+Data = dfbf_sigOnly;
+importantFrames = zeros(size(Data));
+importantFrames(:,:,skipFrames) = [];
+for cell = 1:size(importantFrames,1)
+    for trial = 1:size(importantFrames,2)
+        for frame = 1:size(importantFrames,3)
+            if Data(cell, trial, frame) > 0
+                importantFrames(cell, trial, frame) = 1;
+            end
+        end
+    end
+end
 %for cell = 1:size(find(timeLockedCells),1)
 for cell = 1:10
     subplot(3,10,cell)
@@ -27,7 +38,7 @@ for cell = 1:10
     xlabel('Frames')
     ylabel('Trials')
     %colorbar
-    colormap('cool')
+    colormap('gray')
 end
 
 for cell = 11:20
@@ -37,7 +48,7 @@ for cell = 11:20
     xlabel('Frames')
     ylabel('Trials')
     %colorbar
-    colormap('cool')
+    colormap('gray')
 end
 
 for cell = 21:30
@@ -47,5 +58,5 @@ for cell = 21:30
     xlabel('Frames')
     ylabel('Trials')
     %colorbar
-    colormap('cool')
+    colormap('gray')
 end

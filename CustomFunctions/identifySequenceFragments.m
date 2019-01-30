@@ -6,15 +6,11 @@
 function [importantFrames] = identifySequenceFragments(Data, skipFrames)
 %Preallocation
 importantFrames = zeros(size(Data));
-for cell = 1:size(Data,1)
-    for trial = 1:size(Data,2)
-        for frame = 1:size(Data,3)
-            if frame == skipFrames
-                %skip
-            elseif Data(cell, trial, frame) > 0 %NOTE: the data should be significant-only
-                importantFrames(cell, trial, frame) = 1;
-            else
-            end
+importantFrames(:,:,skipFrames) = [];
+for cell = 1:size(importantFrames,1)
+    for trial = 1:size(importantFrames,2)
+        for frame = 1:size(importantFrames,3)
+            importantFrames(cell, trial, frame) = 1;
         end
     end
 end

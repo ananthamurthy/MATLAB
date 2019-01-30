@@ -70,7 +70,7 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
         db(iexp).sessionType, ...
         db(iexp).session, ...
         db(iexp).date)
-
+    
     run_pipeline(db(iexp), ops0);
     % deconvolved data into (dat.)cl.dcell, and neuropil subtraction coef
     % commented out for now, back up ~ 10 May
@@ -85,11 +85,10 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
     end
     %load(sprintf('%s/F_%s_%s_plane%d.mat', ops0.ResultsSavePath, db(iexp).mouse_name, db(iexp).date, db(iexp).nplanes))
     %disp('Suite2P pipeline complete!')
-    
-    % Manual curation
-    new_main
 end
 toc
+% Manual curation
+new_main
 %%
 disp('Done!')
 beep
