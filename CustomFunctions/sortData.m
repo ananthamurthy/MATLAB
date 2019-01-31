@@ -1,4 +1,5 @@
-function [sortedCells, peakIndices] = sortData(Data, normalizeCell2Maz)
+% AUTHOR - Kambadur Ananthmurthy
+function [sortedCells, peakIndices] = sortData(Data, normalizeCell2Max)
 
 disp('Sorting data ...')
 %sortedCells = zeros(size(Data,1),1); %preallocation

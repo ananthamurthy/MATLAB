@@ -1,9 +1,9 @@
 % AUTHOR - Kambadur Ananthmurthy
 function [cellRastor, cellFrequency, timeLockedCells, importantTrials] ...
-    = getFreqBasedTimeCellList(Data, threshold, skipFrames)
+    = getPSTHBasedTimeCellList(Data, threshold, skipFrames)
 %Develop Ca activity Frequency using threshold
 
-fprintf(['Total cells: %i\n', size(Data,1)])
+fprintf(['Total cells: %i\n' size(Data,1)])
 disp('Now, checking for time-locked cells based on Event Frequency ...')
 fprintf('Threshold: %i trials\n', threshold)
 

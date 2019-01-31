@@ -1,3 +1,4 @@
+% AUTHOR - Kambadur Ananthmurthy
 function plotdFbyF(dataset, Data, trialDetails, xtitle, ytitle, figureDetails, normalizeCell2Max)
 
 if normalizeCell2Max
