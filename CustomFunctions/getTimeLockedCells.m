@@ -9,7 +9,7 @@ Here I use Temporal Information (TI), based on Mau et al (Eichenbaum) 2018
 %NOTE: 'threshold' is in percentage. Mau et al (Eichenbaum), 2018 uses 99%
 
 %preallocation
-timeLockedCells = zeros(size(PSTH_3D,1));
+timeLockedCells = zeros(size(PSTH_3D,1),1);
 TI = zeros(size(PSTH_3D,1),1);
 shuffledPSTH_3D = zeros(size(PSTH_3D));
 
@@ -39,12 +39,14 @@ for cell = 1:size(PSTH_3D,1)
         
         if comparison >= threshold
             timeLockedCells(cell) = 1;
+        else
+            timeLockedCells(cell) = 0;
         end
     
     if (mod(cell, 10) == 0) && cell ~= size(PSTH_3D,1)
         fprintf('... %i cells checked ...\n', cell)
     end
 end
-fprintf('Currently, %i time-locked cells found\n', length(find(timeLockedCells)))
+%fprintf('Finally, %i time-locked cells found\n', length(find(timeLockedCells)))
 disp('... done!')
 

@@ -5,8 +5,16 @@ function [PSTH, PSTH_3D] = getPSTH(Data, delta, skipFrames)
 fprintf('Now, developing PSTH for %i cells ...\n', size(Data,1))
 %disp('Now, developing PSTH ...')
 
+%nFrames = size(Data,3);
+r = rem(size(Data,3),delta);
+if r == 0
+    nFrames = size(Data,3);
+else
+    Data(:,:,1:(end-(r-1)):end) = []; %get rid of last r frames
+    nFrames = size(Data,3);
+end
 %NOTE: 'Data' is organized as cells, trials, frames
-nbins = size(Data,3)/delta;
+nbins = nFrames/delta;
 PSTH_3D = zeros(size(Data,1), size(Data,2), nbins);
 PSTH = zeros(size(Data,1), nbins);
 
@@ -22,7 +30,7 @@ for cell = 1:size(Data,1)
         
         bin = 1;
         trialAUCs = zeros(nbins,1);
-        for frame = 1:delta:size(Data,3)
+        for frame = 1:delta:nFrames
             %fprintf('Frame: %i\n', frame)
             windowAUC = trapz(Data(cell, trial, frame:(frame+delta-1)));
             trialAUCs(bin) = windowAUC;

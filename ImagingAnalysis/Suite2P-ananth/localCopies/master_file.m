@@ -1,7 +1,7 @@
 % SET ALL DEFAULT OPTIONS HERE
 
 tic
-%close all
+close all
 clear
 % UPDATE Christmas 2016: number of clusters determined automatically, but
 % do specify the "diameter" of an average cell for best results. You can do this with either
@@ -88,7 +88,7 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
 end
 toc
 % Manual curation
-new_main
+%new_main
 %%
 disp('Done!')
 beep

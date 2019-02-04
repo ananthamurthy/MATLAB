@@ -1,26 +1,26 @@
 % AUTHOR - Kambadur Ananthmurthy
 
-function [datasetA, datasetB] = compileChronicData(mouseName, dateA, dateB, sessionA, sessionB, sessionTypeA, sessionTypeB)
+function [datasetA, datasetB] = compileChronicData(mouseName, dateA, dateB, sessionA, sessionB, sessionTypeA, sessionTypeB, nFrames, trialDuration)
 
 datasetA.mouse_name = mouseName;
 datasetA.date = dateA;
 datasetA.sessionType   = sessionTypeA;
 datasetA.session       = sessionA;
-datasetA.nFrames       = 246;
-datasetA.trialDuration = 17; %in seconds
+datasetA.nFrames       = nFrames;
+datasetA.trialDuration = trialDuration; %in seconds
 datasetA.trialDetails = getTrialDetails(datasetA);
 
 datasetB.mouse_name = mouseName;
 datasetB.date = dateB;
 datasetB.sessionType   = sessionTypeB;
 datasetB.session       = sessionB;
-datasetB.nFrames       = 246;
-datasetB.trialDuration = 17; %in seconds
+datasetB.nFrames       = nFrames;
+datasetB.trialDuration = trialDuration; %in seconds
 datasetB.trialDetails = getTrialDetails(datasetB);
 
 regDataset = sprintf('Users/ananth/Desktop/Work/Analysis/Imaging/%s/%s_%s_plane1_%s_%s_plane1_reg.mat', ...
     mouseName, mouseName, datasetA.date, mouseName, datasetB.date);
-fprintf(regDataset)
+%fprintf(regDataset)
 
 %Daisy-chain
 [overlaps] = cat_overlap();

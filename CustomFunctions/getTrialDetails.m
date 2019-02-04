@@ -28,6 +28,13 @@ elseif dataset.sessionType == 6 %550 ms trace
 
 elseif dataset.sessionType == 7 %650 ms trace
     trialDetails.traceDuration      = 0.0000; %in seconds
+
+elseif dataset.sessionType == 9 %250 ms trace - legacy
+    trialDetails.traceDuration      = 0.2500; %in seconds
+
+elseif dataset.sessionType == 11 %250 ms trace - legacy
+    trialDetails.traceDuration      = 0.4500; %in seconds
+
 else
     warning('Unknown session type')
 end

@@ -39,7 +39,9 @@ for cell = 1:size(Data,1)
     %number of trials
     if ~isempty(find((cellFrequency(cell,:) > threshold),1))
         timeLockedCells(cell) = 1;
+    %else
+        %timeLockedCells(cell) = 0;
     end
 end
-fprintf('Finally, %i time-locked cells found\n', length(find(timeLockedCells)))
+%fprintf('After first step, %i time-locked cells found\n', length(find(timeLockedCells)))
 disp('... done!')
