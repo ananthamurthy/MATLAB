@@ -1,6 +1,7 @@
 % AUTHOR - Kambadur Ananthmurthy
 % Analyze identified cells across multiple days
-clear all
+%clear all
+clear
 close all
 
 addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions')) % my custom functions
@@ -54,6 +55,7 @@ x = ((datasetB.trialDetails.preDuration + datasetB.trialDetails.csDuration + dat
 datasetB.usBin = ceil(x/delta);
 clear x
 %1
+disp('Working on datasetA ...')
 disp('First filtering for percentage of trials with activity, then PSTH ...')
 threshold = 0.25 * (size(datasetA.data,2)); %threshold is 25% of the session trials
 [datasetA.cellRastor, datasetA.cellFrequency, datasetA.timeLockedCells_temp, datasetA.importantTrials] = ...
@@ -76,6 +78,7 @@ else
 end
 
 %2
+disp('Working on datasetB ...')
 disp('First filtering for percentage of trials with activity, then PSTH ...')
 threshold = 0.25 * (size(datasetB.data,2)); %threshold is 25% of the session trials
 [datasetB.cellRastor, datasetB.cellFrequency, datasetB.timeLockedCells_temp, datasetB.importantTrials] = ...
@@ -128,12 +131,15 @@ for cell = 1:nCells
     [~, PeaksB(cell)] = max(B);
     
 end
-interestingCells = find(abs(rho)>0.2);
+interestingCells              = find(abs(rho)>0.2);
 interestingCells_positiveCorr = find(rho>0.2);
+fprintf('%i cells found with positive correlation\n', length(interestingCells_positiveCorr))
 interestingCells_negativeCorr = find(rho<0.2);
+fprintf('%i cells found with negative correlation\n', length(interestingCells_negativeCorr))
 interestingCells_lostCorr     = find(abs(rho)<= 0.2);
+fprintf('%i cells found with lost correlation\n', length(interestingCells_lostCorr))
 %Sanity checks
-if length(rho) ~= length(interestingCells_positiveCorr) + length(interestingCells_negativeCorr + length(interestingCells_lostCorr)
+if length(rho) ~= length(interestingCells_positiveCorr) + length(interestingCells_negativeCorr) + length(interestingCells_lostCorr)
     disp('[INFO] There is a problem with the Interesting Cells')
 elseif length(interestingCells) ~= length(interestingCells_positiveCorr) + length(interestingCells_negativeCorr)
     disp('[INFO] There is a problem with the Interesting Cells')
@@ -175,7 +181,6 @@ if ops0.fig == 1
     %subFig1 = subplot(2,2,1);
     subplot(2,1,1)
     plotPSTH(datasetA, datasetA.PSTH_sorted, datasetA.trialDetails, 'Bin No.', sprintf('Sorted Cells (by %s)',num2str(datasetA.date)), figureDetails, 1)
-    
     set(gca, 'XTick', [1 datasetA.csBin datasetA.usBin nBins])
     set(gca,'XTickLabel',{'1' 'CS' 'US' num2str(nBins)})
     set(gca,'FontSize', figureDetails.fontSize-2)
@@ -189,6 +194,7 @@ if ops0.fig == 1
     print(['/Users/ananth/Desktop/figs/chronicAnalysis/psth_simple_' ...
         datasetB.mouse_name '_' dateA '_' dateB  '_multiDay'],...
         '-djpeg');
+    
     %     % PSTH sorted by different dates
     %     fig3 = figure(3);
     %     clf
@@ -255,7 +261,7 @@ if ops0.fig == 1
         'MarkerSize', figureDetails.markerSize)
     hold on
     datasetB.TI_onlyTimeLockedCells = nan(size(datasetB.TI));
-    datasetB.TI_onlyTimeLockedCells = datasetB.TI(find(datasetB.timeLockedCells),:); %check
+    datasetB.TI_onlyTimeLockedCells(find(datasetB.timeLockedCells)) = datasetB.TI(find(datasetB.timeLockedCells));
     plot(datasetB.TI_onlyTimeLockedCells, 'ro', ...
         'LineWidth', figureDetails.lineWidth, ...
         'MarkerSize', figureDetails.markerSize)
@@ -277,14 +283,33 @@ if ops0.fig == 1
         '-djpeg');
     
     % Trends in Temporal Information
-    TI_timeLockedCells = TI(find(timeLockedCells),:);
-    TI_sorted = TI_timeLockedCells(sortedPSTHindices,:);
+    datasetA.TI_timeLockedCells = datasetA.TI(find(datasetA.timeLockedCells),:);
+    datasetA.TI_sorted = datasetA.TI_timeLockedCells(datasetA.sortedPSTHindices,:);
+    datasetB.TI_timeLockedCells = datasetB.TI(find(datasetB.timeLockedCells),:);
+    datasetB.TI_sorted = datasetB.TI_timeLockedCells(datasetB.sortedPSTHindices,:);
     fig5 = figure(5);
     clf
     set(fig5,'Position',[300,300,800,400])
-    plot(TI_sorted, 'r*', ...
+    subplot(1,2,1)
+    plot(datasetA.TI_sorted, 'r*', ...
         'MarkerSize', figureDetails.markerSize)
-    title(sprintf('Trends in Temporal Information (Method: %s)', ops0.method), ...
+    axis([0 size(datasetA.TI,1) 0 2])
+    title(sprintf('TI - Date: %s', datasetA.date), ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    xlabel('Sorted Time-Locked Cell Number', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    ylabel('Temporal Information (bits)', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    %legend({'All Cells', 'Time-Locked Cells'})
+    set(gca,'FontSize', figureDetails.fontSize-2)
+    subplot(1,2,2)
+    plot(datasetB.TI_sorted, 'r*', ...
+        'MarkerSize', figureDetails.markerSize)
+    axis([0 size(datasetA.TI,1) 0 2])
+    title(sprintf('TI - Date: %s', datasetB.date), ...
         'FontSize', figureDetails.fontSize, ...
         'FontWeight', 'bold')
     xlabel('Sorted Time-Locked Cell Number', ...
@@ -296,18 +321,19 @@ if ops0.fig == 1
     %legend({'All Cells', 'Time-Locked Cells'})
     set(gca,'FontSize', figureDetails.fontSize-2)
     print(['/Users/ananth/Desktop/figs/chronicAnalysis/ti_sorted_' ...
-        db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_multiDay'],...
+        datasetB.mouse_name '_' dateA '_' dateB '_' ops0.method '_multiDay'],...
         '-djpeg');
     
     %Correlation Coefficient based selection of cell pairs
+    % High correlation (positive or negative)
     fig6 = figure(6);
     clf
-    set(fig6,'Position',[100,100,1500,700])
+    set(fig6,'Position',[100,100,1800,700])
     for pair = 1:length(interestingCells)
         subplot(length(interestingCells),1, pair)
-        bar(datasetA.PSTH(interestingCells(pair),:), 'blue', 'FaceAlpha', 0.3)
+        plot(datasetA.PSTH(interestingCells(pair),:), 'blue', 'LineWidth', figureDetails.lineWidth)
         hold on
-        bar(datasetB.PSTH(interestingCells(pair),:), 'red', 'FaceAlpha', 0.3)
+        plot(datasetB.PSTH(interestingCells(pair),:), 'red', 'LineWidth', figureDetails.lineWidth)
         set(gca,'FontSize', figureDetails.fontSize-5)
         if ops0.acrossSessionTypes
             set(gca, 'XTick', [1 datasetA.csBin datasetA.usBin datasetB.usBin nBins])
@@ -317,7 +343,7 @@ if ops0.fig == 1
         set(gca,'XTickLabel',[])
         %text_str = sprintf('Correlation Coefficient: %0.4f', rho(interestingCells(pair)));
         %position = [23 373;35 185;77 107];
-        title(sprintf('Cell Pair: %i | Corr Coeff: %0.4f', pair, rho(interestingCells(pair))))
+        title(sprintf('Cell Pair: %i | (High) Corr Coeff: %0.4f', pair, rho(interestingCells(pair))))
         if pair == ceil(length(interestingCells)/2)
             ylabel('Summed AUC (A.U.)')
         end
@@ -332,13 +358,124 @@ if ops0.fig == 1
         legend({sprintf('Date: %s', datasetA.date), sprintf('Date: %s', datasetB.date)})
     end
     xlabel('Bin No.')
-    print(['/Users/ananth/Desktop/figs/chronicAnalysis/comparingPSTH_' ...
+    print(['/Users/ananth/Desktop/figs/chronicAnalysis/comparingPSTH_highCorr_' ...
         datasetB.mouse_name '_' dateA '_' dateB  '_multiDay'],...
         '-djpeg');
     
+    % High Positive correlation
     fig7 = figure(7);
     clf
-    set(fig7,'Position',[100,100,650,550])
+    set(fig7,'Position',[100,100,1800,700])
+    for pair = 1:length(interestingCells_positiveCorr)
+        subplot(length(interestingCells_positiveCorr),1, pair)
+        plot(datasetA.PSTH(interestingCells_positiveCorr(pair),:), 'blue', 'LineWidth', figureDetails.lineWidth)
+        hold on
+        plot(datasetB.PSTH(interestingCells_positiveCorr(pair),:), 'red', 'LineWidth', figureDetails.lineWidth)
+        set(gca,'FontSize', figureDetails.fontSize-5)
+        if ops0.acrossSessionTypes
+            set(gca, 'XTick', [1 datasetA.csBin datasetA.usBin datasetB.usBin nBins])
+        else
+            set(gca, 'XTick', [1 datasetB.csBin datasetB.usBin nBins])
+        end
+        set(gca,'XTickLabel',[])
+        %text_str = sprintf('Correlation Coefficient: %0.4f', rho(interestingCells(pair)));
+        %position = [23 373;35 185;77 107];
+        title(sprintf('Cell Pair: %i | (Positive) Corr Coeff: %0.4f', pair, rho(interestingCells_positiveCorr(pair))))
+        if pair == ceil(length(interestingCells_positiveCorr)/2)
+            ylabel('Summed AUC (A.U.)')
+        end
+        if pair == length(interestingCells_positiveCorr)
+            %set(gca,'XTickLabel',{'0' sprintf('%i (CS)', csBin) sprintf('%i (US)', usBin) num2str(nBins)})
+            if ops0.acrossSessionTypes
+                set(gca,'XTickLabel',{'1' 'CS' 'US_A' 'US_B' num2str(nBins)})
+            else
+                set(gca,'XTickLabel',{'1' 'CS' 'US' num2str(nBins)})
+            end
+        end
+        legend({sprintf('Date: %s', datasetA.date), sprintf('Date: %s', datasetB.date)})
+    end
+    xlabel('Bin No.')
+    print(['/Users/ananth/Desktop/figs/chronicAnalysis/comparingPSTH_positiveCorr_' ...
+        datasetB.mouse_name '_' dateA '_' dateB  '_multiDay'], ...
+        '-djpeg');
+    
+    % High Negative correlation
+    fig8 = figure(8);
+    clf
+    set(fig8,'Position',[100,100,1800,700])
+    for pair = 1:length(interestingCells_negativeCorr)
+        subplot(length(interestingCells_negativeCorr),1, pair)
+        plot(datasetA.PSTH(interestingCells_negativeCorr(pair),:), 'blue', 'LineWidth', figureDetails.lineWidth)
+        hold on
+        plot(datasetB.PSTH(interestingCells_negativeCorr(pair),:), 'red', 'LineWidth', figureDetails.lineWidth)
+        set(gca,'FontSize', figureDetails.fontSize-5)
+        if ops0.acrossSessionTypes
+            set(gca, 'XTick', [1 datasetA.csBin datasetA.usBin datasetB.usBin nBins])
+        else
+            set(gca, 'XTick', [1 datasetB.csBin datasetB.usBin nBins])
+        end
+        set(gca,'XTickLabel',[])
+        %text_str = sprintf('Correlation Coefficient: %0.4f', rho(interestingCells(pair)));
+        %position = [23 373;35 185;77 107];
+        title(sprintf('Cell Pair: %i | (Negative) Corr Coeff: %0.4f', pair, rho(interestingCells_negativeCorr(pair))))
+        if pair == ceil(length(interestingCells_negativeCorr)/2)
+            ylabel('Summed AUC (A.U.)')
+        end
+        if pair == length(interestingCells_negativeCorr)
+            %set(gca,'XTickLabel',{'0' sprintf('%i (CS)', csBin) sprintf('%i (US)', usBin) num2str(nBins)})
+            if ops0.acrossSessionTypes
+                set(gca,'XTickLabel',{'1' 'CS' 'US_A' 'US_B' num2str(nBins)})
+            else
+                set(gca,'XTickLabel',{'1' 'CS' 'US' num2str(nBins)})
+            end
+        end
+        legend({sprintf('Date: %s', datasetA.date), sprintf('Date: %s', datasetB.date)})
+    end
+    xlabel('Bin No.')
+    print(['/Users/ananth/Desktop/figs/chronicAnalysis/comparingPSTH_negativeCorr_' ...
+        datasetB.mouse_name '_' dateA '_' dateB  '_multiDay'], ...
+        '-djpeg');
+    
+    % Lost correlation
+    fig9 = figure(9);
+    clf
+    set(fig9,'Position',[100,100,1800,700])
+    for pair = 1:length(interestingCells_lostCorr)
+        subplot(length(interestingCells_lostCorr),1, pair)
+        plot(datasetA.PSTH(interestingCells_lostCorr(pair),:), 'blue', 'LineWidth', figureDetails.lineWidth)
+        hold on
+        plot(datasetB.PSTH(interestingCells_lostCorr(pair),:), 'red', 'LineWidth', figureDetails.lineWidth)
+        set(gca,'FontSize', figureDetails.fontSize-5)
+        if ops0.acrossSessionTypes
+            set(gca, 'XTick', [1 datasetA.csBin datasetA.usBin datasetB.usBin nBins])
+        else
+            set(gca, 'XTick', [1 datasetB.csBin datasetB.usBin nBins])
+        end
+        set(gca,'XTickLabel',[])
+        %text_str = sprintf('Correlation Coefficient: %0.4f', rho(interestingCells(pair)));
+        %position = [23 373;35 185;77 107];
+        title(sprintf('Cell Pair: %i | (Negative) Corr Coeff: %0.4f', pair, rho(interestingCells_lostCorr(pair))))
+        if pair == ceil(length(interestingCells_lostCorr)/2)
+            ylabel('Summed AUC (A.U.)')
+        end
+        if pair == length(interestingCells_lostCorr)
+            %set(gca,'XTickLabel',{'0' sprintf('%i (CS)', csBin) sprintf('%i (US)', usBin) num2str(nBins)})
+            if ops0.acrossSessionTypes
+                set(gca,'XTickLabel',{'1' 'CS' 'US_A' 'US_B' num2str(nBins)})
+            else
+                set(gca,'XTickLabel',{'1' 'CS' 'US' num2str(nBins)})
+            end
+        end
+        legend({sprintf('Date: %s', datasetA.date), sprintf('Date: %s', datasetB.date)})
+    end
+    xlabel('Bin No.')
+    print(['/Users/ananth/Desktop/figs/chronicAnalysis/comparingPSTH_lostCorr_' ...
+        datasetB.mouse_name '_' dateA '_' dateB  '_multiDay'],...
+        '-djpeg');
+    
+    fig10 = figure(10);
+    clf
+    set(fig10,'Position',[100,100,650,550])
     scatter(PeaksA, PeaksB, 110, 'g', 'filled')
     hold on
     scatter(PeaksA(interestingCells), PeaksB(interestingCells), 150, 'rd')
