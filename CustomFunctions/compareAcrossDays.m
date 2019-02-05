@@ -1,5 +1,5 @@
 % AUTHOR - Kambadur Ananthmurthy
-% Plot consistently identified cells across multiple days
+% Analyze identified cells across multiple days
 clear all
 close all
 
