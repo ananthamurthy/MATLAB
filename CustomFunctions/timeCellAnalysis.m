@@ -16,7 +16,7 @@ addpath(genpath('/Users/ananth/Desktop/Work/Analysis/Imaging')) % analysis outpu
 ops0.multiDayAnalysis       = 0; %For chronic tracking experiments; usually set to 0
 ops0.fig                    = 1;
 ops0.method                 = 'C'; % A: only PSTH; B: PSTH then filter; C: filter then PSTH; use 'C'
-ops0.saveData               = 1;
+ops0.saveData               = 0;
 
 %Identify Dataset
 addpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies')
@@ -103,17 +103,17 @@ for iexp = 1:length(db)
         threshold = 0.25 * (size(dfbf,2)); %threshold is 25% of the session trials
         [cellRastor, cellFrequency, timeLockedCells_temp, importantTrials] = ...
             getFreqBasedTimeCellList(dfbf_sigOnly, threshold, skipFrames);
+        %Develop PSTH only for cells passing >25% activity
         [PSTH, PSTH_3D] = getPSTH(dfbf_sigOnly(find(timeLockedCells_temp),:,:), delta, skipFrames);
+        %Finally, identifying true time-locked cells, using the TI metric
         [timeLockedCells, TI] = getTimeLockedCells(PSTH_3D, 1000, 99);
+        
+        dfbf_timeLockedCells = dfbf_sigOnly(find(timeLockedCells),:,:);
         fprintf('%i time-locked cells found\n', length(find(timeLockedCells)))
     else
     end
     %2. There should be at least two consecutive bins with significant
     %values for PSTH.
-    
-    % Unsorted
-    dfbf_timeLockedCells = dfbf_sigOnly(find(timeLockedCells),:,:);
-    %dfbf_2D_timeLockedCells = dfbf_2D(find(timeLockedCells),:,:);
     
     % Sorting
     if isempty(find(timeLockedCells,1))
@@ -183,10 +183,10 @@ for iexp = 1:length(db)
         end
         
         % Sorting based Sequences - plotting
-%         csFrame = 116;
-%         xTicks = window;
-%         %xLabels = strtrim(cellstr(num2str(window'))');
-%         xLabels = cellstr(num2str(window'))';
+        %         csFrame = 116;
+        %         xTicks = window;
+        %         %xLabels = strtrim(cellstr(num2str(window'))');
+        %         xLabels = cellstr(num2str(window'))';
         %             clear window %for sanity
         %             window = 80:160;
         %             xTicks = [0 18 36 54 72];
@@ -197,53 +197,53 @@ for iexp = 1:length(db)
         %             %temp2 = strjoin(arrayfun(@(actualXlabels) num2str(actualXlabels),n,'UniformOutput',false),',');
         %             %xLabels = {'-2484', '-2208', '-1932', '-1656', '-1380', '-1104', '-828', '-552', '-276', '0', '276', '552', '828', '1104','1380', '1656', '1932', '2208', '2484', '2760', '3036'};
         %             xLabels = {'-2484', '-1242', '0', '1242', '2484' };
-%         fig2 = figure(2);
-%         set(fig2,'Position', [300, 300, 1200, 500]);
-%         subplot(1,2,1);
-%         %plot unsorted data
-%         plotSequences(db(iexp), dfbf_timeLockedCells, trialPhase, 'Frames', 'Unsorted Cells', figureDetails, 1)
-%         colormap(figureDetails.colorMap)
-%         
-%         subplot(1,2,2);
-%         %plot sorted data
-%         plotSequences(db(iexp), dfbf_sorted_timeLockedCells, trialPhase, 'Frames', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 1)
-%         colormap(figureDetails.colorMap)
-%         
-%         if ops0.multiDayAnalysis
-%             print(['/Users/ananth/Desktop/figs/sort/timeCells_allTrialsAvg_sorted_' ...
-%                 'threshold' num2str(threshold) '_' ...
-%                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_multiDay'],...
-%                 '-djpeg');
-%         else
-%             print(['/Users/ananth/Desktop/figs/sort/timeCells_allTrialsAvg_sorted_' ...
-%                 'threshold' num2str(threshold) '_' ...
-%                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method],...
-%                 '-djpeg');
-%         end
+        %         fig2 = figure(2);
+        %         set(fig2,'Position', [300, 300, 1200, 500]);
+        %         subplot(1,2,1);
+        %         %plot unsorted data
+        %         plotSequences(db(iexp), dfbf_timeLockedCells, trialPhase, 'Frames', 'Unsorted Cells', figureDetails, 1)
+        %         colormap(figureDetails.colorMap)
+        %
+        %         subplot(1,2,2);
+        %         %plot sorted data
+        %         plotSequences(db(iexp), dfbf_sorted_timeLockedCells, trialPhase, 'Frames', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 1)
+        %         colormap(figureDetails.colorMap)
+        %
+        %         if ops0.multiDayAnalysis
+        %             print(['/Users/ananth/Desktop/figs/sort/timeCells_allTrialsAvg_sorted_' ...
+        %                 'threshold' num2str(threshold) '_' ...
+        %                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_multiDay'],...
+        %                 '-djpeg');
+        %         else
+        %             print(['/Users/ananth/Desktop/figs/sort/timeCells_allTrialsAvg_sorted_' ...
+        %                 'threshold' num2str(threshold) '_' ...
+        %                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method],...
+        %                 '-djpeg');
+        %         end
         
         % Calcium activity for time-locked cells, from all trials
-%         fig3 = figure(3);
-%         clf
-%         set(fig3,'Position',[300,300,1200,500])
-%         subplot(2,1,1);
-%         %plot unsorted data
-%         plotdFbyF(db(iexp), dfbf_2D, trialDetails, 'Frames', 'Unsorted Cells', figureDetails, 0)
-%         %plot sorted data
-%         subplot(2,1,2);
-%         plotdFbyF(db(iexp), dfbf_2D_sorted_timeCells, trialDetails, 'Frames', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 0)
-%         colormap(figureDetails.colorMap)
-%         
-%         if ops0.multiDayAnalysis
-%             print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_2D_allTrials_' ...
-%                 'threshold' num2str(threshold) '_'...
-%                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_sorted_multiDay'],...
-%                 '-djpeg');
-%         else
-%             print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_2D_allTrials_' ...
-%                 'threshold' num2str(threshold) '_'...
-%                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_sorted'],...
-%                 '-djpeg');
-%         end
+        %         fig3 = figure(3);
+        %         clf
+        %         set(fig3,'Position',[300,300,1200,500])
+        %         subplot(2,1,1);
+        %         %plot unsorted data
+        %         plotdFbyF(db(iexp), dfbf_2D, trialDetails, 'Frames', 'Unsorted Cells', figureDetails, 0)
+        %         %plot sorted data
+        %         subplot(2,1,2);
+        %         plotdFbyF(db(iexp), dfbf_2D_sorted_timeCells, trialDetails, 'Frames', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 0)
+        %         colormap(figureDetails.colorMap)
+        %
+        %         if ops0.multiDayAnalysis
+        %             print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_2D_allTrials_' ...
+        %                 'threshold' num2str(threshold) '_'...
+        %                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_sorted_multiDay'],...
+        %                 '-djpeg');
+        %         else
+        %             print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_2D_allTrials_' ...
+        %                 'threshold' num2str(threshold) '_'...
+        %                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_sorted'],...
+        %                 '-djpeg');
+        %         end
         
         % Temporal Information
         fig4 = figure(4);
@@ -258,6 +258,7 @@ for iexp = 1:length(db)
         TI_onlyTimeLockedCells(find(timeLockedCells)) = TI(find(timeLockedCells));
         plot(TI_onlyTimeLockedCells, 'ro', ...
             'MarkerSize', figureDetails.markerSize)
+        axis([0 size(TI,1) 0.5 2.5])
         title(sprintf('Temporal Information (Method: %s)', ops0.method), ...
             'FontSize', figureDetails.fontSize, ...
             'FontWeight', 'bold')
@@ -286,11 +287,12 @@ for iexp = 1:length(db)
         fig5 = figure(5);
         clf
         set(fig5,'Position',[300,300,800,400])
-        plot(TI_sorted, 'r*', ...
+        plot(TI_sorted, 'b*', ...
             'MarkerSize', figureDetails.markerSize)
-        title(sprintf('Trends in Temporal Information (Method: %s)', ops0.method), ...
-            'FontSize', figureDetails.fontSize, ...
-            'FontWeight', 'bold')
+        axis([0 size(TI_sorted,1) 0.2 2])
+%         title(sprintf('Trends in Temporal Information (Method: %s)', ops0.method), ...
+%             'FontSize', figureDetails.fontSize, ...
+%             'FontWeight', 'bold')
         xlabel('Sorted Time-Locked Cell Number', ...
             'FontSize', figureDetails.fontSize, ...
             'FontWeight', 'bold')
