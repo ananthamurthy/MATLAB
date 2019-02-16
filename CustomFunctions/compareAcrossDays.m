@@ -19,7 +19,7 @@ ops0.acrossSessionTypes = 0;
 % dateA = '20170711';
 % sessionA = 4;
 % sessionTypeA = 9;
-%
+% 
 % dateB = '20170712';
 % sessionB = 1;
 % sessionTypeB = 11;
@@ -31,13 +31,13 @@ dateA = '20180508';
 sessionA = 1;
 sessionTypeA = 5;
 
-% dateB = '20180509';
-% sessionB = 2;
-% sessionTypeB = 5;
-
-dateB = '20180514';
-sessionB = 4;
+dateB = '20180509';
+sessionB = 2;
 sessionTypeB = 5;
+
+% dateB = '20180514';
+% sessionB = 4;
+% sessionTypeB = 5;
 
 [datasetA, datasetB] = compileChronicData(mouseName, dateA, dateB, ...
     sessionA, sessionB, sessionTypeA, sessionTypeB, nFrames, trialDuration);
@@ -187,7 +187,7 @@ for cell = 1:nCells_same
     A = datasetA.PSTH_same(cell,:);
     B = datasetB.PSTH_same(cell,:);
     % Using Correlation Coefficients
-    [r, p] = corrcoef(A, B); %NOTE: this skips unpaired cells
+    [r, p] = corrcoef(A, B);
     rho(cell) = r(2,1);
     pval(cell) = p(2,1);
     

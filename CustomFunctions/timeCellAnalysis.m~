@@ -9,10 +9,10 @@ close all
 %clear all
 clear
 
-%% Addpaths
 addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions')) % my custom functions
 addpath(genpath('/Users/ananth/Desktop/Work/Analysis/Imaging')) % analysis output
 addpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies')
+
 %% Operations
 ops0.multiDayAnalysis       = 0; %For chronic tracking experiments; usually set to 0
 ops0.fig                    = 0;
@@ -20,10 +20,13 @@ ops0.method                 = 'C'; % A: only PSTH; B: PSTH then filter; C: filte
 ops0.saveData               = 0;
 ops0.search4lowFreqEvents   = 1;
 ops0.bandpassFilter         = 0;
-%% Dataset
+
+%Identify Dataset
+
 make_db
 %% Main script
-for iexp = 1:length(db)    
+for iexp = 1:length(db)
+    
     fprintf('Analyzing %s_%i_%i - Date: %s\n', db(iexp).mouse_name, ...
         db(iexp).sessionType, ...
         db(iexp).session, ...
