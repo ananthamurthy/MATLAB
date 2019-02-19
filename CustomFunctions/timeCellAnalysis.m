@@ -2,7 +2,7 @@
 % AUTHOR - Kambadur Ananthmurthy
 
 % Additional functions may be found in "CustomFunctions"
-
+%profile on
 tic
 disp('Analyzing for Time Cells ...')
 close all
@@ -15,15 +15,17 @@ addpath(genpath('/Users/ananth/Desktop/Work/Analysis/Imaging')) % analysis outpu
 addpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies')
 %% Operations
 ops0.multiDayAnalysis       = 0; %For chronic tracking experiments; usually set to 0
-ops0.fig                    = 0;
+ops0.fig                    = 1;
 ops0.method                 = 'C'; % A: only PSTH; B: PSTH then filter; C: filter then PSTH; use 'C'
 ops0.saveData               = 0;
-ops0.search4lowFreqEvents   = 1;
+ops0.search4lowFreqEvents   = 0;
 ops0.bandpassFilter         = 0;
+ops0.loadBehaviourData      = 0;
+ops0.onlyProbeTrials        = 0;
 %% Dataset
 make_db
 %% Main script
-for iexp = 1:length(db)    
+for iexp = 1:length(db)
     fprintf('Analyzing %s_%i_%i - Date: %s\n', db(iexp).mouse_name, ...
         db(iexp).sessionType, ...
         db(iexp).session, ...
@@ -33,14 +35,21 @@ for iexp = 1:length(db)
     saveFolder = [saveDirec db(iexp).mouse_name '/' db(iexp).date '/'];
     
     %Load Fluorescence Data
-    load(['Users/ananth/Desktop/Work/Analysis/Imaging/' ...
-        db(iexp).mouse_name '/' db(iexp).date '/' num2str(db(iexp).expts) ...
-        '/F_' db(iexp).mouse_name '_' db(iexp).date '_plane' num2str(db(iexp).nplanes) '.mat'])
+    load(sprintf('/Users/ananth/Desktop/Work/Analysis/Imaging/%s/%s/%i/F_%s_%s_plane%i.mat', ...
+        db(iexp).mouse_name, db(iexp).date, db(iexp).expts, ...
+        db(iexp).mouse_name, db(iexp).date, db(iexp).nplanes))
     
     %Registration Options
-    load(['Users/ananth/Desktop/Work/Analysis/Imaging/' ...
-        db(iexp).mouse_name '/' db(iexp).date '/' num2str(db(iexp).expts) ...
-        '/regops_' db(iexp).mouse_name '_' db(iexp).date '.mat'])
+    load(sprintf('/Users/ananth/Desktop/Work/Analysis/Imaging/%s/%s/%i/regops_%s_%s.mat', ...
+        db(iexp).mouse_name, db(iexp).date, db(iexp).expts, ...
+        db(iexp).mouse_name, db(iexp).date))
+    
+    %Load Behaviour Data
+    if ops0.loadBehaviourData == 1
+        load(sprintf('/Users/ananth/Desktop/Work/Analysis/Behaviour/FEC/%s/%s_%i_%i/fec.mat', ...
+            db(iexp).mouse_name, db(iexp).mouse_name, db(iexp).sessionType, db(iexp).session))
+        iProbeTrials = find(probeTrials);
+    end
     
     if ops0.fig
         figureDetails = compileFigureDetails(20, 2, 10, 0.5, 'hot'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
@@ -63,34 +72,39 @@ for iexp = 1:length(db)
     [dfbf, baselines, dfbf_2D] = dodFbyF(db(iexp), myData);
     
     %Significant-Only Traces
-    dfbf_sigOnly = findSigOnly(dfbf);
+    if ops0.onlyProbeTrials
+        disp('Only analysing Probe Trials ...')
+        dfbf_sigOnly = findSigOnly(dfbf(:,iProbeTrials,:));
+    else
+        dfbf_sigOnly = findSigOnly(dfbf);
+    end
     
     %Search for low frequency events
     if ops0.search4lowFreqEvents
-        nSamples = 4; %for Gaussian Kernel
+        nSamples = 10; %for Gaussian Kernel
         [dfbf_sigOnly_smooth, gaussianKernel] = doGaussianSmoothing(dfbf_sigOnly, nSamples);
-        cell = 15;
-        figure(20)
-        subplot(1,2,1)
-        surf(squeeze(dfbf_sigOnly(cell,:,:))*100)
-        title('Data | Cell 15')
-        xlabel('Frames')
-        ylabel('Trials')
-        zlabel('dF/F (%)')
-        set(gca, 'FontSize', 20)
-        
-        subplot(1,2,2)
-        surf(squeeze(dfbf_sigOnly_smooth(cell,:,:))*100)
-        title('Smoothed Data | Cell 15')
-        xlabel('Frames')
-        ylabel('Trials')
-        zlabel('dF/F (%)')
-        set(gca, 'FontSize', 20)
-        colormap summer
+%         cell = 15;
+%         figure(20)
+%         subplot(1,2,1)
+%         surf(squeeze(dfbf_sigOnly(cell,:,:))*100)
+%         title('Data | Cell 15')
+%         xlabel('Frames')
+%         ylabel('Trials')
+%         zlabel('dF/F (%)')
+%         set(gca, 'FontSize', 20)
+%         
+%         subplot(1,2,2)
+%         surf(squeeze(dfbf_sigOnly_smooth(cell,:,:))*100)
+%         title('Smoothed Data | Cell 15')
+%         xlabel('Frames')
+%         ylabel('Trials')
+%         zlabel('dF/F (%)')
+%         set(gca, 'FontSize', 20)
+%         colormap summer
         %Visualize filter
         %wvtool(gaussianKernel)
         myData = dfbf_sigOnly_smooth;
-    end 
+    end
     
     if ops0.bandpassFilter
         sampleRate = 14.5; % Hz
@@ -116,8 +130,6 @@ for iexp = 1:length(db)
     %skipFrames = 116; %Skip frame 116, viz., the CS frame. Use skipFrames = 0 to avoid skipping
     %skipFrames = trialDetails.preDuration * db(iexp).samplingDate;
     skipFrames = 81;
-    %Here, threshold is in terms of number of trials
-    %threshold = 2;
     
     %NOTE: Make sure to use significant-only traces else a second
     %threshold needs to be passed as an argument
@@ -128,30 +140,32 @@ for iexp = 1:length(db)
     delta = 3; %for now; works out to 207 ms if sampling at 14.5 Hz
     if ops0.method == 'A' %No filtering for % of trials active
         disp('Only PSTH; not filtering for percentage of trials with activity ...')
-        threshold = 0; %meaningless
+        freqThreshold = 0; %meaningless
         [PSTH, PSTH_3D] = getPSTH(myData, delta, skipFrames);
         [timeLockedCells, TI] = getTimeLockedCells(PSTH_3D, 1000, 99);
         [cellRastor, cellFrequency, importantTrials] = getCellRastors(myData, skipFrames);
+        iTimeCells = find(timeLockedCells);
     elseif ops0.method == 'B' %PSTH then filtering for % of trials active
         disp('First PSTH, then filtering for percentage of trials with activity ...')
         [PSTH, PSTH_3D] = getPSTH(myData, delta, skipFrames);
         [timeLockedCells_temp, TI] = getTimeLockedCells(PSTH_3D, 1000, 99);
-        threshold = 0.25 * (size(dfbf,2)); %threshold is 25% of the session trials
+        freqThreshold = 0.25 * (size(dfbf,2)); %threshold is 25% of the session trials
         [cellRastor, cellFrequency, timeLockedCells, importantTrials] = ...
-            getFreqBasedTimeCellList(myData(find(timeLockedCells_temp),:,:), threshold, skipFrames);
-        fprintf('%i time-locked cells found\n', length(find(timeLockedCells)))
+            getFreqBasedTimeCellList(myData(find(timeLockedCells_temp),:,:), freqThreshold, skipFrames);
+        iTimeCells = find(timeLockedCells);
+        fprintf('%i time-locked cells found\n', length(iTimeCells))
     elseif ops0.method == 'C' %Filter for % trials active then PSTH
         disp('First filtering for percentage of trials with activity, then PSTH ...')
-        threshold = 0.25 * (size(dfbf,2)); %threshold is 25% of the session trials
+        freqThreshold = 0.25 * (size(dfbf,2)); %threshold is 25% of the session trials
         [cellRastor, cellFrequency, timeLockedCells_temp, importantTrials] = ...
-            getFreqBasedTimeCellList(myData, threshold, skipFrames);
+            getFreqBasedTimeCellList(myData, freqThreshold, skipFrames);
         %Develop PSTH only for cells passing >25% activity
         [PSTH, PSTH_3D] = getPSTH(myData(find(timeLockedCells_temp),:,:), delta, skipFrames);
         %Finally, identifying true time-locked cells, using the TI metric
         [timeLockedCells, TI] = getTimeLockedCells(PSTH_3D, 1000, 99);
-        
-        dfbf_timeLockedCells = myData(find(timeLockedCells),:,:);
-        fprintf('%i time-locked cells found\n', length(find(timeLockedCells)))
+        iTimeCells = find(timeLockedCells);
+        dfbf_timeLockedCells = myData(iTimeCells,:,:);
+        fprintf('%i time-locked cells found\n', length(iTimeCells))
     else
     end
     %2. There should be at least two consecutive bins with significant
@@ -166,8 +180,8 @@ for iexp = 1:length(db)
         PSTH_sorted = [];
         dfbf_sorted_timeLockedCells = [];
     else
-        [sortedPSTHindices, peakIndicies] = sortPSTH(PSTH(find(timeLockedCells),:));
-        PSTH_timeLocked = PSTH(find(timeLockedCells),:);
+        [sortedPSTHindices, peakIndicies] = sortPSTH(PSTH(iTimeCells,:));
+        PSTH_timeLocked = PSTH(iTimeCells,:);
         PSTH_sorted = PSTH_timeLocked(sortedPSTHindices,:);
         dfbf_sorted_timeLockedCells = dfbf_timeLockedCells(sortedPSTHindices,:,:);
         %dfbf_2D_sorted_timeCells = dfbf_2D_timeLockedCells(sortedPSTHindices,:);
@@ -210,7 +224,7 @@ for iexp = 1:length(db)
         clf
         set(fig1,'Position',[300,300,1200,500])
         subFig1 = subplot(1,2,1);
-        plotPSTH(db(iexp), PSTH(find(timeLockedCells),:,:), trialDetails, 'Bin No.', 'Unsorted Cells', figureDetails, 1)
+        plotPSTH(db(iexp), PSTH(iTimeCells,:,:), trialDetails, 'Bin No.', 'Unsorted Cells', figureDetails, 1)
         subFig2 = subplot(1,2,2);
         plotPSTH(db(iexp), PSTH_sorted, trialDetails, 'Bin No.', 'Sorted Cells', figureDetails, 1)
         colormap(figureDetails.colorMap)
@@ -289,43 +303,43 @@ for iexp = 1:length(db)
         %         end
         
         % Temporal Information
-        fig4 = figure(4);
-        clf
-        set(fig4,'Position',[300,300,800,400])
-        %TI_all_sorted = TI(sortedPSTHindices,:);
-        plot(TI, 'b*', ...
-            'LineWidth', figureDetails.lineWidth, ...
-            'MarkerSize', figureDetails.markerSize)
-        hold on
-        TI_onlyTimeLockedCells = nan(size(TI));
-        TI_onlyTimeLockedCells(find(timeLockedCells)) = TI(find(timeLockedCells));
-        plot(TI_onlyTimeLockedCells, 'ro', ...
-            'MarkerSize', figureDetails.markerSize)
-        axis([0 size(TI,1) 0.5 2.5])
-        title(sprintf('Temporal Information (Method: %s)', ops0.method), ...
-            'FontSize', figureDetails.fontSize, ...
-            'FontWeight', 'bold')
-        xlabel('Cell Number', ...
-            'FontSize', figureDetails.fontSize, ...
-            'FontWeight', 'bold')
-        ylabel('Temporal Information (bits)', ...
-            'FontSize', figureDetails.fontSize, ...
-            'FontWeight', 'bold')
-        legend({'All Cells', 'Time-Locked Cells'})
-        set(gca,'FontSize', figureDetails.fontSize-2)
-        
-        if ops0.multiDayAnalysis
-            print(['/Users/ananth/Desktop/figs/psth/ti_' ...
-                db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_multiDay'],...
-                '-djpeg');
-        else
-            print(['/Users/ananth/Desktop/figs/psth/ti_' ...
-                db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method],...
-                '-djpeg');
-        end
+%         fig4 = figure(4);
+%         clf
+%         set(fig4,'Position',[300,300,800,400])
+%         %TI_all_sorted = TI(sortedPSTHindices,:);
+%         plot(TI, 'b*', ...
+%             'LineWidth', figureDetails.lineWidth, ...
+%             'MarkerSize', figureDetails.markerSize)
+%         hold on
+%         TI_onlyTimeLockedCells = nan(size(TI));
+%         TI_onlyTimeLockedCells(iTimeCells) = TI(iTimeCells);
+%         plot(TI_onlyTimeLockedCells, 'ro', ...
+%             'MarkerSize', figureDetails.markerSize)
+%         axis([0 size(TI,1) 0.5 2.5])
+%         title(sprintf('Temporal Information (Method: %s)', ops0.method), ...
+%             'FontSize', figureDetails.fontSize, ...
+%             'FontWeight', 'bold')
+%         xlabel('Cell Number', ...
+%             'FontSize', figureDetails.fontSize, ...
+%             'FontWeight', 'bold')
+%         ylabel('Temporal Information (bits)', ...
+%             'FontSize', figureDetails.fontSize, ...
+%             'FontWeight', 'bold')
+%         legend({'All Cells', 'Time-Locked Cells'})
+%         set(gca,'FontSize', figureDetails.fontSize-2)
+%         
+%         if ops0.multiDayAnalysis
+%             print(['/Users/ananth/Desktop/figs/psth/ti_' ...
+%                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_multiDay'],...
+%                 '-djpeg');
+%         else
+%             print(['/Users/ananth/Desktop/figs/psth/ti_' ...
+%                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method],...
+%                 '-djpeg');
+%         end
         
         % Trends in Temporal Information
-        TI_timeLockedCells = TI(find(timeLockedCells),:);
+        TI_timeLockedCells = TI(iTimeCells,:);
         TI_sorted = TI_timeLockedCells(sortedPSTHindices,:);
         fig5 = figure(5);
         clf
@@ -356,7 +370,7 @@ for iexp = 1:length(db)
         
         disp('... done!')
     end
-    percentTimeCells = (length(find(timeLockedCells))/size(dfbf,1))*100;
+    percentTimeCells = (length(iTimeCells)/size(dfbf,1))*100;
     fprintf('[INFO] %0.4f %% of cells were time-locked\n', percentTimeCells)
 end
 toc
@@ -368,3 +382,4 @@ disp('All done!')
 % xlabel('Time (ms)');
 % ylabel('Trial-averaged dF/F (%)')
 % hold on
+%profile viewer

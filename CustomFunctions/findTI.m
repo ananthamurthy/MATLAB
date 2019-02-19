@@ -11,8 +11,8 @@ for bin = 1:length(avgPSTH_3D)
         %lambdai(bin) = 0;
         x(bin) = 0;
     elseif avgPSTH_3D(bin) < 0
-        %fprintf('Negative value observed in bin %i while finding TI\n',bin)
-        x(bin) = 0; %assertion
+        fprintf('Negative value observed in bin %i while finding TI\n',bin)
+        %x(bin) = 0; %assertion
     else
         lambdai(bin) = avgPSTH_3D(bin);
         x(bin) = lambdai(bin)*(log2(lambdai(bin)/lambda))*(1/length(avgPSTH_3D));
