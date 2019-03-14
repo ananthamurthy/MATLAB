@@ -15,7 +15,7 @@ addpath(genpath('/Users/ananth/Desktop/Work/Analysis/Imaging')) % analysis outpu
 addpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies')
 %% Operations
 ops0.multiDayAnalysis       = 0; %For chronic tracking experiments; usually set to 0
-ops0.fig                    = 1;
+ops0.fig                    = 0;
 ops0.method                 = 'C'; % A: only PSTH; B: PSTH then filter; C: filter then PSTH; use 'C'
 ops0.saveData               = 1;
 ops0.search4lowFreqEvents   = 0;
@@ -104,6 +104,7 @@ for iexp = 1:length(db)
         %Visualize filter
         %wvtool(gaussianKernel)
         myData = dfbf_sigOnly_smooth;
+        
     elseif ops0.bandpassFilter
         sampleRate = 14.5; % Hz
         lowEnd = 3; % Hz
@@ -118,7 +119,7 @@ for iexp = 1:length(db)
         end
         myData = filteredData;
     else
-        myData = dfbf_sigOnly; % crucial
+        myData = dfbf_sigOnly;
     end
     
     %% Tuning and time field fidelity using PSTH
@@ -207,7 +208,7 @@ for iexp = 1:length(db)
                 'dfbf_timeLockedCells', ...
                 'dfbf_sorted_timeLockedCells', ...
                 'trialPhase', 'window', ...
-                'freqThreshold', ...
+                'threshold', ...
                 'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
                 'PSTH')
         else
@@ -216,7 +217,7 @@ for iexp = 1:length(db)
                 'dfbf_timeLockedCells', ...
                 'dfbf_sorted_timeLockedCells', ...
                 'trialPhase', 'window', ...
-                'freqThreshold', ...
+                'threshold', ...
                 'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
                 'PSTH')
         end
