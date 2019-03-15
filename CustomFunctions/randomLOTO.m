@@ -1,5 +1,5 @@
 % AUTHOR - Kambadur Ananthmurthy
-function lotoData = randomLOTO(Data)
+function [lotoData, trial2remove] = randomLOTO(Data)
     %nTrials = size(Data,2);
     trial2remove = randi(size(Data,2));
     lotoData = Data; %preallocation

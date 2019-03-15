@@ -1,5 +1,5 @@
 % AUTHOR - Kambadur Ananthmurthy
-function [PSTH, PSTH_3D] = getPSTH(Data, delta, skipFrames)
+function [PSTH, PSTH_3D, nbins] = getPSTH(Data, delta, skipFrames)
 %Develop PSTH
 
 fprintf('Now, developing PSTH for %i cells ...\n', size(Data,1))
