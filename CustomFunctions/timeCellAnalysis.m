@@ -236,10 +236,15 @@ for iexp = 1:length(db)
                 fprintf('%i time-locked cells found\n', length(iTimeCells_loto))
             else
             end
-            TI_loto_consolidated{trial2remove} = TI_loto;
-            iTimeCells_loto_consolidated{trial2remove} = iTimeCells_loto;
+            consolidated_TI_loto{trial2remove} = TI_loto;
+            consolidated_iTimeCells_loto{trial2remove} = iTimeCells_loto;
         end
+        
         %Look for Differences
+        for trial = 1:size(myData,2) % trial is basically the trial2remove
+            diff_nTimeCells(trial,:) = length(iTimeCells) - length(consolidated_iTimeCells_loto{1, trial});
+            diff_TI(trial,:) = TI - consolidated_TI_loto{1, trial};
+        end
         disp('... done!')
     end
     disp('... done!')
@@ -259,7 +264,7 @@ for iexp = 1:length(db)
                     'trialPhase', 'window', ...
                     'freqThreshold', ...
                     'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
-                    'PSTH', 'iTimeCells', 'iTimeCells_loto_consolidated', 'TI', 'TI_loto_consolidated')
+                    'PSTH', 'iTimeCells', 'consolidated_iTimeCells_loto', 'TI', 'TI_loto_consolidated')
             else
                 save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '.mat' ], ...
                     'dfbf', 'baselines', 'dfbf_2D', ...
@@ -268,7 +273,7 @@ for iexp = 1:length(db)
                     'trialPhase', 'window', ...
                     'freqThreshold', ...
                     'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
-                    'PSTH', 'iTimeCells', 'iTimeCells_loto_consolidated', 'TI', 'TI_loto_consolidated')
+                    'PSTH', 'iTimeCells', 'consolidated_iTimeCells_loto', 'TI', 'TI_loto_consolidated')
             end
         else
             if ops0.multiDayAnalysis
@@ -447,6 +452,92 @@ for iexp = 1:length(db)
                 '-djpeg');
         end
         
+        %Differences observed using LOTO
+        if ops0.useLOTO
+            %Number of classified time cells
+            fig6 = figure(6);
+            clf
+            set(fig6,'Position',[300,300,800,400])
+            stem(diff_nTimeCells, '-red*', ...
+                'MarkerSize', figureDetails.markerSize)
+            title(['LOTO - Numbers | ', ...
+                db.mouse_name ' ST' num2str(db.sessionType) ' S' num2str(db.session)], ...
+                'FontSize', figureDetails.fontSize, ...
+                'FontWeight', 'bold')
+            xlabel('Excluded Trial No.', ...
+                'FontSize', figureDetails.fontSize, ...
+                'FontWeight', 'bold')
+            ylabel('Difference in classified time cells', ...
+                'FontSize', figureDetails.fontSize, ...
+                'FontWeight', 'bold')
+            set(gca,'FontSize', figureDetails.fontSize-2)
+            if ops0.multiDayAnalysis
+                print(['/Users/ananth/Desktop/figs/importantTrials/diff_nTimeCells_' ...
+                    db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_multiDay'],...
+                    '-djpeg');
+            else
+                print(['/Users/ananth/Desktop/figs/importantTrials/diff_nTimeCells_' ...
+                    db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method],...
+                    '-djpeg');
+            end
+            
+            %TI values
+            nanLine = nan(size(myData,1),1);
+            nanLine(iTimeCells) = 1;
+            fig7 = figure(7);
+            clf
+            set(fig7,'Position',[300,300,1500,1500])
+%             for trial = 1:size(myData,2)
+%                 hold on;
+%                 plot(diff_TI(trial,:), '-bo', ...
+%                     'MarkerSize', figureDetails.markerSize)
+%             end
+            subplot(3,1,1:2)
+            surf(diff_TI, 'FaceAlpha', 0.4);
+            colormap autumn
+            title(['LOTO - TI | ', ...
+                db.mouse_name ' ST' num2str(db.sessionType) ' S' num2str(db.session)], ...
+                'FontSize', figureDetails.fontSize, ...
+                'FontWeight', 'bold')
+            xlabel('Cell No.', ...
+                'FontSize', figureDetails.fontSize, ...
+                'FontWeight', 'bold')
+            ylabel('Excluded Trial No.', ...
+                'FontSize', figureDetails.fontSize, ...
+                'FontWeight', 'bold')
+            zlabel('Difference in TI (bits)', ...
+                'FontSize', figureDetails.fontSize, ...
+                'FontWeight', 'bold')
+            set(gca,'FontSize', figureDetails.fontSize-2)
+            subplot(3,1,3)
+            plot(nanLine, 'b*', 'MarkerSize', figureDetails.markerSize)
+            xlim([1 size(myData,1)])
+            ylim([0 2])
+            set(gca, 'YTick', [])
+            %             title(['Classified Time Cells | ', ...
+            %                 db.mouse_name ' ST' num2str(db.sessionType) ' S' num2str(db.session)], ...
+            title('Classified Time Cells', ...
+                'FontSize', figureDetails.fontSize, ...
+                'FontWeight', 'bold')
+            xlabel('Cell No.', ...
+                'FontSize', figureDetails.fontSize, ...
+                'FontWeight', 'bold')
+            ylabel('Is time cell?', ...
+                'FontSize', figureDetails.fontSize, ...
+                'FontWeight', 'bold')
+            set(gca,'FontSize', figureDetails.fontSize-2)
+            if ops0.multiDayAnalysis
+                print(['/Users/ananth/Desktop/figs/importantTrials/diff_TI_' ...
+                    db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_multiDay'],...
+                    '-djpeg');
+            else
+                print(['/Users/ananth/Desktop/figs/importantTrials/diff_TI_' ...
+                    db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method],...
+                    '-djpeg');
+            end
+            
+        end
+        
         disp('... done!')
     end
     percentTimeCells = (length(iTimeCells)/size(dfbf,1))*100;
@@ -454,11 +545,4 @@ for iexp = 1:length(db)
 end
 toc
 disp('All done!')
-% plotCell_Analysis(cell, trialPhase, cellRastor, myData, cellFrequency, AUC, MAX_value, MAX_index, importantTrials, fontSize, lineWidth)
-% figure(11)
-% plot(mean(squeeze(dfbf(23,:,:)),1)*100);
-% title('Comparing between different weights for neuropil subtraction');
-% xlabel('Time (ms)');
-% ylabel('Trial-averaged dF/F (%)')
-% hold on
 %profile viewer
