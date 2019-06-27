@@ -17,10 +17,10 @@ plotFigures = 1;
 playVideo = 0;
 
 %% Dataset details
-mice = [26];
-sessionType = 5;
+mice = [27];
+sessionType = 'An2';
 nSessions = 1;
-nTrials = 60; %default is 60
+nTrials = 48; %default is 60
 startSession = nSessions; %single sessions
 %startSession = 1;
 startTrial = 1;
@@ -38,13 +38,13 @@ nFrames = 313;
 
 %% Directories
 imageProcessDirec = '/Users/ananth/Desktop/Work/Analysis/Behaviour/ImageProcess/';
-rawDirec = '/Users/ananth/Desktop/Work/Behaviour/DATA/';
-%rawDirec = '/Volumes/ananthamurthy/EyeBlinkBehaviour/';
+%rawDirec = '/Users/ananth/Desktop/Work/Behaviour/DATA/';
+rawDirec = '/Volumes/ananthamurthy/EyeBlinkBehaviour/';
 motionDirec = '/Users/ananth/Desktop/Work/Analysis/Behaviour/Motion/';
 performanceDirec = '/Users/ananth/Desktop/Work/Analysis/Behaviour/Performance/';
 saveDirec = '/Users/ananth/Desktop/Work/Analysis/Behaviour/FEC/';
 if ~exist(rawDirec, 'dir')
-    warning('Raw directory not found')
+    warning('Raw directory not found. Have you tried findTheEye.m?')
     return
 end
 
@@ -60,7 +60,7 @@ for mouse = 1:length(mice)
     %mouseName = ['G5-' num2str(mice(mouse))];
     
     for session = startSession:nSessions
-        dataset = [mouseName '_' num2str(sessionType) '_' num2str(session)];
+        dataset = [mouseName '_' sessionType '_' num2str(session)];
         disp(['Working on ' dataset])
         
         if doFECAnalysis == 1
@@ -186,7 +186,7 @@ for mouse = 1:length(mice)
                             'FontSize', fontSize, ...
                             'FontWeight', 'bold')
                         title(['Eye - ' mouseName ...
-                            ' ST' num2str(sessionType) ' S' num2str(session) ...
+                            ' ST' sessionType ' S' num2str(session) ...
                             ' Trial ' num2str(trial) ...
                             ' Frame ' num2str(frame)], ...
                             'FontSize', fontSize, ...
@@ -545,7 +545,7 @@ for mouse = 1:length(mice)
             %             legend('mean Paired +/- stddev', 'mean Probe +/- stddev','Location', 'northwest')
             
             print(['/Users/ananth/Desktop/figs/FEC/fec_' ...
-                mouseName '_' num2str(sessionType) '_' num2str(session)],...
+                mouseName '_' sessionType '_' num2str(session)],...
                 '-djpeg');
         end
         disp([dataset ' analyzed'])

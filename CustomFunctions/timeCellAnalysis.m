@@ -17,11 +17,12 @@ addpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopi
 ops0.multiDayAnalysis       = 0; %For chronic tracking experiments; usually set to 0
 ops0.fig                    = 1;
 ops0.method                 = 'C'; % A: only PSTH; B: PSTH then filter; C: filter then PSTH; use 'C'
-ops0.useLOTO                = 1;
+ops0.useLOTO                = 0;
 ops0.gaussianSmoothing      = 0;
 ops0.bandpassFilter         = 0;
-ops0.loadBehaviourData      = 1;
+ops0.loadBehaviourData      = 0;
 ops0.onlyProbeTrials        = 0;
+ops0.findTimeCells          = 1;
 ops0.saveData               = 1;
 %% Dataset
 make_db
@@ -82,7 +83,7 @@ for iexp = 1:length(db)
     
     %Search for low frequency events
     if ops0.gaussianSmoothing
-        nSamples = 4; %for Gaussian Kernel
+        nSamples = 3; %for Gaussian Kernel
         [dfbf_sigOnly_smooth, gaussianKernel] = doGaussianSmoothing(dfbf_sigOnly, nSamples);
         %         cell = 15;
         %         figure(20)
@@ -121,69 +122,72 @@ for iexp = 1:length(db)
     else
         myData = dfbf_sigOnly; % crucial
     end
-    %% Tuning and time field fidelity using PSTH
-    %Area Under Curve
-    %AUC = doAUC(myData(:,:,window)); %(Data, percentile)
-    trialPhase = 'wholeTrial';
-    window = findWindow(trialPhase, trialDetails);
-    %window = 100:150;
-    %skipFrames = 116; %Skip frame 116, viz., the CS frame. Use skipFrames = 0 to avoid skipping
-    %skipFrames = trialDetails.preDuration * db(iexp).samplingDate;
-    skipFrames = 81;
-    %NOTE: Make sure to use significant-only traces else a second
-    %threshold needs to be passed as an argument
-    % PSTH based identification of tuning curves
-    freqThreshold = 0.2 * (size(dfbf,2)); %threshold is 25% of the session trials
-    delta = 1; %for now; works out to 207 ms if sampling at 14.5 Hz
-    allCells = ones(size(myData,1),1); %for indexing only
-    if ops0.method == 'A' %No filtering for % of trials active
-        disp('Only PSTH; not filtering for percentage of trials with activity ...')
-        freqThreshold = 0; %meaningless
-        [PSTH, PSTH_3D, nbins] = getPSTH(myData, delta, skipFrames);
-        [timeLockedCells, TI] = getTimeLockedCells(PSTH_3D, allCells, 1000, 99, delta);
-        [cellRastor, cellFrequency, importantTrials] = getCellRastors(myData, skipFrames);
-        iTimeCells = find(timeLockedCells);
-    elseif ops0.method == 'B' %PSTH then filtering for % of trials active
-        disp('First PSTH, then filtering for percentage of trials with activity ...')
-        [PSTH, PSTH_3D, nbins] = getPSTH(myData, delta, skipFrames);
-        [timeLockedCells_temp, TI] = getTimeLockedCells(PSTH_3D, allCells, 1000, 99);
-        %iTimeCells_temp = find(timeLockedCells_temp);
-        [cellRastor, cellFrequency, timeLockedCells, importantTrials] = ...
-            getFreqBasedTimeCellList(myData, timeLockedCells_temp, freqThreshold, skipFrames, delta);
-        iTimeCells = find(timeLockedCells); %Absolute indexing
-        fprintf('%i time-locked cells found\n', length(iTimeCells))
-    elseif ops0.method == 'C' %Filter for % trials active then PSTH
-        disp('First filtering for percentage of trials with activity, then PSTH ...')
-        [cellRastor, cellFrequency, timeLockedCells_temp, importantTrials] = ...
-            getFreqBasedTimeCellList(myData, allCells, freqThreshold, skipFrames, delta);
-        %iTimeCells_temp = find(selectedIndices);
-        %Develop PSTH only for cells passing >25% activity
-        [PSTH, PSTH_3D, nbins] = getPSTH(myData, delta, skipFrames);
-        %Finally, identifying true time-locked cells, using the TI metric
-        [timeLockedCells, TI] = getTimeLockedCells(PSTH_3D, timeLockedCells_temp, 1000, 99);
-        iTimeCells = find(timeLockedCells); %Absolute indexing
-        dfbf_timeLockedCells = myData(iTimeCells,:,:);
-        fprintf('%i time-locked cells found\n', length(iTimeCells))
-    else
-    end
-    %PSTH_probeTrials = sum(PSTH_3D(:,iProbeTrials,:),2);
-    %2. There should be at least two consecutive bins with significant
-    %values for PSTH. TBA
     
-    % Sorting
-    if isempty(find(timeLockedCells,1))
-        %disp('No time cells found')
-        %[sortedPSTHindices, peakIndicies] = [0, 0];
-        sortedPSTHindices = [];
-        peakIndicies = [];
-        PSTH_sorted = [];
-        dfbf_sorted_timeLockedCells = [];
-    else
-        [sortedPSTHindices, peakIndicies] = sortPSTH(PSTH(iTimeCells,:));
-        PSTH_timeLocked = PSTH(iTimeCells,:);
-        PSTH_sorted = PSTH_timeLocked(sortedPSTHindices,:);
-        dfbf_sorted_timeLockedCells = dfbf_timeLockedCells(sortedPSTHindices,:,:);
-        %dfbf_2D_sorted_timeCells = dfbf_2D_timeLockedCells(sortedPSTHindices,:);
+    %% Tuning and time field fidelity using PSTH
+    if ops0.findTimeCells
+        %Area Under Curve
+        %AUC = doAUC(myData(:,:,window)); %(Data, percentile)
+        trialPhase = 'wholeTrial';
+        window = findWindow(trialPhase, trialDetails);
+        %window = 100:150;
+        %skipFrames = 116; %Skip frame 116, viz., the CS frame. Use skipFrames = 0 to avoid skipping
+        %skipFrames = trialDetails.preDuration * db(iexp).samplingDate;
+        skipFrames = 81;
+        %NOTE: Make sure to use significant-only traces else a second
+        %freqThreshold needs to be passed as an argument
+        % PSTH based identification of tuning curves
+        freqThreshold = floor(0.25 * (size(dfbf,2))); %freqThreshold is 25% of the session trials
+        delta = 1; %for now; works out to 207 ms if sampling at 14.5 Hz
+        allCells = ones(size(myData,1),1); %for indexing only
+        if ops0.method == 'A' %No filtering for % of trials active
+            disp('Only PSTH; not filtering for percentage of trials with activity ...')
+            freqThreshold = 0; %meaningless
+            [PSTH, PSTH_3D, nbins] = getPSTH(myData, delta, skipFrames);
+            [timeLockedCells, TI] = getTimeLockedCells(PSTH_3D, allCells, 1000, 99, delta);
+            [cellRastor, cellFrequency, importantTrials] = getCellRastors(myData, skipFrames);
+            iTimeCells = find(timeLockedCells);
+        elseif ops0.method == 'B' %PSTH then filtering for % of trials active
+            disp('First PSTH, then filtering for percentage of trials with activity ...')
+            [PSTH, PSTH_3D, nbins] = getPSTH(myData, delta, skipFrames);
+            [timeLockedCells_temp, TI] = getTimeLockedCells(PSTH_3D, allCells, 1000, 99);
+            %iTimeCells_temp = find(timeLockedCells_temp);
+            [cellRastor, cellFrequency, timeLockedCells, importantTrials] = ...
+                getFreqBasedTimeCellList(myData, timeLockedCells_temp, freqThreshold, skipFrames, delta);
+            iTimeCells = find(timeLockedCells); %Absolute indexing
+            fprintf('%i time-locked cells found\n', length(iTimeCells))
+        elseif ops0.method == 'C' %Filter for % trials active then PSTH
+            disp('First filtering for percentage of trials with activity, then PSTH ...')
+            [cellRastor, cellFrequency, timeLockedCells_temp, importantTrials] = ...
+                getFreqBasedTimeCellList(myData, allCells, freqThreshold, skipFrames, delta);
+            %iTimeCells_temp = find(selectedIndices);
+            %Develop PSTH only for cells passing >25% activity
+            [PSTH, PSTH_3D, nbins] = getPSTH(myData, delta, skipFrames);
+            %Finally, identifying true time-locked cells, using the TI metric
+            [timeLockedCells, TI] = getTimeLockedCells(PSTH_3D, timeLockedCells_temp, 1000, 99);
+            iTimeCells = find(timeLockedCells); %Absolute indexing
+            dfbf_timeLockedCells = myData(iTimeCells,:,:);
+            fprintf('%i time-locked cells found\n', length(iTimeCells))
+        else
+        end
+        %PSTH_probeTrials = sum(PSTH_3D(:,iProbeTrials,:),2);
+        %2. There should be at least two consecutive bins with significant
+        %values for PSTH. TBA
+        
+        % Sorting
+        if isempty(find(timeLockedCells,1))
+            %disp('No time cells found')
+            %[sortedPSTHindices, peakIndicies] = [0, 0];
+            sortedPSTHindices = [];
+            peakIndicies = [];
+            PSTH_sorted = [];
+            dfbf_sorted_timeLockedCells = [];
+        else
+            [sortedPSTHindices, peakIndicies] = sortPSTH(PSTH(iTimeCells,:));
+            PSTH_timeLocked = PSTH(iTimeCells,:);
+            PSTH_sorted = PSTH_timeLocked(sortedPSTHindices,:);
+            dfbf_sorted_timeLockedCells = dfbf_timeLockedCells(sortedPSTHindices,:,:);
+            %dfbf_2D_sorted_timeCells = dfbf_2D_timeLockedCells(sortedPSTHindices,:);
+        end
     end
     %     if ~ops0.onlyProbeTrials
     %         % Sort PSTHs for only Probe Trials
@@ -195,66 +199,69 @@ for iexp = 1:length(db)
     if ops0.useLOTO
         [consolidated_iTimeCells_loto, diff_nTimeCells, consolidated_TI_loto, diff_TI] ...
             = runLOTO(myData, ops0.method, freqThreshold, delta, allCells, skipFrames);
-%         disp('Now using LOTO to find important trials ...')
-%         lotoData = zeros(size(myData)); %done for every cell
-%         %fprintf('... working on time cell %i\n', timeCell)
-%         for trial2remove = 1:size(myData,2)
-%             fprintf('[INFO] LOTO trial2remove - %i\n', trial2remove)
-%             %preallocation
-%             lotoData = squeeze(myData); %crucial
-%             lotoData(:, trial2remove,:) = []; %crucial
-%             nTrials = size(lotoData,2);
-%             if nTrials ~= (size(myData,2)-1)
-%                 error('Error with total trials using LOTO')
-%             end
-%             if ops0.method == 'A' %No filtering for % of trials active
-%                 disp('LOTO; only PSTH; not filtering for percentage of trials with activity ...')
-%                 freqThreshold = 0; %meaningless
-%                 [PSTH_loto, PSTH_3D_loto, nbins] = getPSTH(lotoData, delta, skipFrames);
-%                 [timeLockedCells_loto, TI_loto] = getTimeLockedCells(PSTH_3D_loto, allCells, 1000, 99, delta);
-%                 [cellRastor_loto, cellFrequency_loto, importantTrials_loto] = getCellRastors(lotoData, skipFrames);
-%                 iTimeCells = find(timeLockedCells_loto);
-%                 fprintf('%i time-locked cells found\n', length(iTimeCells_loto))
-%             elseif ops0.method == 'B' %PSTH then filtering for % of trials active
-%                 disp('LOTO; first PSTH, then filtering for percentage of trials with activity ...')
-%                 [PSTH_loto, PSTH_3D_loto, nbins] = getPSTH(lotoData, delta, skipFrames);
-%                 [timeLockedCells_temp_loto, TI_loto] = getTimeLockedCells(PSTH_3D_loto, allCells, 1000, 99);
-%                 iTimeCells_temp_loto = find(timeLockedCells_temp_loto);
-%                 [cellRastor_loto, cellFrequency_loto, timeLockedCells_loto, importantTrials_loto] = ...
-%                     getFreqBasedTimeCellList(myData, timeLockedCells_temp_loto, freqThreshold, skipFrames, delta);
-%                 iTimeCells = find(timeLockedCells); %Absolute indexing
-%                 fprintf('%i time-locked cells found\n', length(iTimeCells_loto))
-%             elseif ops0.method == 'C' %Filter for % trials active then PSTH
-%                 disp('LOTO; first filtering for percentage of trials with activity, then PSTH ...')
-%                 [cellRastor_loto, cellFrequency_loto, timeLockedCells_temp_loto, importantTrials_loto] = ...
-%                     getFreqBasedTimeCellList(lotoData, allCells, freqThreshold, skipFrames, delta);
-%                 %iTimeCells_temp_loto = find(timeLockedCells_temp_loto);
-%                 %Develop PSTH only for cells passing >25% activity
-%                 [PSTH_loto, PSTH_3D_loto, nbins] = getPSTH(lotoData, delta, skipFrames);
-%                 %Finally, identifying true time-locked cells, using the TI metric
-%                 [timeLockedCells_loto, TI_loto] = getTimeLockedCells(PSTH_3D_loto, timeLockedCells_temp_loto, 1000, 99);
-%                 iTimeCells_loto = find(timeLockedCells_loto); %Absolute indexing
-%                 dfbf_timeLockedCells_loto = myData(iTimeCells_loto,:,:);
-%                 fprintf('%i time-locked cells found\n', length(iTimeCells_loto))
-%             else
-%             end
-%             consolidated_TI_loto{trial2remove} = TI_loto;
-%             consolidated_iTimeCells_loto{trial2remove} = iTimeCells_loto;
-%         end
-%         %preallocation
-%         diff_nTimeCells = zeros(size(myData,2),1);
-%         diff_TI = zeros(size(myData,2), size(myData,1));
-%         %Look for Differences
-%         for trial = 1:size(myData,2) % trial is basically the trial2remove
-%             diff_nTimeCells(trial,:) = length(iTimeCells) - length(consolidated_iTimeCells_loto{1, trial});
-%             diff_TI(trial,:) = TI - consolidated_TI_loto{1, trial};
-%         end
-%         disp('... done!')
+        %         disp('Now using LOTO to find important trials ...')
+        %         lotoData = zeros(size(myData)); %done for every cell
+        %         %fprintf('... working on time cell %i\n', timeCell)
+        %         for trial2remove = 1:size(myData,2)
+        %             fprintf('[INFO] LOTO trial2remove - %i\n', trial2remove)
+        %             %preallocation
+        %             lotoData = squeeze(myData); %crucial
+        %             lotoData(:, trial2remove,:) = []; %crucial
+        %             nTrials = size(lotoData,2);
+        %             if nTrials ~= (size(myData,2)-1)
+        %                 error('Error with total trials using LOTO')
+        %             end
+        %             if ops0.method == 'A' %No filtering for % of trials active
+        %                 disp('LOTO; only PSTH; not filtering for percentage of trials with activity ...')
+        %                 freqThreshold = 0; %meaningless
+        %                 [PSTH_loto, PSTH_3D_loto, nbins] = getPSTH(lotoData, delta, skipFrames);
+        %                 [timeLockedCells_loto, TI_loto] = getTimeLockedCells(PSTH_3D_loto, allCells, 1000, 99, delta);
+        %                 [cellRastor_loto, cellFrequency_loto, importantTrials_loto] = getCellRastors(lotoData, skipFrames);
+        %                 iTimeCells = find(timeLockedCells_loto);
+        %                 fprintf('%i time-locked cells found\n', length(iTimeCells_loto))
+        %             elseif ops0.method == 'B' %PSTH then filtering for % of trials active
+        %                 disp('LOTO; first PSTH, then filtering for percentage of trials with activity ...')
+        %                 [PSTH_loto, PSTH_3D_loto, nbins] = getPSTH(lotoData, delta, skipFrames);
+        %                 [timeLockedCells_temp_loto, TI_loto] = getTimeLockedCells(PSTH_3D_loto, allCells, 1000, 99);
+        %                 iTimeCells_temp_loto = find(timeLockedCells_temp_loto);
+        %                 [cellRastor_loto, cellFrequency_loto, timeLockedCells_loto, importantTrials_loto] = ...
+        %                     getFreqBasedTimeCellList(myData, timeLockedCells_temp_loto, freqThreshold, skipFrames, delta);
+        %                 iTimeCells = find(timeLockedCells); %Absolute indexing
+        %                 fprintf('%i time-locked cells found\n', length(iTimeCells_loto))
+        %             elseif ops0.method == 'C' %Filter for % trials active then PSTH
+        %                 disp('LOTO; first filtering for percentage of trials with activity, then PSTH ...')
+        %                 [cellRastor_loto, cellFrequency_loto, timeLockedCells_temp_loto, importantTrials_loto] = ...
+        %                     getFreqBasedTimeCellList(lotoData, allCells, freqThreshold, skipFrames, delta);
+        %                 %iTimeCells_temp_loto = find(timeLockedCells_temp_loto);
+        %                 %Develop PSTH only for cells passing >25% activity
+        %                 [PSTH_loto, PSTH_3D_loto, nbins] = getPSTH(lotoData, delta, skipFrames);
+        %                 %Finally, identifying true time-locked cells, using the TI metric
+        %                 [timeLockedCells_loto, TI_loto] = getTimeLockedCells(PSTH_3D_loto, timeLockedCells_temp_loto, 1000, 99);
+        %                 iTimeCells_loto = find(timeLockedCells_loto); %Absolute indexing
+        %                 dfbf_timeLockedCells_loto = myData(iTimeCells_loto,:,:);
+        %                 fprintf('%i time-locked cells found\n', length(iTimeCells_loto))
+        %             else
+        %             end
+        %             consolidated_TI_loto{trial2remove} = TI_loto;
+        %             consolidated_iTimeCells_loto{trial2remove} = iTimeCells_loto;
+        %         end
+        %         %preallocation
+        %         diff_nTimeCells = zeros(size(myData,2),1);
+        %         diff_TI = zeros(size(myData,2), size(myData,1));
+        %         %Look for Differences
+        %         for trial = 1:size(myData,2) % trial is basically the trial2remove
+        %             diff_nTimeCells(trial,:) = length(iTimeCells) - length(consolidated_iTimeCells_loto{1, trial});
+        %             diff_TI(trial,:) = TI - consolidated_TI_loto{1, trial};
+        %         end
+        %         disp('... done!')
     end
     disp('... done!')
-    
+    %% Search for large Calcium events
+    largeEvents = detectLargeEvents(myData);
     %% Data Saving for Custom section
     if ops0.saveData
+        percentTimeCells = (length(iTimeCells)/size(dfbf,1))*100;
+        fprintf('[INFO] %0.4f %% of cells were time-locked\n', percentTimeCells)
         disp('Saving data ...')
         if ~isdir(saveFolder)
             mkdir(saveFolder);
@@ -269,7 +276,8 @@ for iexp = 1:length(db)
                     'freqThreshold', ...
                     'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
                     'delta', ...
-                    'PSTH', 'iTimeCells', 'consolidated_iTimeCells_loto', 'TI', 'consolidated_TI_loto')
+                    'PSTH', 'iTimeCells', 'consolidated_iTimeCells_loto', 'TI', 'consolidated_TI_loto', ...
+                    'largeEvents')
             else
                 save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '.mat' ], ...
                     'dfbf', 'baselines', 'dfbf_2D', ...
@@ -279,7 +287,8 @@ for iexp = 1:length(db)
                     'freqThreshold', ...
                     'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
                     'delta', ...
-                    'PSTH', 'iTimeCells', 'consolidated_iTimeCells_loto', 'TI', 'consolidated_TI_loto')
+                    'PSTH', 'iTimeCells', 'consolidated_iTimeCells_loto', 'TI', 'consolidated_TI_loto', ...
+                    'largeEvents')
             end
         else
             if ops0.multiDayAnalysis
@@ -291,7 +300,8 @@ for iexp = 1:length(db)
                     'freqThreshold', ...
                     'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
                     'delta', ...
-                    'PSTH', 'iTimeCells', 'TI')
+                    'PSTH', 'iTimeCells', 'TI', ...
+                    'largeEvents')
             else
                 save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '.mat' ], ...
                     'dfbf', 'baselines', 'dfbf_2D', ...
@@ -301,7 +311,8 @@ for iexp = 1:length(db)
                     'freqThreshold', ...
                     'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
                     'delta', ...
-                    'PSTH', 'iTimeCells', 'TI')
+                    'PSTH', 'iTimeCells', 'TI', ...
+                    'largeEvents')
             end
         end
         disp('... done!')
@@ -355,44 +366,48 @@ for iexp = 1:length(db)
         %
         %         subplot(1,2,2);
         %         %plot sorted data
-        %         plotSequences(db(iexp), dfbf_sorted_timeLockedCells, trialPhase, 'Frames', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 1)
+        %         plotSequences(db(iexp), dfbf_sorted_timeLockedCells, trialPhase, 'Frames', ['Sorted Cells (Threshold: ' num2str(freqThreshold) ')'], figureDetails, 1)
         %         colormap(figureDetails.colorMap)
         %
         %         if ops0.multiDayAnalysis
         %             print(['/Users/ananth/Desktop/figs/sort/timeCells_allTrialsAvg_sorted_' ...
-        %                 'threshold' num2str(threshold) '_' ...
+        %                 'freqThreshold' num2str(freqThreshold) '_' ...
         %                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_multiDay'],...
         %                 '-djpeg');
         %         else
         %             print(['/Users/ananth/Desktop/figs/sort/timeCells_allTrialsAvg_sorted_' ...
-        %                 'threshold' num2str(threshold) '_' ...
+        %                 'freqThreshold' num2str(freqThreshold) '_' ...
         %                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method],...
         %                 '-djpeg');
         %         end
         
         % Calcium activity for time-locked cells, from all trials
-        %         fig3 = figure(3);
-        %         clf
-        %         set(fig3,'Position',[300,300,1200,500])
-        %         subplot(2,1,1);
-        %         %plot unsorted data
-        %         plotdFbyF(db(iexp), dfbf_2D, trialDetails, 'Frames', 'Unsorted Cells', figureDetails, 0)
-        %         %plot sorted data
-        %         subplot(2,1,2);
-        %         plotdFbyF(db(iexp), dfbf_2D_sorted_timeCells, trialDetails, 'Frames', ['Sorted Cells (Threshold: ' num2str(threshold) ')'], figureDetails, 0)
-        %         colormap(figureDetails.colorMap)
-        %
-        %         if ops0.multiDayAnalysis
-        %             print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_2D_allTrials_' ...
-        %                 'threshold' num2str(threshold) '_'...
-        %                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_sorted_multiDay'],...
-        %                 '-djpeg');
-        %         else
-        %             print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_2D_allTrials_' ...
-        %                 'threshold' num2str(threshold) '_'...
-        %                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_sorted'],...
-        %                 '-djpeg');
-        %         end
+        fig3 = figure(3);
+        clf
+        set(fig3,'Position',[300,300,1200,500])
+        if ~isempty(iTimeCells)
+            subplot(2,1,1);
+            %plot unsorted data
+            plotdFbyF(db(iexp), dfbf_2D, trialDetails, 'Frames', 'Unsorted Cells', figureDetails, 0)
+            %plot sorted data
+            subplot(2,1,2);
+            plotdFbyF(db(iexp), dfbf_2D_sorted_timeCells, trialDetails, 'Frames', ['Sorted Cells (Threshold: ' num2str(freqThreshold) ')'], figureDetails, 0)
+            colormap(figureDetails.colorMap)
+        else
+            plotdFbyF(db(iexp), dfbf_2D, trialDetails, 'Frames', 'Unsorted Cells', figureDetails, 0)
+        end
+        
+        if ops0.multiDayAnalysis
+            print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_2D_allTrials_' ...
+                'freqThreshold' num2str(freqThreshold) '_'...
+                db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_sorted_multiDay'],...
+                '-djpeg');
+        else
+            print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_2D_allTrials_' ...
+                'freqThreshold' num2str(freqThreshold) '_'...
+                db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_sorted'],...
+                '-djpeg');
+        end
         
         % Temporal Information
         %         fig4 = figure(4);
@@ -438,7 +453,9 @@ for iexp = 1:length(db)
         set(fig5,'Position',[300,300,800,400])
         plot(TI_sorted, 'b*', ...
             'MarkerSize', figureDetails.markerSize)
-        axis([0 size(TI_sorted,1) 0.2 2])
+        if ~isempty(TI_sorted)
+            axis([0 size(TI_sorted,1) 0.2 2])
+        end
         %         title(sprintf('Trends in Temporal Information (Method: %s)', ops0.method), ...
         %             'FontSize', figureDetails.fontSize, ...
         %             'FontWeight', 'bold')
@@ -495,11 +512,11 @@ for iexp = 1:length(db)
             fig7 = figure(7);
             clf
             set(fig7,'Position',[300,300,1500,1500])
-%             for trial = 1:size(myData,2)
-%                 hold on;
-%                 plot(diff_TI(trial,:), '-bo', ...
-%                     'MarkerSize', figureDetails.markerSize)
-%             end
+            %             for trial = 1:size(myData,2)
+            %                 hold on;
+            %                 plot(diff_TI(trial,:), '-bo', ...
+            %                     'MarkerSize', figureDetails.markerSize)
+            %             end
             subplot(3,1,1:2)
             surf(diff_TI, 'FaceAlpha', 0.4);
             colormap autumn
@@ -548,8 +565,6 @@ for iexp = 1:length(db)
         
         disp('... done!')
     end
-    percentTimeCells = (length(iTimeCells)/size(dfbf,1))*100;
-    fprintf('[INFO] %0.4f %% of cells were time-locked\n', percentTimeCells)
 end
 toc
 disp('All done!')
