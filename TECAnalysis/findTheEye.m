@@ -16,9 +16,9 @@ loadData = 0;
 playVideo = 0;
 
 %% Dataset details
-mice = 25;
-sessionType = 5;
-nSessions = 7;
+mice = 27;
+sessionType = 'An2';
+nSessions = 1;
 
 nTrials = 1; %default is 1
 startSession = nSessions;
@@ -29,7 +29,7 @@ startFrame = 1;
 %samplingRate = 100; % in Frames Per Second (FPS)
 %trialDuration = 1.5; % in seconds
 %nFrames = floor(samplingRate*trialDuration); %per trial
-nFrames = 313;
+nFrames = 207;
 % if sessionType == 6
 %     nFrames = 330; %per trial;
 % elseif sessionType == 8
@@ -40,8 +40,8 @@ nFrames = 313;
 
 %% Directories
 saveDirec = '/Users/ananth/Desktop/Work/Analysis/Behaviour/ImageProcess/';
-%rawDirec = '/Users/ananth/Desktop/Work/Behaviour/DATA/';
-rawDirec = '/Volumes/ananthamurthy/EyeBlinkBehaviour/';
+rawDirec = '/Users/ananth/Desktop/Work/Behaviour/DATA/';
+%rawDirec = '/Volumes/ananthamurthy/EyeBlinkBehaviour/';
 
 if ~exist(rawDirec, 'dir')
     warning('Raw directory not found')
@@ -66,8 +66,8 @@ for mouse = 1:length(mice)
         if loadData == 0
             percentile = 65;
             % Crop parameters - please change to requirement
-            xmin1 = 220;
-            ymin1 = 25;
+            xmin1 = 50;
+            ymin1 = 150;
             width1 = 200;
             height1 = 150;
             crop = [xmin1 ymin1 width1 height1]; %[xmin ymin width height] of refImage
@@ -89,10 +89,10 @@ for mouse = 1:length(mice)
             for trial = startTrial:nTrials
                 if trial <10
                     file = [rawDirec mouseName '/' dataset, ...
-                        '/trial_00' num2str(trial) '.tif'];
+                        '/00' num2str(trial) '.tiff'];
                 else
                     file = [rawDirec mouseName '/' dataset, ...
-                        '/trial_0' num2str(trial) '.tif'];
+                        '/0' num2str(trial) '.tiff'];
                 end
                 
                 %for frame = startFrame:nFrames
@@ -155,8 +155,8 @@ for mouse = 1:length(mice)
                 end
             end
         else
-            %1 - Load the reference image (first image in Trial 1)
-            file = [rawDirec mouseName '/' dataset '/trial_00' num2str(startTrial) '.tif'];
+            %1 - Load the reference image (typically first image in Trial 1)
+            file = [rawDirec mouseName '/' dataset '/00' num2str(startTrial) '.tiff'];
             refImage = double(imread(file, 1));
             
             %2 - Crop image - for eye (absolute coordinates)

@@ -27,7 +27,7 @@ startTrial = 1;
 startFrame = 1;
 
 % Video details
-nFrames = 313;
+nFrames = 207;
 % if sessionType == 6
 %     nFrames = 330; %per trial;
 % elseif sessionType == 8
@@ -38,13 +38,14 @@ nFrames = 313;
 
 %% Directories
 imageProcessDirec = '/Users/ananth/Desktop/Work/Analysis/Behaviour/ImageProcess/';
-%rawDirec = '/Users/ananth/Desktop/Work/Behaviour/DATA/';
-rawDirec = '/Volumes/ananthamurthy/EyeBlinkBehaviour/';
+rawDirec = '/Users/ananth/Desktop/Work/Behaviour/DATA/';
+%rawDirec = '/Volumes/ananthamurthy/EyeBlinkBehaviour/';
 motionDirec = '/Users/ananth/Desktop/Work/Analysis/Behaviour/Motion/';
 performanceDirec = '/Users/ananth/Desktop/Work/Analysis/Behaviour/Performance/';
 saveDirec = '/Users/ananth/Desktop/Work/Analysis/Behaviour/FEC/';
+
 if ~exist(rawDirec, 'dir')
-    warning('Raw directory not found. Have you tried findTheEye.m?')
+    warning('Raw directory not found')
     return
 end
 
@@ -92,10 +93,10 @@ for mouse = 1:length(mice)
                 
                 if trial <10
                     file = [rawDirec mouseName '/' dataset, ...
-                        '/trial_00' num2str(trial) '.tif'];
+                        '/00' num2str(trial) '.tiff'];
                 else
                     file = [rawDirec mouseName '/' dataset, ...
-                        '/trial_0' num2str(trial) '.tif'];
+                        '/0' num2str(trial) '.tiff'];
                     
                     if (mod(trial,10) == 0) && trial ~= nTrials
                         disp(['... working on ' dataset ' ...'])
@@ -136,7 +137,8 @@ for mouse = 1:length(mice)
                         continue
                     else
                         %{
-                        DATALINE:
+                        **********!!! TO BE UPDATED !!!******
+                        DATALINE: 
                         1. msg_ (timestamp1)
                         2. "%lu,%d,%d,%d,%d,%d,%d,%d,%d,%s" (timestamp2)
                         3. timestamp3 (arduino)
