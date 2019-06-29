@@ -17,8 +17,8 @@ playVideo = 0;
 
 %% Dataset details
 mice = 27;
-sessionType = 'An2';
-nSessions = 1;
+sessionType = 'All3';
+nSessions = 2;
 
 nTrials = 1; %default is 1
 startSession = nSessions;
