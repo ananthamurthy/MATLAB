@@ -20,7 +20,7 @@ playVideo = 0;
 mice = [27];
 sessionType = 'An2';
 nSessions = 1;
-nTrials = 30; %default is 60
+nTrials = 2; %default is 60
 startSession = nSessions; %single sessions
 %startSession = 1;
 startTrial = 1;
@@ -71,11 +71,12 @@ for mouse = 1:length(mice)
             load([imageProcessDirec mouseName '/' dataset '/imageProcess.mat'])
             
             % Preallocation - for every individual session
+            frameTime = zeros(nTrials,nFrames);
+            frame_dt = nan(nTrials,nFrames);
             eyeClosure = nan(nTrials,nFrames);
             eyeClosure_baseline = nan(nTrials,1);
             fec = nan(nTrials,nFrames);
             probeTrials = zeros(nTrials,1); %NOTE: Don't initialize with "NaN".
-            timestamp3 = zeros(nTrials,nFrames);
             trialCount = zeros(nTrials,nFrames);
             puffUS = zeros(nTrials,nFrames);
             toneCS = zeros(nTrials,nFrames);
@@ -150,7 +151,18 @@ for mouse = 1:length(mice)
                         12. shock_pin_readout
                         13. encoder_value_
                         %}
-                        timestamp3(trial,frame) = str2double(sprintf(dataLine(commai(2)+1:commai(3)-1),'%s'));
+                        frameTimeStamp = sprintf(dataLine(commai(1)+1:commai(2)-1),'%s');
+                        coloni = strfind(frameTimeStamp, ':');
+                        frameTime(trial, frame) = str2num(frameTimeStamp(coloni(2)+1:end)); %only considering seconds
+                        %disp(frameTime(trial, frame))
+                        if frame >1
+                            frame_dt(trial, frame) = frameTime(trial, frame) - frameTime(trial, frame-1);
+                            if frame_dt(trial, frame) <= 0
+                                %fprintf('Timestamp problem; Trial: %i, Frame: %i\n', trial, frame)
+                                %%%%%%%%%%%%fprintf('%i, %i')
+                            end
+                            %disp(frame_dt(trial,frame))
+                        end
                         trialCount(trial,frame) = str2double(sprintf(dataLine(commai(4)+1:commai(5)-1),'%s'));
                         if trialCount(trial,frame) ~= trial
                             warning('trialCount ~= trial')
@@ -209,7 +221,7 @@ for mouse = 1:length(mice)
                 end
                 %Displacement
                 for frame = 2:nFrames %2nd frame onwards
-                    displacement(trial, frame) = position(trial, frame) - position (trial, frame-1);
+                    displacement(trial, frame) = position(trial, frame) - position (trial, frame-1);  
                 end
                 %FEC
                 eyeClosure_baseline(trial) = max(eyeClosure(trial,:));
@@ -313,6 +325,7 @@ for mouse = 1:length(mice)
                 save([saveFolder 'fec.mat' ], ...
                     'eyeClosure', 'FEC', ...
                     'LED', 'PUFF', ...
+                    'frameTime','frame_dt', ...
                     'probeTrials',...
                     'camera', 'microscope', ...
                     'crop', 'fecROI')
