@@ -16,9 +16,9 @@ loadData = 0;
 playVideo = 0;
 
 %% Dataset details
-mice = 27;
-sessionType = 'All3';
-nSessions = 2;
+mice = 30;
+sessionType = 'An2';
+nSessions = 4;
 
 nTrials = 1; %default is 1
 startSession = nSessions;
@@ -29,7 +29,7 @@ startFrame = 1;
 %samplingRate = 100; % in Frames Per Second (FPS)
 %trialDuration = 1.5; % in seconds
 %nFrames = floor(samplingRate*trialDuration); %per trial
-nFrames = 207;
+nFrames = 281; % 207
 % if sessionType == 6
 %     nFrames = 330; %per trial;
 % elseif sessionType == 8
@@ -56,6 +56,7 @@ for mouse = 1:length(mice)
     
     mouseName = ['M' num2str(mice(mouse))];
     %mouseName = ['G5-' num2str(mice(mouse))];
+    %mouseName = ['G' num2str(mice(mouse))];
     
     for session = startSession:nSessions
         %         dataset = ['Mouse' mouseName '_SessionType' num2str(sessionType) '_Session' num2str(session)];
@@ -64,10 +65,10 @@ for mouse = 1:length(mice)
         
         %%
         if loadData == 0
-            percentile = 65;
+            percentile = 45;
             % Crop parameters - please change to requirement
-            xmin1 = 50;
-            ymin1 = 150;
+            xmin1 = 280;
+            ymin1 = 90;
             width1 = 200;
             height1 = 150;
             crop = [xmin1 ymin1 width1 height1]; %[xmin ymin width height] of refImage

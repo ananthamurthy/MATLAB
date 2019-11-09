@@ -39,7 +39,8 @@ elseif dataset.sessionType == 11 %250 ms trace - legacy
     trialDetails.traceDuration      = 0.4500; %in seconds
 
 else
-    warning('Unknown session type')
+    warning('Unknown session type, using trace duration as 250 ms')
+    trialDetails.traceDuration      = 0.2500; %in seconds
 end
 
 trialDetails.postDuration = dataset.trialDuration - ...

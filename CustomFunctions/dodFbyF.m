@@ -13,7 +13,9 @@ dfbf_2D = nan(nCells,dataset.nTrials*dataset.nFrames);
 
 raw = nan(nCells, dataset.nTrials, dataset.nFrames);
 for cell = 1:nCells
+    %disp(cell)
     for trial = 1:dataset.nTrials
+        %disp(trial)
         count = trial-1;
         
         %First, separate out the trials, to do a proper dF/F

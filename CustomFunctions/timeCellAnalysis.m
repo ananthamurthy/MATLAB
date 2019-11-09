@@ -137,7 +137,7 @@ for iexp = 1:length(db)
         %freqThreshold needs to be passed as an argument
         % PSTH based identification of tuning curves
         freqThreshold = floor(0.25 * (size(dfbf,2))); %freqThreshold is 25% of the session trials
-        delta = 1; %for now; works out to 207 ms if sampling at 14.5 Hz
+        delta = 3; %for now; works out to 207 ms if sampling at 14.5 Hz
         allCells = ones(size(myData,1),1); %for indexing only
         if ops0.method == 'A' %No filtering for % of trials active
             disp('Only PSTH; not filtering for percentage of trials with activity ...')
@@ -166,6 +166,8 @@ for iexp = 1:length(db)
             [timeLockedCells, TI] = getTimeLockedCells(PSTH_3D, timeLockedCells_temp, 1000, 99);
             iTimeCells = find(timeLockedCells); %Absolute indexing
             dfbf_timeLockedCells = myData(iTimeCells,:,:);
+            %2D
+            
             fprintf('%i time-locked cells found\n', length(iTimeCells))
         else
         end
@@ -181,8 +183,13 @@ for iexp = 1:length(db)
             peakIndicies = [];
             PSTH_sorted = [];
             dfbf_sorted_timeLockedCells = [];
+            dfbf_2D_sorted_timeCells = [];
         else
             [sortedPSTHindices, peakIndicies] = sortPSTH(PSTH(iTimeCells,:));
+            %%%
+            %Add a section to use the median time onset delay
+            %maybe use PSTH_3D
+            %%%
             PSTH_timeLocked = PSTH(iTimeCells,:);
             PSTH_sorted = PSTH_timeLocked(sortedPSTHindices,:);
             dfbf_sorted_timeLockedCells = dfbf_timeLockedCells(sortedPSTHindices,:,:);
@@ -382,32 +389,32 @@ for iexp = 1:length(db)
         %         end
         
         % Calcium activity for time-locked cells, from all trials
-        fig3 = figure(3);
-        clf
-        set(fig3,'Position',[300,300,1200,500])
-        if ~isempty(iTimeCells)
-            subplot(2,1,1);
-            %plot unsorted data
-            plotdFbyF(db(iexp), dfbf_2D, trialDetails, 'Frames', 'Unsorted Cells', figureDetails, 0)
-            %plot sorted data
-            subplot(2,1,2);
-            plotdFbyF(db(iexp), dfbf_2D_sorted_timeCells, trialDetails, 'Frames', ['Sorted Cells (Threshold: ' num2str(freqThreshold) ')'], figureDetails, 0)
-            colormap(figureDetails.colorMap)
-        else
-            plotdFbyF(db(iexp), dfbf_2D, trialDetails, 'Frames', 'Unsorted Cells', figureDetails, 0)
-        end
-        
-        if ops0.multiDayAnalysis
-            print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_2D_allTrials_' ...
-                'freqThreshold' num2str(freqThreshold) '_'...
-                db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_sorted_multiDay'],...
-                '-djpeg');
-        else
-            print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_2D_allTrials_' ...
-                'freqThreshold' num2str(freqThreshold) '_'...
-                db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_sorted'],...
-                '-djpeg');
-        end
+%         fig3 = figure(3);
+%         clf
+%         set(fig3,'Position',[300,300,1200,500])
+%         if ~isempty(iTimeCells)
+%             subplot(2,1,1);
+%             %plot unsorted data
+%             plotdFbyF(db(iexp), dfbf_2D, trialDetails, 'Frames', 'Unsorted Cells', figureDetails, 0)
+%             %plot sorted data
+%             subplot(2,1,2);
+%             plotdFbyF(db(iexp), dfbf_2D_sorted_timeCells, trialDetails, 'Frames', ['Sorted Cells (Threshold: ' num2str(freqThreshold) ')'], figureDetails, 0)
+%             colormap(figureDetails.colorMap)
+%         else
+%             plotdFbyF(db(iexp), dfbf_2D, trialDetails, 'Frames', 'Unsorted Cells', figureDetails, 0)
+%         end
+%         
+%         if ops0.multiDayAnalysis
+%             print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_2D_allTrials_' ...
+%                 'freqThreshold' num2str(freqThreshold) '_'...
+%                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_sorted_multiDay'],...
+%                 '-djpeg');
+%         else
+%             print(['/Users/ananth/Desktop/figs/calciumActivity/dfbf_2D_allTrials_' ...
+%                 'freqThreshold' num2str(freqThreshold) '_'...
+%                 db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_sorted'],...
+%                 '-djpeg');
+%         end
         
         % Temporal Information
         %         fig4 = figure(4);
