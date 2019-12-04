@@ -136,7 +136,7 @@ for iexp = 1:length(db)
         %NOTE: Make sure to use significant-only traces else a second
         %freqThreshold needs to be passed as an argument
         % PSTH based identification of tuning curves
-        freqThreshold = floor(0.25 * (size(dfbf,2))); %freqThreshold is 25% of the session trials
+        freqThreshold = floor(0.00 * (size(dfbf,2))); %freqThreshold is 25% of the session trials
         delta = 3; %for now; works out to 207 ms if sampling at 14.5 Hz
         allCells = ones(size(myData,1),1); %for indexing only
         if ops0.method == 'A' %No filtering for % of trials active
