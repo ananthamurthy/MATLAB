@@ -199,15 +199,22 @@ for iexp = 1:length(db)
         %Use real 2D data
         baseline = zeros(size(dfbf_2D,1),1);
         stddev = zeros(size(dfbf_2D,1),1);
-        A = zeros(size(dfbf_2D,2),1);
+        binaryData = zeros(size(dfbf_2D,2),1);
         %basic scan for events
+%         nEvents = zeros(size(dfbf_2D,1),1);
+%         eventStartIndices = zeros(size(dfbf_2D,1),1);
+%         eventLengths = zeros(size(dfbf_2D,1),1);
         for cell = 1:size(dfbf_2D,1)
         %for cell = 1:1
             B = squeeze(dfbf_2D(cell,:));
             baseline(cell) = mean(B);
             stddev(cell) = std(B);
-            A(find(B > (baseline(cell) + 1*stddev(cell))),1) = 1;
-            [eventLibrary.nEvents(cell), eventLibrary.eventStartIndices(cell), eventLibrary.eventLengths(cell)] = findConsecutiveOnes(A);
+            binaryData(find(B > (baseline(cell) + 1*stddev(cell))),1) = 1;
+            [Events, StartIndices, Lengths] = findConsecutiveOnes(binaryData);
+            eventLibrary(cell).nEvents = Events;
+            eventLibrary(cell).eventStartIndices = StartIndices;
+            eventLibrary(cell).eventLengths = Lengths;
+            % Find a way to optimize memory.
         end
     end
     %     if ~ops0.onlyProbeTrials
