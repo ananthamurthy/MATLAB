@@ -10,6 +10,7 @@ clear
 
 %% Addpaths
 addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions')) % my custom functions
+addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis')) % Additional functions
 addpath(genpath('/Users/ananth/Desktop/Work/Analysis/Imaging')) % analysis output
 addpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies')
 %% Operations
@@ -21,7 +22,7 @@ ops0.gaussianSmoothing      = 0;
 ops0.bandpassFilter         = 0;
 ops0.loadBehaviourData      = 0;
 ops0.onlyProbeTrials        = 0;
-ops0.findTimeCells          = 0;
+ops0.findTimeCells          = 1;
 ops0.saveData               = 0;
 %% Dataset
 make_db
@@ -202,8 +203,8 @@ for iexp = 1:length(db)
     stddev = zeros(size(dfbf_2D,1),1);
     binaryData = zeros(size(dfbf_2D,2),1);
     
-    %basic scan for events
     %2D
+    disp('Basic scan for calcium events ...')
     for cell = 1:size(dfbf_2D,1)
         B = squeeze(dfbf_2D(cell,:));
         baseline(cell) = mean(B);
@@ -220,6 +221,7 @@ for iexp = 1:length(db)
         clear StartIndices
         clear Lengths
     end
+    disp('... calcium activity library updated!')
 end
 %     if ~ops0.onlyProbeTrials
 %         % Sort PSTHs for only Probe Trials
@@ -398,30 +400,30 @@ if ops0.findTimeCells
         %         end
         
         % Temporal Information
-        %         fig4 = figure(4);
-        %         clf
-        %         set(fig4,'Position',[300,300,800,400])
-        %         %TI_all_sorted = TI(sortedPSTHindices,:);
-        %         plot(TI, 'b*', ...
-        %             'LineWidth', figureDetails.lineWidth, ...
-        %             'MarkerSize', figureDetails.markerSize)
-        %         hold on
-        %         TI_onlyTimeLockedCells = nan(size(TI));
-        %         TI_onlyTimeLockedCells(iTimeCells) = TI(iTimeCells);
-        %         plot(TI_onlyTimeLockedCells, 'ro', ...
-        %             'MarkerSize', figureDetails.markerSize)
-        %         axis([0 size(TI,1) 0.5 2.5])
-        %         title(sprintf('Temporal Information (Method: %s)', ops0.method), ...
-        %             'FontSize', figureDetails.fontSize, ...
-        %             'FontWeight', 'bold')
-        %         xlabel('Cell Number', ...
-        %             'FontSize', figureDetails.fontSize, ...
-        %             'FontWeight', 'bold')
-        %         ylabel('Temporal Information (bits)', ...
-        %             'FontSize', figureDetails.fontSize, ...
-        %             'FontWeight', 'bold')
-        %         legend({'All Cells', 'Time-Locked Cells'})
-        %         set(gca,'FontSize', figureDetails.fontSize-2)
+                fig4 = figure(4);
+                clf
+                set(fig4,'Position',[300,300,800,400])
+                %TI_all_sorted = TI(sortedPSTHindices,:);
+                plot(TI, 'b*', ...
+                    'LineWidth', figureDetails.lineWidth, ...
+                    'MarkerSize', figureDetails.markerSize)
+                hold on
+                TI_onlyTimeLockedCells = nan(size(TI));
+                TI_onlyTimeLockedCells(iTimeCells) = TI(iTimeCells);
+                plot(TI_onlyTimeLockedCells, 'ro', ...
+                    'MarkerSize', figureDetails.markerSize)
+                axis([0 size(TI,1) 0.5 2.5])
+                title(sprintf('Temporal Information (Method: %s)', ops0.method), ...
+                    'FontSize', figureDetails.fontSize, ...
+                    'FontWeight', 'bold')
+                xlabel('Cell Number', ...
+                    'FontSize', figureDetails.fontSize, ...
+                    'FontWeight', 'bold')
+                ylabel('Temporal Information (bits)', ...
+                    'FontSize', figureDetails.fontSize, ...
+                    'FontWeight', 'bold')
+                legend({'All Cells', 'Time-Locked Cells'})
+                set(gca,'FontSize', figureDetails.fontSize-2)
         %
         %         if ops0.multiDayAnalysis
         %             print(['/Users/ananth/Desktop/figs/psth/ti_' ...
