@@ -1,3 +1,4 @@
+%disp('Establishing dataset details ...')
 i = 0;
 % i = i+1; %1
 % db(i).mouse_name    = 'M30';
@@ -282,3 +283,6 @@ db(i).nchannels_red = 0;
 % db(i).nplanes       = 1;
 % db(i).expred        = [];
 % db(i).nchannels_red = 0;
+
+%% END
+%disp ('... done!')

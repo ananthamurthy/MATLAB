@@ -23,7 +23,7 @@ ops0.bandpassFilter         = 0;
 ops0.loadBehaviourData      = 0;
 ops0.onlyProbeTrials        = 0;
 ops0.findTimeCells          = 1;
-ops0.saveData               = 0;
+ops0.saveData               = 1;
 %% Dataset
 make_db
 %% Main script
@@ -285,7 +285,7 @@ if ops0.saveData
                     'PSTH', 'iTimeCells', 'TI', ...
                     'largeEvents')
             else
-                disp('Saving single session data after LOTO ...')
+                disp('Saving single session data ...')
                 save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '.mat' ], ...
                     'dfbf', 'baselines', 'dfbf_2D', ...
                     'dfbf_timeLockedCells', ...
