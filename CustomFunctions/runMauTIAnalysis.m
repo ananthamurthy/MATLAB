@@ -1,4 +1,4 @@
-function [Isec, timeCells_Eichenbaum] = runMauTIAnalysis(DATA)
+function [Isec, Ispk, timeCells_Eichenbaum] = runMauTIAnalysis(DATA)
 nCells = size(DATA,1);
 %Preallocations
 MI = zeros(nCells,1);

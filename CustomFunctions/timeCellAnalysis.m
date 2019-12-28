@@ -21,6 +21,7 @@ ops0.useLOTO                = 0;
 ops0.gaussianSmoothing      = 0;
 ops0.bandpassFilter         = 0;
 ops0.loadBehaviourData      = 0;
+ops0.loadSyntheticData      = 1;
 ops0.onlyProbeTrials        = 0;
 ops0.findTimeCells          = 1;
 ops0.saveData               = 1;
@@ -121,6 +122,10 @@ for iexp = 1:length(db)
         myData = filteredData;
     else
         myData = dfbf_sigOnly; % crucial
+    end
+    
+    if ops0.loadSyntheticData == 1
+        myData = load([saveFolder db(iexp).mouse_name '_' db(iexp).date '_syntheticDATA.mat']);
     end
     
     %% Tuning and time field fidelity using PSTH
