@@ -6,14 +6,17 @@
 % batch, soon.
 
 tic
+close all
+clear
+
 addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions')) % my custom functions
 addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis')) % Additional functions
 addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth'))
 
 %% Dataset
 make_db
-%ops0.method          = 'C'; % A: only PSTH; B: PSTH then filter; C: filter then PSTH; use 'C'
-%ops0.fig             = 1;
+ops0.method          = 'C'; % A: only PSTH; B: PSTH then filter; C: filter then PSTH; use 'C'
+ops0.fig             = 0;
 ops0.saveData        = 1;
 %ops0.onlyProbeTrials = 0;
 
@@ -63,11 +66,32 @@ for iexp = 1:length(db)
             clear StartIndices
             clear Lengths
         end
-        disp('... calcium library updated!')
+        disp('... calcium event library created!')
     end
     %Make synthetic dataset
-    %syntheticDATA = syntheticDataMaker(DATA_2D, eventLibrary_2D, timeCellFraction, hitTrialFraction, eventSize, cellOrder, eventTiming);
-    syntheticDATA = syntheticDataMaker(realProcessedData.dfbf_2D, eventLibrary_2D, 100, 100, 'max', 'basic', 'basic');
+    %{
+    [syntheticDATA, putativeTimeCells, requiredEventLength] = syntheticDataMaker(DATA, DATA_2D, eventLibrary_2D, ...
+                        timeCellFraction, hitTrialFraction, trialOrder, eventSize, cellOrder, eventTiming)
+    %}
+    DATA = realProcessedData.dfbf;
+    DATA_2D = realProcessedData.dfbf_2D;
+    timeCellFraction = 100; %in %
+    cellOrder = ones(size(DATA,1),1); %binary vector
+    maxHitTrialFraction = 100;
+    trialOrder = 'basic';
+    eventSize = 'max';
+    eventTiming = 'basic';
+    precision = [0 4]; %2-element vector that sets the range of precision, in frames
+    noise = 'Gaussian';
+    disp('Creating synthetic data ...');
+    
+    [syntheticDATA, putativeTimeCells, requiredEventLength] = syntheticDataMaker(DATA, DATA_2D, eventLibrary_2D, ...
+        timeCellFraction, cellOrder, ...
+        maxHitTrialFraction, trialOrder, ...
+        eventSize, eventTiming, trialDet...
+        precision, noise);
+    
+    disp('... done!')
     
     if ops0.saveData == 1
         save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_eventLibrary_2D.mat'], 'eventLibrary_2D')
@@ -80,3 +104,4 @@ for iexp = 1:length(db)
     end
 end
 toc
+disp('All done!')

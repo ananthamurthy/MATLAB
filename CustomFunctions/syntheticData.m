@@ -75,9 +75,22 @@ for iexp = 1:length(db)
     %}
     DATA = realProcessedData.dfbf;
     DATA_2D = realProcessedData.dfbf_2D;
+    timeCellFraction = 100; %in %
+    cellOrder = ones(size(DATA,1),1); %binary vector
+    maxHitTrialFraction = 100;
+    trialOrder = 'basic';
+    eventSize = 'max';
+    eventTiming = 'basic';
+    precision = [-4 4]; %2-element vector that sets the range of precision, in frames
+    noise = 'Gaussian';
     disp('Creating synthetic data ...');
+    
     [syntheticDATA, putativeTimeCells, requiredEventLength] = syntheticDataMaker(DATA, DATA_2D, eventLibrary_2D, ...
-        100, 100, 'basic', 'max', 'basic', 'basic');
+        timeCellFraction, cellOrder, ...
+        maxHitTrialFraction, trialOrder, ...
+        eventSize, eventTiming, trialDetails, ...
+        precision, noise);
+    
     disp('... done!')
     
     if ops0.saveData == 1
