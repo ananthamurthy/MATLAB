@@ -35,11 +35,13 @@ for cell = 1:nTotalCells
         if strcmp(eventSize, 'max')
             requiredEventLength(cell) = max(eventLibrary_2D(cell).eventLengths);
         elseif strcmp(eventSize, 'large')
-            requiredEventLength(cell) = prctile(eventLibrary_2D(cell).eventLengths, 75);
+            %requiredEventLength(cell) = prctile(eventLibrary_2D(cell).eventLengths, 75);
         elseif strcmp(eventSize, 'medium')
-            requiredEventLength(cell) = prctile(eventLibrary_2D(cell).eventLengths, 50);
+            %requiredEventLength(cell) = prctile(eventLibrary_2D(cell).eventLengths, 50);
         elseif strcmp(eventSize, 'small')
-            requiredEventLength(cell) = prctile(eventLibrary_2D(cell).eventLengths, 25);
+            %requiredEventLength(cell) = prctile(eventLibrary_2D(cell).eventLengths, 25);
+        elseif strcmp(eventSize, 'min')
+            %TBA
         elseif strcmp(eventSize, 'random')
             %Mix of all sizes of events
             %TBA

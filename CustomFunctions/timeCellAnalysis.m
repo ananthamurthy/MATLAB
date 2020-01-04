@@ -27,6 +27,19 @@ ops0.findTimeCells          = 1;
 ops0.saveData               = 1;
 %% Dataset
 make_db
+
+%% Synthetic Data Parameters
+if ops0.loadSyntheticData
+    timeCellFraction = 100; %in %
+    cellOrder = 'basic'; %basic or random
+    maxHitTrialFraction = 100;
+    trialOrder = 'basic'; %basic
+    eventSize = 'max'; %max, large, medium, or small (TBA: random)
+    eventTiming = 'clustered'; %basic, clustered, or random
+    imprecision = [-4 4]; %2-element vector that sets the range of precision, in frames
+    imprecisionType = 'Uniform'; %Uniform or Gaussian
+    noise = 'None';
+end
 %% Main script
 for iexp = 1:length(db)
     fprintf('Analyzing %s_%i_%i - Date: %s\n', db(iexp).mouse_name, ...
@@ -37,15 +50,49 @@ for iexp = 1:length(db)
     saveDirec = '/Users/ananth/Desktop/Work/Analysis/Imaging/';
     saveFolder = [saveDirec db(iexp).mouse_name '/' db(iexp).date '/'];
     
-    %Load Fluorescence Data
-    load(sprintf('/Users/ananth/Desktop/Work/Analysis/Imaging/%s/%s/%i/F_%s_%s_plane%i.mat', ...
-        db(iexp).mouse_name, db(iexp).date, db(iexp).expts, ...
-        db(iexp).mouse_name, db(iexp).date, db(iexp).nplanes))
-    
-    %Registration Options
-    load(sprintf('/Users/ananth/Desktop/Work/Analysis/Imaging/%s/%s/%i/regops_%s_%s.mat', ...
-        db(iexp).mouse_name, db(iexp).date, db(iexp).expts, ...
-        db(iexp).mouse_name, db(iexp).date))
+    if ops0.loadSyntheticData == 1
+        synth = 1;
+        load([saveFolder ...
+            'synthDATA' ...
+            '_tCF' num2str(timeCellFraction) ...
+            '_cO' cellOrder(1) ...
+            '_mHTF' num2str(maxHitTrialFraction) ...
+            '_tO' trialOrder(1) ...
+            '_eS' eventSize(1:2) ...
+            '_eT' eventTiming(1) ...
+            '_mI' num2str(max(imprecision)) ...
+            '_iT' imprecisionType(1) ...
+            '_n' noise(1) ...
+            '.mat'])
+        dfbf = syntheticDATA;
+        baselines = zeros(size(syntheticDATA));
+        dfbf_2D = syntheticDATA_2D;
+    else
+        synth = 0;
+        %Load Fluorescence Data
+        load(sprintf('/Users/ananth/Desktop/Work/Analysis/Imaging/%s/%s/%i/F_%s_%s_plane%i.mat', ...
+            db(iexp).mouse_name, db(iexp).date, db(iexp).expts, ...
+            db(iexp).mouse_name, db(iexp).date, db(iexp).nplanes))
+        
+        %Registration Options
+        load(sprintf('/Users/ananth/Desktop/Work/Analysis/Imaging/%s/%s/%i/regops_%s_%s.mat', ...
+            db(iexp).mouse_name, db(iexp).date, db(iexp).expts, ...
+            db(iexp).mouse_name, db(iexp).date))
+        
+        if ops0.multiDayAnalysis
+            [overlaps] = cat_overlap();
+            if db(iexp).isDayOne
+                newIndices = overlaps.rois.idcs(:,1);
+            else
+                newIndices = overlaps.rois.idcs(:,2);
+            end
+            myRawData = Fcell{1,1}(newIndices,:);
+        else
+            myRawData = Fcell{1,1};
+        end
+        fprintf('Total cells: %i\n', size(myRawData,1))
+        [dfbf, baselines, dfbf_2D] = dodFbyF(db(iexp), myRawData);
+    end
     
     %Load Behaviour Data
     if ops0.loadBehaviourData == 1
@@ -59,20 +106,6 @@ for iexp = 1:length(db)
     end
     
     trialDetails = getTrialDetails(db(iexp)); %test
-    
-    if ops0.multiDayAnalysis
-        [overlaps] = cat_overlap();
-        if db(iexp).isDayOne
-            newIndices = overlaps.rois.idcs(:,1);
-        else
-            newIndices = overlaps.rois.idcs(:,2);
-        end
-        myRawData = Fcell{1,1}(newIndices,:);
-    else
-        myRawData = Fcell{1,1};
-    end
-    fprintf('Total cells: %i\n', size(myRawData,1))
-    [dfbf, baselines, dfbf_2D] = dodFbyF(db(iexp), myRawData);
     
     %Significant-Only Traces
     if ops0.onlyProbeTrials
@@ -124,10 +157,6 @@ for iexp = 1:length(db)
         myData = dfbf_sigOnly; % crucial
     end
     
-    if ops0.loadSyntheticData == 1
-        myData = load([saveFolder db(iexp).mouse_name '_' db(iexp).date '_syntheticDATA.mat']);
-    end
-    
     %% Tuning and time field fidelity using PSTH
     if ops0.findTimeCells
         %Area Under Curve
@@ -137,7 +166,7 @@ for iexp = 1:length(db)
         %window = 100:150;
         %skipFrames = 116; %Skip frame 116, viz., the CS frame. Use skipFrames = 0 to avoid skipping
         %skipFrames = trialDetails.preDuration * db(iexp).samplingDate;
-        skipFrames = 81;
+        skipFrames = [];
         %NOTE: Make sure to use significant-only traces else a second
         %freqThreshold needs to be passed as an argument
         % PSTH based identification of tuning curves
@@ -253,7 +282,7 @@ if ops0.saveData
         if ops0.useLOTO
             if ops0.multiDayAnalysis
                 disp('Saving multi-day data after LOTO ...')
-                save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '_multiDay.mat' ], ...
+                save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '_synth' num2str(synth) '_multiDay.mat' ], ...
                     'dfbf', 'baselines', 'dfbf_2D', ...
                     'dfbf_timeLockedCells', ...
                     'dfbf_sorted_timeLockedCells', ...
@@ -265,7 +294,7 @@ if ops0.saveData
                     'largeEvents')
             else
                 disp('Saving single session data after LOTO ...')
-                save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '.mat' ], ...
+                save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '_synth' num2str(synth) '.mat' ], ...
                     'dfbf', 'baselines', 'dfbf_2D', ...
                     'dfbf_timeLockedCells', ...
                     'dfbf_sorted_timeLockedCells', ...
@@ -279,7 +308,7 @@ if ops0.saveData
         else %Not using LOTO
             if ops0.multiDayAnalysis
                 disp('Saving multi-day data ...')
-                save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '_multiDay.mat' ], ...
+                save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '_synth' num2str(synth) '_multiDay.mat' ], ...
                     'dfbf', 'baselines', 'dfbf_2D', ...
                     'dfbf_timeLockedCells', ...
                     'dfbf_sorted_timeLockedCells', ...
@@ -291,7 +320,7 @@ if ops0.saveData
                     'largeEvents')
             else
                 disp('Saving single session data ...')
-                save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '.mat' ], ...
+                save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '_synth' num2str(synth) '.mat' ], ...
                     'dfbf', 'baselines', 'dfbf_2D', ...
                     'dfbf_timeLockedCells', ...
                     'dfbf_sorted_timeLockedCells', ...
@@ -405,30 +434,30 @@ if ops0.findTimeCells
         %         end
         
         % Temporal Information
-                fig4 = figure(4);
-                clf
-                set(fig4,'Position',[300,300,800,400])
-                %TI_all_sorted = TI(sortedPSTHindices,:);
-                plot(TI, 'b*', ...
-                    'LineWidth', figureDetails.lineWidth, ...
-                    'MarkerSize', figureDetails.markerSize)
-                hold on
-                TI_onlyTimeLockedCells = nan(size(TI));
-                TI_onlyTimeLockedCells(iTimeCells) = TI(iTimeCells);
-                plot(TI_onlyTimeLockedCells, 'ro', ...
-                    'MarkerSize', figureDetails.markerSize)
-                axis([0 size(TI,1) 0.5 2.5])
-                title(sprintf('Temporal Information (Method: %s)', ops0.method), ...
-                    'FontSize', figureDetails.fontSize, ...
-                    'FontWeight', 'bold')
-                xlabel('Cell Number', ...
-                    'FontSize', figureDetails.fontSize, ...
-                    'FontWeight', 'bold')
-                ylabel('Temporal Information (bits)', ...
-                    'FontSize', figureDetails.fontSize, ...
-                    'FontWeight', 'bold')
-                legend({'All Cells', 'Time-Locked Cells'})
-                set(gca,'FontSize', figureDetails.fontSize-2)
+        fig4 = figure(4);
+        clf
+        set(fig4,'Position',[300,300,800,400])
+        %TI_all_sorted = TI(sortedPSTHindices,:);
+        plot(TI, 'b*', ...
+            'LineWidth', figureDetails.lineWidth, ...
+            'MarkerSize', figureDetails.markerSize)
+        hold on
+        TI_onlyTimeLockedCells = nan(size(TI));
+        TI_onlyTimeLockedCells(iTimeCells) = TI(iTimeCells);
+        plot(TI_onlyTimeLockedCells, 'ro', ...
+            'MarkerSize', figureDetails.markerSize)
+        axis([0 size(TI,1) 0.5 2.5])
+        title(sprintf('Temporal Information (Method: %s)', ops0.method), ...
+            'FontSize', figureDetails.fontSize, ...
+            'FontWeight', 'bold')
+        xlabel('Cell Number', ...
+            'FontSize', figureDetails.fontSize, ...
+            'FontWeight', 'bold')
+        ylabel('Temporal Information (bits)', ...
+            'FontSize', figureDetails.fontSize, ...
+            'FontWeight', 'bold')
+        legend({'All Cells', 'Time-Locked Cells'})
+        set(gca,'FontSize', figureDetails.fontSize-2)
         %
         %         if ops0.multiDayAnalysis
         %             print(['/Users/ananth/Desktop/figs/psth/ti_' ...
