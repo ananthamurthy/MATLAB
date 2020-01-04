@@ -35,7 +35,7 @@ if ops0.loadSyntheticData
     maxHitTrialFraction = 100;
     trialOrder = 'basic'; %basic
     eventSize = 'max'; %max, large, medium, or small (TBA: random)
-    eventTiming = 'clustered'; %basic, clustered, or random
+    eventTiming = 'basic'; %basic, clustered, or random
     imprecision = [-4 4]; %2-element vector that sets the range of precision, in frames
     imprecisionType = 'Uniform'; %Uniform or Gaussian
     noise = 'None';
@@ -478,7 +478,7 @@ if ops0.findTimeCells
         plot(TI_sorted, 'b*', ...
             'MarkerSize', figureDetails.markerSize)
         if ~isempty(TI_sorted)
-            axis([0 size(TI_sorted,1) 0.2 2])
+            axis([0 size(TI_sorted,1) 0 max(TI_sorted)])
         end
         %         title(sprintf('Trends in Temporal Information (Method: %s)', ops0.method), ...
         %             'FontSize', figureDetails.fontSize, ...
