@@ -35,7 +35,7 @@ if ops0.loadSyntheticData
     maxHitTrialFraction = 100;
     trialOrder = 'basic'; %basic
     eventSize = 'max'; %max, large, medium, or small (TBA: random)
-    eventTiming = 'basic'; %basic, clustered, or random
+    eventTiming = 'random'; %basic, clustered, or random
     imprecision = [-4 4]; %2-element vector that sets the range of precision, in frames
     imprecisionType = 'Uniform'; %Uniform or Gaussian
     noise = 'None';

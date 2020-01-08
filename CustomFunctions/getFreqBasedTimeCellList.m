@@ -18,7 +18,7 @@ for cell = 1:size(Data,1)
     if selectedIndices(cell) == 1
         for trial = 1:size(Data,2)
             %Get rid of CS artifact
-            %Data(cell,trial,skipFrames) = 0;
+            Data(cell,trial,skipFrames) = 0;
             
             if ~isempty(find(Data(cell,trial,:),1))
                 importantTrials(cell,trial) = 1;
