@@ -20,8 +20,8 @@ nFrames = dataset.nFrames;
 
 %Which cells to select?
 putativeTimeCells = zeros(nTotalCells,1);
-nPutativeTimeCells = floor((timeCellFraction/100) * nTotalCells);
-fprintf('Number of Putative Time Cells: %i\n', nPutativeTimeCells)
+nPutativeTimeCells = timeCellFraction * nTotalCells;
+fprintf('In this synthetic dataset, there will be %i putative time cells\n')
 if strcmp(cellOrder, 'basic')
     putativeTimeCells(1:nPutativeTimeCells) = 1;
 elseif strcmp(cellOrder, 'random')

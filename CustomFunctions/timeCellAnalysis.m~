@@ -27,6 +27,7 @@ ops0.findTimeCells          = 1;
 ops0.saveData               = 1;
 %% Dataset
 make_db
+
 %% Synthetic Data Parameters
 if ops0.loadSyntheticData
     timeCellFraction = 50; %in %
@@ -35,8 +36,8 @@ if ops0.loadSyntheticData
     trialOrder = 'basic'; %basic
     %eventSize = 'max'; %max, large, medium, or small (TBA: random) %%Legacy
     eventWidth = {50, 'stddev'}; % {location, width}; e.g. - {percentile, stddev}; string array
-    eventAmplificationFactor = 10;
-    eventTiming = 'random'; %sequence or random
+    eventAmplificationFactor = 1;
+    eventTiming = 'sequence'; %sequence or random
     startFrame = 20;
     endFrame = db(1).nFrames;
     imprecision = [-4 4]; %2-element vector that sets the range of precision, in frames
@@ -112,17 +113,13 @@ for iexp = 1:length(db)
     trialDetails = getTrialDetails(db(iexp)); %test
     
     %Significant-Only Traces
-    if ops0.onlyProbeTrials
-        if ops0.loadBehaviourData == 1
+        if ops0.onlyProbeTrials
             disp('Only analysing Probe Trials ...')
             dfbf_sigOnly = findSigOnly(dfbf(:,iProbeTrials,:));
         else
-            error('No behaviour data to get probe trials')
+            dfbf_sigOnly = findSigOnly(dfbf);
         end
-    else
-        dfbf_sigOnly = findSigOnly(dfbf);
     end
-    
     
     %Search for low frequency events
     if ops0.gaussianSmoothing
@@ -179,22 +176,20 @@ for iexp = 1:length(db)
         %NOTE: Make sure to use significant-only traces else a second
         %freqThreshold needs to be passed as an argument
         % PSTH based identification of tuning curves
-        freqThreshold = floor(0.25 * (size(myData,2))); %freqThreshold is 25% of the session trials
-        shuffleThreshold = 99; %percent of nShuffles for time cell qualification
-        nShuffles = 1000;
+        freqThreshold = floor(25 * (size(myData,2))); %freqThreshold is 25% of the session trials
         delta = 3; %for now; works out to 207 ms if sampling at 14.5 Hz
         allCells = ones(size(myData,1),1); %for indexing only
         if ops0.method == 'A' %No filtering for % of trials active
             disp('Only PSTH; not filtering for percentage of trials with activity ...')
             freqThreshold = 0; %meaningless
             [PSTH, PSTH_3D, nbins] = getPSTH(myData, delta, skipFrames);
-            [timeLockedCells, TI] = getTimeLockedCells(PSTH_3D, allCells, nShuffles, shuffleThreshold, delta);
+            [timeLockedCells, TI] = getTimeLockedCells(PSTH_3D, allCells, 1000, 99, delta);
             [cellRastor, cellFrequency, importantTrials] = getCellRastors(myData, skipFrames);
             iTimeCells = find(timeLockedCells);
         elseif ops0.method == 'B' %PSTH then filtering for % of trials active
             disp('First PSTH, then filtering for percentage of trials with activity ...')
             [PSTH, PSTH_3D, nbins] = getPSTH(myData, delta, skipFrames);
-            [timeLockedCells_temp, TI] = getTimeLockedCells(PSTH_3D, allCells, nShuffles, shuffleThreshold);
+            [timeLockedCells_temp, TI] = getTimeLockedCells(PSTH_3D, allCells, 1000, 99);
             %iTimeCells_temp = find(timeLockedCells_temp);
             [cellRastor, cellFrequency, timeLockedCells, importantTrials] = ...
                 getFreqBasedTimeCellList(myData, timeLockedCells_temp, freqThreshold, skipFrames, delta);
@@ -208,7 +203,7 @@ for iexp = 1:length(db)
             %Develop PSTH only for cells passing >25% activity
             [PSTH, PSTH_3D, nbins] = getPSTH(myData, delta, skipFrames);
             %Finally, identifying true time-locked cells, using the TI metric
-            [timeLockedCells, TI] = getTimeLockedCells(PSTH_3D, timeLockedCells_temp, nShuffles, shuffleThreshold);
+            [timeLockedCells, TI] = getTimeLockedCells(PSTH_3D, timeLockedCells_temp, 1000, 99);
             iTimeCells = find(timeLockedCells); %Absolute indexing
             dfbf_timeLockedCells = myData(iTimeCells,:,:);
             fprintf('%i time-locked cells found\n', length(iTimeCells))

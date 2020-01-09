@@ -1,5 +1,5 @@
 % AUTHOR - Kambadur Ananthmurthy
-function [timeLockedCells, TI] = getTimeLockedCells(PSTH_3D, selectedIndices, nShuffles, threshold)
+function [timeLockedCells, TI] = getTimeLockedCells(PSTH_3D, selectedIndices, nShuffles, shuffleThreshold)
 %{
 'PSTH_3D' is organized as cells, trials, frames
 Area under the curve might not be very revelatory
@@ -14,7 +14,7 @@ TI = zeros(size(PSTH_3D,1),1);
 shuffledPSTH_3D = zeros(size(PSTH_3D));
 
 disp('Now, checking for time-locked cells ...')
-fprintf('Threshold (in %% of shuffles): %s\n',num2str(threshold))
+fprintf('Threshold (in %% of shuffles): %s\n', num2str(shuffleThreshold))
 
 for cell = 1:size(PSTH_3D,1)
     if selectedIndices(cell) == 1
@@ -38,7 +38,7 @@ for cell = 1:size(PSTH_3D,1)
         end
         comparison = (length(ratio(ratio>1))/length(ratio))*100; % in %
         
-        if comparison >= threshold
+        if comparison >= shuffleThreshold
             timeLockedCells(cell) = 1;
         else
             timeLockedCells(cell) = 0;
