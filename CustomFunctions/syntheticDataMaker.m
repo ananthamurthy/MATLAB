@@ -35,14 +35,14 @@ for cell = 1:nTotalCells
     %fprintf('Cell: %i\n', cell)
     if putativeTimeCells(cell) == 1
         %What size of calcium events to select?
-        if strcmp(eventWidth(2), 'stddev')
+        if strcmp(eventWidth(2), 'stddev') %Only defined case with a string argument
             requiredEventWidth(cell) = std(eventLibrary_2D(cell).eventLengths);
             requiredEventLengths(cell, 1) = floor(max(eventLibrary_2D(cell).eventLengths) - requiredEventWidth(cell));
             requiredEventLengths(cell, 2) = ceil(max(eventLibrary_2D(cell).eventLengths) + requiredEventWidth(cell));
         else
-            requiredEventWidth(cell) = eventWidth(2);
-            requiredEventLengths(cell, 1) = floor(prctile(eventLibrary_2D(cell).eventLengths, eventWidth(1)) - requiredEventWidth(cell));
-            requiredEventLengths(cell, 2) = ceil(prctile(eventLibrary_2D(cell).eventLengths, eventWidth(2)) + requiredEventWidth(cell));
+            requiredEventWidth(cell) = eventWidth{2}; %Use the actual argument value
+            requiredEventLengths(cell, 1) = floor(prctile(eventLibrary_2D(cell).eventLengths, eventWidth{1})) - requiredEventWidth(cell);
+            requiredEventLengths(cell, 2) = ceil(prctile(eventLibrary_2D(cell).eventLengths, eventWidth{1})) + requiredEventWidth(cell);
         end
     else
         %Skip cell

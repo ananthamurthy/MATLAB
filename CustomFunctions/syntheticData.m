@@ -25,7 +25,6 @@ timeCellFraction = 50; %in %
 cellOrder = 'basic'; %basic or random
 maxHitTrialFraction = 100;
 trialOrder = 'basic'; %basic
-%eventSize = 'max'; %max, large, medium, or small (TBA: random) %%Legacy
 eventWidth = {50, 'stddev'}; % {location, width}; e.g. - {percentile, stddev}; string array
 eventAmplificationFactor = 10;
 eventTiming = 'random'; %sequence or random
