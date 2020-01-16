@@ -29,19 +29,20 @@ ops0.saveData               = 1;
 make_db
 %% Synthetic Data Parameters
 if ops0.loadSyntheticData
+    %% Synthetic Data Parameters
     timeCellFraction = 50; %in %
     cellOrder = 'basic'; %basic or random
     maxHitTrialFraction = 100;
     trialOrder = 'basic'; %basic
-    %eventSize = 'max'; %max, large, medium, or small (TBA: random) %%Legacy
-    eventWidth = {50, 'stddev'}; % {location, width}; e.g. - {percentile, stddev}; string array
+    eventWidth = {25, 'stddev'}; % {location, width}; e.g. - {percentile, stddev}; string array
     eventAmplificationFactor = 10;
-    eventTiming = 'random'; %sequence or random
+    eventTiming = 'sequence'; %sequence or random
     startFrame = 20;
     endFrame = db(1).nFrames;
-    imprecision = [-4 4]; %2-element vector that sets the range of precision, in frames
-    imprecisionType = 'Uniform'; %Uniform or Gaussian
-    noise = 'None';
+    imprecisionFWHM = 8; %Will be divided by 2 for positive and negative "width" around the centre
+    imprecisionType = 'normal'; %Uniform, Normal, or None
+    noise = 'gaussian'; %Gaussian (as noisePercent) or None (makes noisePercent irrelevant)
+    noisePercent = '20'; %How much percent of noise to add
 end
 %% Main script
 for iexp = 1:length(db)
@@ -65,9 +66,10 @@ for iexp = 1:length(db)
             '_eT' eventTiming(1) ...
             '_sF' num2str(startFrame) ...
             '_eF' num2str(endFrame) ...
-            '_mI' num2str(max(imprecision)) ...
-            '_iT' imprecisionType(1) ...
-            '_n' noise(1) ...
+            '_iFWHM' num2str(imprecisionFWHM) ...
+            '_iT' imprecisionType ...
+            '_n' noise ...
+            '_np' num2str(noisePercent) ...
             '.mat'])
         dfbf = syntheticDATA;
         baselines = zeros(size(syntheticDATA));

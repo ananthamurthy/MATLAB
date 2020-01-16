@@ -17,7 +17,7 @@ addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth')
 make_db
 ops0.method          = 'C'; % A: only PSTH; B: PSTH then filter; C: filter then PSTH; use 'C'
 ops0.fig             = 1;
-ops0.saveData        = 0;
+ops0.saveData        = 1;
 %ops0.onlyProbeTrials = 0;
 
 %% Synthetic Data Parameters
@@ -25,15 +25,14 @@ timeCellFraction = 50; %in %
 cellOrder = 'basic'; %basic or random
 maxHitTrialFraction = 100;
 trialOrder = 'basic'; %basic
-%eventSize = 'max'; %max, large, medium, or small (TBA: random) %%Legacy
-eventWidth = {50, 'stddev'}; % {location, width}; e.g. - {percentile, stddev}; string array
-eventAmplificationFactor = 1;
-eventTiming = 'sequence'; %sequence or random
+eventWidth = {25, 'stddev'}; % {location, width}; e.g. - {percentile, stddev}; string array
+eventAmplificationFactor = 10;
+eventTiming = 'random'; %sequence or random
 startFrame = 20;
 endFrame = db(1).nFrames;
-imprecision = [-4 4]; %2-element vector that sets the range of precision, in frames
-imprecisionType = 'Uniform'; %Uniform or Gaussian
-noise = 'None';
+imprecisionFWHM = 8; %Will be divided by 2 for positive and negative "width" around the centre
+imprecisionType = 'none'; %Uniform or Normal
+noise = 'none';
 
 %%
 if ops0.fig
@@ -92,7 +91,7 @@ for iexp = 1:length(db)
         timeCellFraction, cellOrder, ...
         maxHitTrialFraction, trialOrder, ...
         eventWidth, eventAmplificationFactor, eventTiming, startFrame, endFrame, ...
-        imprecision, imprecisionType, noise);
+        imprecisionFWHM, imprecisionType, noise);
     disp('... done!')
     
     if ops0.saveData == 1
@@ -104,9 +103,11 @@ for iexp = 1:length(db)
             '_mHTF' num2str(maxHitTrialFraction) ...
             '_tO' trialOrder(1) ...
             '_eW' num2str(eventWidth{1}) ...
+            '_eAF' eventAmplificationFactor ...
             '_eT' eventTiming(1) ...
-            '_mI' num2str(max(imprecision)) ...
-            '_sF' num2str(startFrame) .
+            '_sF' num2str(startFrame) ...
+            '_eF' num2str(endFrame) ...
+            '_iFWHM' num2str(imprecisionFWHM) ...
             '_iT' imprecisionType(1) ...
             '_n' noise(1) ...
             '.mat'], ...
@@ -115,22 +116,6 @@ for iexp = 1:length(db)
             'maxHitTrialFraction', 'trialOrder', ...
             'eventWidth', 'eventTiming', ...
             'imprecision', 'imprecisionType', 'noise')
-        
-        %% Synthetic Data Parameters
-timeCellFraction = 50; %in %
-cellOrder = 'basic'; %basic or random
-maxHitTrialFraction = 100;
-trialOrder = 'basic'; %basic
-%eventSize = 'max'; %max, large, medium, or small (TBA: random) %%Legacy
-eventWidth = {50, 'stddev'}; % {location, width}; e.g. - {percentile, stddev}; string array
-eventAmplificationFactor = 1;
-eventTiming = 'sequence'; %sequence or random
-startFrame = 20;
-endFrame = db(1).nFrames;
-imprecision = [-4 4]; %2-element vector that sets the range of precision, in frames
-imprecisionType = 'Uniform'; %Uniform or Gaussian
-noise = 'None';
-
     end
     
     if ops0.fig == 1

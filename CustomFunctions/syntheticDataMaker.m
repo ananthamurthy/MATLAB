@@ -4,7 +4,7 @@ function [syntheticDATA, syntheticDATA_2D, putativeTimeCells, requiredEventLengt
     timeCellFraction, cellOrder, ...
     maxHitTrialFraction, trialOrder, ...
     eventWidth, eventAmplificationFactor, eventTiming, startFrame, endFrame, ...
-    imprecision, imprecisionType, noise)
+    imprecisionFWHM, imprecisionType, noise)
 syntheticDATA = zeros(size(DATA));
 syntheticDATA_2D = zeros(size(DATA,1),size(DATA,2)*size(DATA,3));
 nTotalCells = size(DATA,1);
@@ -22,9 +22,9 @@ nFrames = dataset.nFrames;
 putativeTimeCells = zeros(nTotalCells,1);
 nPutativeTimeCells = floor((timeCellFraction/100) * nTotalCells);
 fprintf('Number of Putative Time Cells: %i\n', nPutativeTimeCells)
-if strcmp(cellOrder, 'basic')
+if strcmpi(cellOrder, 'basic')
     putativeTimeCells(1:nPutativeTimeCells) = 1;
-elseif strcmp(cellOrder, 'random')
+elseif strcmpi(cellOrder, 'random')
     r = randi([1 nTotalCells], 1, nPutativeTimeCells);
     putativeTimeCells(r) = 1;
 end
@@ -35,7 +35,7 @@ for cell = 1:nTotalCells
     %fprintf('Cell: %i\n', cell)
     if putativeTimeCells(cell) == 1
         %What size of calcium events to select?
-        if strcmp(eventWidth(2), 'stddev') %Only defined case with a string argument
+        if strcmpi(eventWidth(2), 'stddev') %Only defined case with a string argument
             requiredEventWidth(cell) = std(eventLibrary_2D(cell).eventLengths);
             requiredEventLengths(cell, 1) = floor(max(eventLibrary_2D(cell).eventLengths) - requiredEventWidth(cell));
             requiredEventLengths(cell, 2) = ceil(max(eventLibrary_2D(cell).eventLengths) + requiredEventWidth(cell));
@@ -53,9 +53,9 @@ for cell = 1:nTotalCells
     hitTrials = zeros(nTotalTrials,1);
     hitTrialFraction = floor(rand() * maxHitTrialFraction);
     nHitTrials = hitTrialFraction * nTotalTrials;
-    if strcmp(trialOrder, 'basic')
+    if strcmpi(trialOrder, 'basic')
         hitTrials(1:nHitTrials) = 1;
-    elseif strcmp(trialOrder, 'random')
+    elseif strcmpi(trialOrder, 'random')
         for trial = 1:nTotalTrials
             if sum(hitTrials) == maxHitTrialFraction*nTotalTrials
                 continue
@@ -88,7 +88,7 @@ for cell = 1:nTotalCells
                     %Now, we pick out exactly one event per trial
                     event = DATA_2D(cell, eventStartIndex:1:eventStartIndex+requiredEventLengths(cell)-1) * eventAmplificationFactor;
                     [~, I] = max(event);
-                    [frameIndex, pad] = selectFrameIndex(eventTiming, startFrame, endFrame, I, imprecision, imprecisionType, cell);
+                    [frameIndex, pad] = selectFrameIndex(eventTiming, startFrame, endFrame, I, imprecisionFWHM, imprecisionType, cell);
                 end
                 
                 %Prune trial lengths, if necessary
@@ -115,8 +115,8 @@ for cell = 1:nTotalCells
                 syntheticDATA_2D(cell,(((count*nFrames)+1):(count*nFrames)+nFrames)) = syntheticDATA(cell,trial,:);
             end
             %Add noise (irrespective of hit trial)
-            if strcmp(noise, 'none')
-            elseif strcmp(noise, 'gaussian')
+            if strcmpi(noise, 'none')
+            elseif strcmpi(noise, 'gaussian')
                 %syntheticDATA(cell, trial,:) = awgn((syntheticDATA(cell, trial, :)), 15, 'measured');
             end
         end

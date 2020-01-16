@@ -1,24 +1,27 @@
 %Written by Kambadur Ananthamurthy
-function [frameIndex, pad] = selectFrameIndex(eventTiming, startFrame, endFrame, I, imprecision, imprecisionType, cell)
+function [frameIndex, pad] = selectFrameIndex(eventTiming, startFrame, endFrame, I, imprecisionFWHM, imprecisionType, cell)
 %What timing/frame to select?
-if strcmp(eventTiming, 'sequence')
+if strcmpi(eventTiming, 'sequence')
     %Perfect sequence
     frameIndex = (startFrame + cell - 1) - I; %Uses the event peak instead of the event start index
     %fprintf('frameIndex: %i\n', frameIndex)
     
-elseif strcmp(eventTiming, 'random')
+elseif strcmpi(eventTiming, 'random')
     %randomized
     frameIndex = floor(rand()*(endFrame - startFrame)) + startFrame - I; %Uses the event peak instead of the event start index
     %fprintf('frameIndex: %i\n', frameIndex)
 end
 
 %Add the effect of "imprecision"
-if strcmp(imprecisionType, 'uniform')
-    pad = floor(rand()*imprecision(1) + floor(rand()*imprecision(2)));
-elseif strcmp(imprecisionType, 'gaussian')
-    %pad = floor(rand()*imprecision(1) + floor(rand()*imprecision(2)));
-else
-    pad = 0;
+if strcmpi(imprecisionType, 'uniform')
+    pad = randi([-1*(imprecisionFWHM/2), (imprecisionFWHM/2)]);
+elseif strcmpi(imprecisionType, 'normal')
+    stddev = imprecisionFWHM/(2*sqrt(2*log(2))); %NOTE: In MATLAB, log() performs a natural log
+    pad = round(normrnd(0, stddev)); %Setting mean = 0
+elseif strcmpi(imprecisionType, 'none')
+    pad = 0; %No imprecision
 end
+%NOTE: The selected frame will be established by (frameIndex + pad),
+%outside of this code
 
 end
