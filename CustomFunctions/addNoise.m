@@ -1,13 +1,13 @@
 %Written by Kambadur Ananthamurthy
 function DATA_trialWithNoise = addNoise(DATA_trial, noise, noisePercent)
-s = (noisePercent/100) .* mean(DATA_trial);
+s = (noisePercent/100) * mean(DATA_trial);
 
 if strcmpi(noise, 'gaussian')
-    noiseComponent = (randn(1, length(DATA_trial)) * s);
+    noiseComponent = (s .* randn(1, length(DATA_trial)));
 else
-    error('Unable to identify noise case')
+    %error('Unable to identify noise case')
 end
-DATA_trialWithNoise =  DATA_trial + noiseComponent;
+DATA_trialWithNoise = DATA_trial + noiseComponent;
 end
 
 

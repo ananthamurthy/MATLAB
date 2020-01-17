@@ -32,8 +32,8 @@ startFrame = 20;
 endFrame = db(1).nFrames;
 imprecisionFWHM = 8; %Will be divided by 2 for positive and negative "width" around the centre
 imprecisionType = 'None'; %Uniform, Normal, or None
-noise = 'gaussian'; %Gaussian (as noisePercent) or None (makes noisePercent irrelevant)
-noisePercent = '20'; %How much percent of noise to add
+noise = 'gaussian'; %Gaussian (as noisePercent) or None (renders noisePercent irrelevant)
+noisePercent = 100; %How much percent of noise to add
 
 %%
 if ops0.fig

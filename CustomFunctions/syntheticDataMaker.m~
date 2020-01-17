@@ -114,7 +114,9 @@ for cell = 1:nTotalCells
             
             %Add noise (irrespective of hit trial)
             if ~strcmpi(noise, 'none')
-                syntheticDATA(cell, trial, :) = addNoise(squeeze(syntheticDATA(cell, trial, :))', noise, noisePercent);
+                %syntheticDATA_trialWithNoise = addNoise(syntheticDATA_trial, noisePercent)
+                DATA_trial = syntheticDATA(cell, trial, :);
+                syntheticDATA(cell, trial, :) = addNoise(squeeze(squeeze(syntheticDATA(cell,trial,:))), noise, noisePercent);
             end
             
             %Reshape the synthetic data into a 2D matrix
