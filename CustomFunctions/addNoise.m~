@@ -1,0 +1,34 @@
+%Written by Kambadur Ananthamurthy
+function syntheticDATA_trialWithNoise = addNoise(syntheticDATA_trial, noisePercent)
+s = (noisePercent/100) .* syntheticDATA_trial;
+noiseComponent = (randn() .* s);
+syntheticDATA_trialWithNoise =  syntheticDATA_trial + noiseComponent;
+
+%{
+    m = [ 1.05 ; 0.2561 ; 0.3321 ];
+    s = 0.2 * m ;
+    N = 1000;
+    x =  ones(N,1) * m'  +  randn(N,3) * diag(s)
+%}
+end
+
+%{
+
+%}
+
+figure(1)
+hist(syntheticData)
+
+
+figure(2)
+clf
+plot(syntheticDATA_trial, 'black', 'LineWidth', 3)
+hold on
+plot(syntheticDATA_trialWithNoise, 'blue', 'LineWidth', 3)
+hold on
+plot(noiseComponent, 'red', 'LineWidth', 3)
+hold off
+title('Testing with Noise')
+xlabel('Frames')
+legend('Trial Without Noise', 'Trial With Noise', 'Noise')
+set(gca, 'FontSize', 20)

@@ -31,7 +31,7 @@ eventTiming = 'sequence'; %sequence or random
 startFrame = 20;
 endFrame = db(1).nFrames;
 imprecisionFWHM = 8; %Will be divided by 2 for positive and negative "width" around the centre
-imprecisionType = 'normal'; %Uniform, Normal, or None
+imprecisionType = 'None'; %Uniform, Normal, or None
 noise = 'gaussian'; %Gaussian (as noisePercent) or None (makes noisePercent irrelevant)
 noisePercent = '20'; %How much percent of noise to add
 
@@ -92,7 +92,8 @@ for iexp = 1:length(db)
         timeCellFraction, cellOrder, ...
         maxHitTrialFraction, trialOrder, ...
         eventWidth, eventAmplificationFactor, eventTiming, startFrame, endFrame, ...
-        imprecisionFWHM, imprecisionType, noise);
+        imprecisionFWHM, imprecisionType, ...
+        noise, noisePercent);
     disp('... done!')
     
     if ops0.saveData == 1

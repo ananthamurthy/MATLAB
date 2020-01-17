@@ -40,7 +40,7 @@ if ops0.loadSyntheticData
     startFrame = 20;
     endFrame = db(1).nFrames;
     imprecisionFWHM = 8; %Will be divided by 2 for positive and negative "width" around the centre
-    imprecisionType = 'normal'; %Uniform, Normal, or None
+    imprecisionType = 'None'; %Uniform, Normal, or None
     noise = 'gaussian'; %Gaussian (as noisePercent) or None (makes noisePercent irrelevant)
     noisePercent = '20'; %How much percent of noise to add
 end

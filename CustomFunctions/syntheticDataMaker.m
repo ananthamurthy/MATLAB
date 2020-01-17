@@ -4,7 +4,8 @@ function [syntheticDATA, syntheticDATA_2D, putativeTimeCells, requiredEventLengt
     timeCellFraction, cellOrder, ...
     maxHitTrialFraction, trialOrder, ...
     eventWidth, eventAmplificationFactor, eventTiming, startFrame, endFrame, ...
-    imprecisionFWHM, imprecisionType, noise)
+    imprecisionFWHM, imprecisionType, ...
+    noise, noisePercent)
 syntheticDATA = zeros(size(DATA));
 syntheticDATA_2D = zeros(size(DATA,1),size(DATA,2)*size(DATA,3));
 nTotalCells = size(DATA,1);
@@ -107,18 +108,18 @@ for cell = 1:nTotalCells
                 clear event
                 clear tailClip
                 
-                %Reshape the synthetic data into a 2D matrix
-                syntheticDATA_2D(cell,(((count*nFrames)+1):(count*nFrames)+nFrames)) = syntheticDATA(cell,trial,:);
             else
                 %Skip trial
-                %Reshape the synthetic data into a 2D matrix
-                syntheticDATA_2D(cell,(((count*nFrames)+1):(count*nFrames)+nFrames)) = syntheticDATA(cell,trial,:);
             end
+            
             %Add noise (irrespective of hit trial)
-            if strcmpi(noise, 'none')
-            elseif strcmpi(noise, 'gaussian')
-                %syntheticDATA(cell, trial,:) = awgn((syntheticDATA(cell, trial, :)), 15, 'measured');
+            if strcmpi(noise, 'gaussian')
+                %syntheticDATA_trialWithNoise = addNoise(syntheticDATA_trial, noisePercent)
+                syntheticDATA(cell, trial, :) = addNoise(syntheticDATA(cell,trial,:), noisePercent);
             end
+            
+            %Reshape the synthetic data into a 2D matrix
+            syntheticDATA_2D(cell,(((count*nFrames)+1):(count*nFrames)+nFrames)) = syntheticDATA(cell,trial,:);
         end
     else
         %Skip cell
