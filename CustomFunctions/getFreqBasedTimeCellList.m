@@ -1,11 +1,11 @@
 % AUTHOR - Kambadur Ananthmurthy
 function [cellRastor, cellFrequency, timeLockedCells, importantTrials] ...
-    = getFreqBasedTimeCellList(Data, selectedIndices, freqThreshold, skipFrames, delta)
+    = getFreqBasedTimeCellList(Data, selectedIndices, trialThreshold, skipFrames, delta)
 %Develop Ca activity Frequency using threshold
 
-fprintf(['Total cells: %i\n', size(Data,1)])
+%fprintf(['Total cells: %i\n', size(Data,1)])
 disp('Now, checking for time-locked cells based on Event Frequency ...')
-fprintf('Threshold: %i trials\n', freqThreshold)
+fprintf('Threshold (in number of trials): %i\n', trialThreshold)
 
 %NOTE: 'Data' is organized as cells, trials, frames
 %A = zeros(1,size(Data,3));
@@ -38,7 +38,7 @@ for cell = 1:size(Data,1)
         
         %Identify time-locked cells based on activity on more than threshold
         %number of trials
-        if ~isempty(find((cellFrequency(cell,:) >= freqThreshold),1))
+        if ~isempty(find((cellFrequency(cell,:) >= trialThreshold),1))
             timeLockedCells(cell) = 1;
             %fprintf('Cell %i a time cell\n', cell)
             %fprintf('Max: %i\n', max(cellFrequency(cell,:)))

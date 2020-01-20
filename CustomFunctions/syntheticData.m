@@ -15,7 +15,6 @@ addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth')
 
 %% Dataset
 make_db
-ops0.method          = 'C'; % A: only PSTH; B: PSTH then filter; C: filter then PSTH; use 'C'
 ops0.fig             = 1;
 ops0.saveData        = 1;
 %ops0.onlyProbeTrials = 0;
@@ -51,7 +50,7 @@ for iexp = 1:length(db)
     saveFolder = [saveDirec db(iexp).mouse_name '/' db(iexp).date '/'];
     
     %Load processed data (processed dfbf for dataset/session)
-    realProcessedData = load([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '.mat']);
+    realProcessedData = load([saveFolder db(iexp).mouse_name '_' db(iexp).date '.mat']);
     trialDetails = getTrialDetails(db(iexp));
     
     %% Curate Calcium Event Library

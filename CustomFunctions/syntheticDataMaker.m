@@ -54,13 +54,13 @@ for cell = 1:nTotalCells
     hitTrials = zeros(nTotalTrials,1);
     
     if strcmpi(hitTrialAssignment, 'random')
-        hitTrialPercent = floor(rand() * (maxPercentHitTrials));
+        percentHitTrials = floor(rand() * (maxPercentHitTrials));
     elseif strcmpi(hitTrialAssignment, 'fixed')
-        hitTrialPercent = (maxPercentHitTrials);
+        percentHitTrials = (maxPercentHitTrials);
     else
     end
     
-    nHitTrials = (hitTrialPercent/100) * nTotalTrials;
+    nHitTrials = (percentHitTrials/100) * nTotalTrials;
     if strcmpi(trialOrder, 'basic')
         hitTrials(1:nHitTrials) = 1;
     elseif strcmpi(trialOrder, 'random')

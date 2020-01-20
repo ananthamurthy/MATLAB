@@ -14,18 +14,17 @@ addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis')) % Additional 
 addpath(genpath('/Users/ananth/Desktop/Work/Analysis/Imaging')) % analysis output
 addpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies')
 %% Operations
-ops0.multiDayAnalysis       = 0; %For chronic tracking experiments; usually set to 0
-ops0.fig                    = 1;
-ops0.method                 = 'C'; % A: only PSTH; B: PSTH then filter; C: filter then PSTH; use 'C'
-ops0.useLOTO                = 0;
-ops0.gaussianSmoothing      = 0;
-ops0.bandpassFilter         = 0;
-ops0.loadBehaviourData      = 0;
-ops0.loadSyntheticData      = 1;
-ops0.onlyProbeTrials        = 0;
-ops0.findTimeCells          = 1;
-ops0.curateCalciumEventLibrary =
-ops0.saveData               = 1;
+ops0.multiDayAnalysis          = 0; %For chronic tracking experiments; usually set to 0
+ops0.fig                       = 1;
+ops0.useLOTO                   = 0;
+ops0.gaussianSmoothing         = 0;
+ops0.bandpassFilter            = 0;
+ops0.loadBehaviourData         = 0;
+ops0.loadSyntheticData         = 1;
+ops0.onlyProbeTrials           = 0;
+ops0.findTimeCells             = 1;
+ops0.curateCalciumEventLibrary = 1;
+ops0.saveData                  = 1;
 %% Dataset
 make_db
 %% Synthetic Data Parameters
@@ -189,36 +188,19 @@ for iexp = 1:length(db)
         nShuffles = 1000;
         delta = 3; %for now; works out to 207 ms if sampling at 14.5 Hz
         allCells = ones(size(myData,1),1); %for indexing only
-        if ops0.method == 'A' %No filtering for % of trials active
-            disp('Only PSTH; not filtering for percentage of trials with activity ...')
-            freqThreshold = 0; %meaningless
-            [PSTH, PSTH_3D, nbins] = getPSTH(myData, delta, skipFrames);
-            [timeLockedCells, TI] = getTimeLockedCells(PSTH_3D, allCells, nShuffles, shuffleThreshold, delta);
-            [cellRastor, cellFrequency, importantTrials] = getCellRastors(myData, skipFrames);
-            iTimeCells = find(timeLockedCells);
-        elseif ops0.method == 'B' %PSTH then filtering for % of trials active
-            disp('First PSTH, then filtering for percentage of trials with activity ...')
-            [PSTH, PSTH_3D, nbins] = getPSTH(myData, delta, skipFrames);
-            [timeLockedCells_temp, TI] = getTimeLockedCells(PSTH_3D, allCells, nShuffles, shuffleThreshold);
-            %iTimeCells_temp = find(timeLockedCells_temp);
-            [cellRastor, cellFrequency, timeLockedCells, importantTrials] = ...
-                getFreqBasedTimeCellList(myData, timeLockedCells_temp, freqThreshold, skipFrames, delta);
-            iTimeCells = find(timeLockedCells); %Absolute indexing
-            fprintf('%i time-locked cells found\n', length(iTimeCells))
-        elseif ops0.method == 'C' %Filter for % trials active then PSTH
-            disp('First filtering for percentage of trials with activity, then PSTH ...')
-            [cellRastor, cellFrequency, timeLockedCells_temp, importantTrials] = ...
-                getFreqBasedTimeCellList(myData, allCells, freqThreshold, skipFrames, delta);
-            %iTimeCells_temp = find(selectedIndices);
-            %Develop PSTH only for cells passing >25% activity
-            [PSTH, PSTH_3D, nbins] = getPSTH(myData, delta, skipFrames);
-            %Finally, identifying true time-locked cells, using the TI metric
-            [timeLockedCells, TI] = getTimeLockedCells(PSTH_3D, timeLockedCells_temp, nShuffles, shuffleThreshold);
-            iTimeCells = find(timeLockedCells); %Absolute indexing
-            dfbf_timeLockedCells = myData(iTimeCells,:,:);
-            fprintf('%i time-locked cells found\n', length(iTimeCells))
-        else
-        end
+        
+        
+        disp('First filtering for percentage of trials with activity, then PSTH ...')
+        [cellRastor, cellFrequency, timeLockedCells_temp, importantTrials] = ...
+            getFreqBasedTimeCellList(myData, allCells, freqThreshold, skipFrames, delta);
+        %iTimeCells_temp = find(selectedIndices);
+        %Develop PSTH only for cells passing >25% activity
+        [PSTH, PSTH_3D, nbins] = getPSTH(myData, delta, skipFrames);
+        %Finally, identifying true time-locked cells, using the TI metric
+        [timeLockedCells, TI] = getTimeLockedCells(PSTH_3D, timeLockedCells_temp, nShuffles, shuffleThreshold);
+        iTimeCells = find(timeLockedCells); %Absolute indexing
+        dfbf_timeLockedCells = myData(iTimeCells,:,:);
+        fprintf('%i time-locked cells found\n', length(iTimeCells))
         %PSTH_probeTrials = sum(PSTH_3D(:,iProbeTrials,:),2);
         %2. There should be at least two consecutive bins with significant
         %values for PSTH. TBA
@@ -245,7 +227,7 @@ for iexp = 1:length(db)
         end
     else
         %Populate library for simulated data
-        realProcessedData = load([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '.mat']);
+        realProcessedData = load([saveFolder db(iexp).mouse_name '_' db(iexp).date '.mat']);
     end
     %Cell specific
     %Use real 2D data
@@ -283,7 +265,7 @@ end
 
 if ops0.useLOTO
     [consolidated_iTimeCells_loto, diff_nTimeCells, consolidated_TI_loto, diff_TI] ...
-        = runLOTO(myData, ops0.method, freqThreshold, delta, allCells, skipFrames);
+        = runLOTO(myData, freqThreshold, delta, allCells, skipFrames);
 end
 disp('... done!')
 %% Search for large Calcium events
@@ -300,7 +282,7 @@ if ops0.saveData
             if ops0.multiDayAnalysis
                 disp('Saving multi-day data after LOTO ...')
                 if ops0.loadSyntheticData == 1
-                    save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '_synth' num2str(ops0.loadSyntheticData) '_multiDay.mat' ], ...
+                    save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_'  '_synth' num2str(ops0.loadSyntheticData) '_multiDay.mat' ], ...
                         'dfbf', 'baselines', 'dfbf_2D', ...
                         'dfbf_timeLockedCells', ...
                         'dfbf_sorted_timeLockedCells', ...
@@ -311,7 +293,7 @@ if ops0.saveData
                         'PSTH', 'iTimeCells', 'consolidated_iTimeCells_loto', 'TI', 'consolidated_TI_loto', ...
                         'largeEvents')
                 else
-                    save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '_multiDay.mat' ], ...
+                    save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_'  '_multiDay.mat' ], ...
                         'dfbf', 'baselines', 'dfbf_2D', ...
                         'dfbf_timeLockedCells', ...
                         'dfbf_sorted_timeLockedCells', ...
@@ -325,7 +307,7 @@ if ops0.saveData
             else
                 disp('Saving single session data after LOTO ...')
                 if ops0.loadSyntheticData == 1
-                    save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '_synth' num2str(ops0.loadSyntheticData) '.mat' ], ...
+                    save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_'  '_synth' num2str(ops0.loadSyntheticData) '.mat' ], ...
                         'dfbf', 'baselines', 'dfbf_2D', ...
                         'dfbf_timeLockedCells', ...
                         'dfbf_sorted_timeLockedCells', ...
@@ -336,7 +318,7 @@ if ops0.saveData
                         'PSTH', 'iTimeCells', 'consolidated_iTimeCells_loto', 'TI', 'consolidated_TI_loto', ...
                         'largeEvents')
                 else
-                    save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '.mat' ], ...
+                    save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_'  '.mat' ], ...
                         'dfbf', 'baselines', 'dfbf_2D', ...
                         'dfbf_timeLockedCells', ...
                         'dfbf_sorted_timeLockedCells', ...
@@ -352,7 +334,7 @@ if ops0.saveData
             if ops0.multiDayAnalysis
                 disp('Saving multi-day data ...')
                 if ops0.loadSyntheticData == 1
-                    save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '_synth' num2str(ops0.loadSyntheticData) '_multiDay.mat' ], ...
+                    save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_'  '_synth' num2str(ops0.loadSyntheticData) '_multiDay.mat' ], ...
                         'dfbf', 'baselines', 'dfbf_2D', ...
                         'dfbf_timeLockedCells', ...
                         'dfbf_sorted_timeLockedCells', ...
@@ -363,7 +345,7 @@ if ops0.saveData
                         'PSTH', 'iTimeCells', 'TI', ...
                         'largeEvents')
                 else
-                    save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '_multiDay.mat' ], ...
+                    save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_'  '_multiDay.mat' ], ...
                         'dfbf', 'baselines', 'dfbf_2D', ...
                         'dfbf_timeLockedCells', ...
                         'dfbf_sorted_timeLockedCells', ...
@@ -377,7 +359,7 @@ if ops0.saveData
             else
                 disp('Saving single session data ...')
                 if ops0.loadSyntheticData == 1
-                    save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '_synth' num2str(ops0.loadSyntheticData) '.mat' ], ...
+                    save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_'  '_synth' num2str(ops0.loadSyntheticData) '.mat' ], ...
                         'dfbf', 'baselines', 'dfbf_2D', ...
                         'dfbf_timeLockedCells', ...
                         'dfbf_sorted_timeLockedCells', ...
@@ -388,7 +370,7 @@ if ops0.saveData
                         'PSTH', 'iTimeCells', 'TI', ...
                         'largeEvents')
                 else
-                    save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '.mat' ], ...
+                    save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_'  '.mat' ], ...
                         'dfbf', 'baselines', 'dfbf_2D', ...
                         'dfbf_timeLockedCells', ...
                         'dfbf_sorted_timeLockedCells', ...
@@ -405,7 +387,7 @@ if ops0.saveData
     else
         %Saving library for simulated data
         disp('Saving the library of events ...')
-        save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '_eventLibrary_2D.mat'], 'eventLibrary_2D')
+        save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_'  '_eventLibrary_2D.mat'], 'eventLibrary_2D')
         disp('... done!')
     end
 end
@@ -427,7 +409,7 @@ if ops0.findTimeCells
         
         if ops0.multiDayAnalysis
             print(['/Users/ananth/Desktop/figs/psth/psth_' ...
-                db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_' ops0.method '_multiDay'],...
+                db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_'  '_multiDay'],...
                 '-djpeg');
         else
             print(['/Users/ananth/Desktop/figs/psth/psth_' ...
