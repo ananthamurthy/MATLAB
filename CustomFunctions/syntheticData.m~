@@ -54,7 +54,6 @@ for iexp = 1:length(db)
     realProcessedData = load([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '.mat']);
     trialDetails = getTrialDetails(db(iexp));
     
-    %% Curate Calcium Event Library
     %Cell specific curation of the calcium event library
     %Check to see if the library exits
     if isfile([saveFolder db(iexp).mouse_name '_' db(iexp).date '_eventLibrary_2D.mat'])
@@ -69,13 +68,14 @@ for iexp = 1:length(db)
         
         %2D
         disp('Basic scan for calcium events ...')
+        eventLibrary_2D.nEvents = 
         for cell = 1:size(realProcessedData.dfbf_2D,1)
             B = squeeze(realProcessedData.dfbf_2D(cell,:));
             baseline(cell) = mean(B);
             stddev(cell) = std(B);
             binaryData(find(B > (baseline(cell) + 2*stddev(cell))),1) = 1; %multiplier = 1
-            [nEvents, StartIndices, Lengths] = findConsecutiveOnes(binaryData);
-            eventLibrary_2D(cell).nEvents = nEvents;
+            [Events, StartIndices, Lengths] = findConsecutiveOnes(binaryData);
+            eventLibrary_2D(cell).nEvents = Events;
             eventLibrary_2D(cell).eventStartIndices = StartIndices;
             eventLibrary_2D(cell).eventLengths = Lengths;
             % Find a way to optimize memory.
@@ -87,8 +87,7 @@ for iexp = 1:length(db)
         end
         disp('... calcium event library created!')
     end
-    
-    %% Make synthetic dataset
+    %Make synthetic dataset
     DATA = realProcessedData.dfbf;
     DATA_2D = realProcessedData.dfbf_2D;
     disp('Creating synthetic data ...');

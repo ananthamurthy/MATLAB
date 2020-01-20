@@ -2,7 +2,7 @@
 %Written by Kambadur Ananthamurthy
 function [syntheticDATA, syntheticDATA_2D, putativeTimeCells, requiredEventLengths] = syntheticDataMaker(dataset, DATA, DATA_2D, eventLibrary_2D, ...
     timeCellFraction, cellOrder, ...
-    maxHitTrialFraction, trialOrder, ...
+    maxHitTrialFraction, hitTrialAssignment4cell = 'random'; %random or fixedtrialOrder, ...
     eventWidth, eventAmplificationFactor, eventTiming, startFrame, endFrame, ...
     imprecisionFWHM, imprecisionType, ...
     noise, noisePercent)
@@ -114,9 +114,7 @@ for cell = 1:nTotalCells
             
             %Add noise (irrespective of hit trial)
             if ~strcmpi(noise, 'none')
-                %syntheticDATA_trialWithNoise = addNoise(syntheticDATA_trial, noisePercent)
-                DATA_trial = syntheticDATA(cell, trial, :);
-                syntheticDATA(cell, trial, :) = addNoise(squeeze(squeeze(syntheticDATA(cell,trial,:))), noise, noisePercent);
+                syntheticDATA(cell, trial, :) = addNoise(squeeze(syntheticDATA(cell, trial, :))', noise, noisePercent);
             end
             
             %Reshape the synthetic data into a 2D matrix

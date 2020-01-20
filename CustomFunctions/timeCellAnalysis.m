@@ -14,35 +14,37 @@ addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis')) % Additional 
 addpath(genpath('/Users/ananth/Desktop/Work/Analysis/Imaging')) % analysis output
 addpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies')
 %% Operations
-ops0.multiDayAnalysis       = 0; %For chronic tracking experiments; usually set to 0
-ops0.fig                    = 1;
-ops0.method                 = 'C'; % A: only PSTH; B: PSTH then filter; C: filter then PSTH; use 'C'
-ops0.useLOTO                = 0;
-ops0.gaussianSmoothing      = 0;
-ops0.bandpassFilter         = 0;
-ops0.loadBehaviourData      = 0;
-ops0.loadSyntheticData      = 1;
-ops0.onlyProbeTrials        = 0;
-ops0.findTimeCells          = 1;
-ops0.saveData               = 1;
+ops0.multiDayAnalysis          = 0; %For chronic tracking experiments; usually set to 0
+ops0.fig                       = 1;
+ops0.method                    = 'C'; % A: only PSTH; B: PSTH then filter; C: filter then PSTH; use 'C'
+ops0.useLOTO                   = 0;
+ops0.gaussianSmoothing         = 0;
+ops0.bandpassFilter            = 0;
+ops0.loadBehaviourData         = 0;
+ops0.loadSyntheticData         = 1;
+ops0.onlyProbeTrials           = 0;
+ops0.findTimeCells             = 1;
+ops0.curateCalciumEventLibrary = 1;
+ops0.saveData                  = 1;
 %% Dataset
 make_db
 %% Synthetic Data Parameters
 if ops0.loadSyntheticData
     %% Synthetic Data Parameters
-    timeCellFraction = 50; %in %
-    cellOrder = 'basic'; %basic or random
-    maxHitTrialFraction = 100;
-    trialOrder = 'basic'; %basic
+    percentTimeCells = 50; %in %
+    cellOrder = 'Basic'; %Basic or Random
+    maxPercentHitTrials = 100; %as a fraction
+    hitTrialAssignment = 'Random'; %random or fixed
+    trialOrder = 'Basic'; %basic or random
     eventWidth = {25, 'stddev'}; % {location, width}; e.g. - {percentile, stddev}; string array
     eventAmplificationFactor = 10;
-    eventTiming = 'sequence'; %sequence or random
+    eventTiming = 'Sequence'; %sequence or random
     startFrame = 20;
     endFrame = db(1).nFrames;
     imprecisionFWHM = 8; %Will be divided by 2 for positive and negative "width" around the centre
     imprecisionType = 'None'; %Uniform, Normal, or None
-    noise = 'gaussian'; %Gaussian (as noisePercent) or None (renders noisePercent irrelevant)
-    noisePercent = 100; %How much percent of noise to add
+    noise = 'Gaussian'; %Gaussian (as noisePercent) or None (renders noisePercent irrelevant)
+    noisePercent = 20; %How much percent of noise to add
 end
 %% Main script
 for iexp = 1:length(db)
@@ -57,18 +59,19 @@ for iexp = 1:length(db)
     if ops0.loadSyntheticData == 1
         load([saveFolder ...
             'synthDATA' ...
-            '_tCF' num2str(timeCellFraction) ...
-            '_cO' cellOrder(1) ...
-            '_mHTF' num2str(maxHitTrialFraction) ...
-            '_tO' trialOrder(1) ...
+            '_pTC' num2str(percentTimeCells) ...
+            '_cO' lower(cellOrder) ...
+            '_mPHT' num2str(maxPercentHitTrials) ...
+            '_hTA' lower(hitTrialAssignment) ...
+            '_tO' lower(trialOrder) ...
             '_eW' num2str(eventWidth{1}) ...
             '_eAF' eventAmplificationFactor ...
-            '_eT' eventTiming(1) ...
+            '_eT' lower(eventTiming) ...
             '_sF' num2str(startFrame) ...
             '_eF' num2str(endFrame) ...
             '_iFWHM' num2str(imprecisionFWHM) ...
-            '_iT' imprecisionType ...
-            '_n' noise ...
+            '_iT' lower(imprecisionType) ...
+            '_n' lower(noise) ...
             '_np' num2str(noisePercent) ...
             '.mat'])
         dfbf = syntheticDATA;
@@ -250,6 +253,7 @@ for iexp = 1:length(db)
     stddev = zeros(size(dfbf_2D,1),1);
     binaryData = zeros(size(dfbf_2D,2),1);
     
+    %% Curate Calcium Event Library
     %2D
     disp('Basic scan for calcium events ...')
     for cell = 1:size(dfbf_2D,1)

@@ -1,8 +1,8 @@
 %syntheticDataMaker
 %Written by Kambadur Ananthamurthy
 function [syntheticDATA, syntheticDATA_2D, putativeTimeCells, requiredEventLengths] = syntheticDataMaker(dataset, DATA, DATA_2D, eventLibrary_2D, ...
-    timeCellFraction, cellOrder, ...
-    maxHitTrialFraction, trialOrder, ...
+    percentTimeCells, cellOrder, ...
+    maxPercentHitTrials, hitTrialAssignment, trialOrder, ...
     eventWidth, eventAmplificationFactor, eventTiming, startFrame, endFrame, ...
     imprecisionFWHM, imprecisionType, ...
     noise, noisePercent)
@@ -21,13 +21,13 @@ nFrames = dataset.nFrames;
 
 %Which cells to select?
 putativeTimeCells = zeros(nTotalCells,1);
-nPutativeTimeCells = floor((timeCellFraction/100) * nTotalCells);
+nPutativeTimeCells = floor((percentTimeCells/100) * nTotalCells);
 fprintf('Number of Putative Time Cells: %i\n', nPutativeTimeCells)
 if strcmpi(cellOrder, 'basic')
     putativeTimeCells(1:nPutativeTimeCells) = 1;
 elseif strcmpi(cellOrder, 'random')
-    r = randi([1 nTotalCells], 1, nPutativeTimeCells);
-    putativeTimeCells(r) = 1;
+    %r = randi([1 nTotalCells], 1, nPutativeTimeCells);
+    putativeTimeCells(randperm(nTotalCells, nPutativeTimeCells)) = 1;
 end
 
 requiredEventLengths = zeros(nTotalCells,2);
@@ -52,22 +52,19 @@ for cell = 1:nTotalCells
     %What trials to select?
     nTotalTrials = size(DATA,2);
     hitTrials = zeros(nTotalTrials,1);
-    hitTrialFraction = floor(rand() * maxHitTrialFraction);
-    nHitTrials = hitTrialFraction * nTotalTrials;
+    
+    if strcmpi(hitTrialAssignment, 'random')
+        hitTrialPercent = floor(rand() * (maxPercentHitTrials));
+    elseif strcmpi(hitTrialAssignment, 'fixed')
+        hitTrialPercent = (maxPercentHitTrials);
+    else
+    end
+    
+    nHitTrials = (hitTrialPercent/100) * nTotalTrials;
     if strcmpi(trialOrder, 'basic')
         hitTrials(1:nHitTrials) = 1;
     elseif strcmpi(trialOrder, 'random')
-        for trial = 1:nTotalTrials
-            if sum(hitTrials) == maxHitTrialFraction*nTotalTrials
-                continue
-            else
-                if rand() >= 0.5
-                    hitTrials(trial) = 1;
-                else
-                    %hitTrial(trial) = 0; %Unnecessary if preallocated.
-                end
-            end
-        end
+        hitTrials(randperm(nTotalTrials, nHitTrials)) = 1;
     end
     
     %Prepare the dataset
