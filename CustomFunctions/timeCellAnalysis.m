@@ -20,7 +20,7 @@ ops0.useLOTO                   = 0;
 ops0.gaussianSmoothing         = 0;
 ops0.bandpassFilter            = 0;
 ops0.loadBehaviourData         = 0;
-ops0.loadSyntheticData         = 0;
+ops0.loadSyntheticData         = 1;
 ops0.onlyProbeTrials           = 0;
 ops0.findTimeCells             = 1;
 ops0.curateCalciumEventLibrary = 1;
@@ -29,21 +29,7 @@ ops0.saveData                  = 1;
 make_db
 %% Synthetic Data Parameters
 if ops0.loadSyntheticData
-    %% Synthetic Data Parameters
-    percentTimeCells = 50; %in %
-    cellOrder = 'Basic'; %Basic or Random
-    maxPercentHitTrials = 100; %as a fraction
-    hitTrialAssignment = 'Random'; %random or fixed
-    trialOrder = 'Basic'; %basic or random
-    eventWidth = {25, 'stddev'}; % {location, width}; e.g. - {percentile, stddev}; string array
-    eventAmplificationFactor = 10;
-    eventTiming = 'Sequence'; %sequence or random
-    startFrame = 20;
-    endFrame = db(1).nFrames;
-    imprecisionFWHM = 8; %Will be divided by 2 for positive and negative "width" around the centre
-    imprecisionType = 'None'; %Uniform, Normal, or None
-    noise = 'Gaussian'; %Gaussian (as noisePercent) or None (renders noisePercent irrelevant)
-    noisePercent = 20; %How much percent of noise to add
+    setupSyntheticDataParameters
 end
 %% Main script
 for iexp = 1:length(db)

@@ -19,7 +19,7 @@ saved_pk_times = [];
 %Change of hands
 % !! Requires further thought; currently just trying to run the code !!
 learned = 1;
-blink_list = ones(size(realProcessedData.dfbf, 2), 1); %Setting blink_list = 1 for all trials
+blink_list = ones(size(myData.dfbf, 2), 1); %Setting blink_list = 1 for all trials
 learned_list = [learned_list; learned]; %!! Handle this better !!
 blink_trials = find(blink_list == 1);
 %Trial specifics
