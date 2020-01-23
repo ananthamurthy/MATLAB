@@ -74,28 +74,48 @@ for iexp = 1:length(db)
         dfbf_sigOnly = findSigOnly(myData.dfbf);
     end
     
+    %% Analysis Pipelines
     %I -Mehrab's Reliability Analysis (Bhalla Lab)
     runAdapter4MehrabAnalysis;
     
     DATA = dfbf_sigOnly;
-    [rrb_ratio_vec_final, timeCells_Mehrab] = runMehrabReliabilityAnalysis(learned_only, bk_period_control, non_ov_trials, early_only, ...
+    [reliability_mehrab, timeCells_Mehrab] = runMehrabReliabilityAnalysis(learned_only, bk_period_control, non_ov_trials, early_only, ...
         DATA, CS_onset_frame, US_onset_frame, frame_time, r_iters);
     
     %Save Analysis Output from Mehrab's method
     save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_mehrabAnalysis.mat' ], ...
-        'rrb_ratio_vec_final', 'timeCells_Mehrab')
+        'reliability_mehrab', 'timeCells_Mehrab')
     
     %II - William Mau's Temporal Information (Eichenbaum Lab)
-    [Isec, Ispk, timeCells_Eichenbaum] = runMauTIAnalysis(DATA);
-    
+    %[Isec, Ispk, timeCells_Eichenbaum] = runMauTIAnalysis(DATA);
+    [Isec, reliability_william, timeCells_Eichenbaum] = runMauTIAnalysis(DATA);
     %Save Analysis Output from William's method
     save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_williamAnalysis.mat' ], ...
         'Isec', 'timeCells_Eichenbaum')
     
-    %% Things to do
-    % 1. NOTE: The list of timeCells has to be populated for each case. I need to design a classifier
+    %% Second Order Stats to compare the outputs
+    %Normalize the "reliability vectors
+    reliability_mehrab_norm = reliability_mehrab./max(reliability_mehrab);
+    reliability_william_norm = reliability_william./max(reliability_william);
     
-    % 2. Collator to combine and compare the outputs
+    % 1 - Dot product
+    dotProduct = dot(reliability_mehrab_norm, reliability_william_norm);
+    
+    % 2 - RMS
+    rms_mehrab = rms(reliability_mehrab_norm);
+    rms_william = rms(reliability_william_norm);
+    
+    % 3 - Scatter plot
+    if ops0.fig == 1
+        figure(1)
+        scatter(reliability_mehrab_norm, reliability_william_norm);
+        title(['R2BR vs TI | ', ...
+            db(iexp).mouse_name ' ST' num2str(db(iexp).sessionType) ' S' num2str(db(iexp).session) ' | ' ...
+            num2str(trialDetails.frameRate) ' Hz'], ...
+            'FontSize', figureDetails.fontSize, ...
+            'FontWeight', 'bold')
+        %xlabel()
+    end
     
     %{
     %Combined save
@@ -107,8 +127,8 @@ for iexp = 1:length(db)
     %}
     %% Figures
     if ops0.fig == 1
-        figure(1)
-        plot(rrb_ratio_vec_final, 'g*')
+        figure(2)
+        plot(reliability_mehrab, 'g*')
         title(['Mehrab - Ridge/Background Ratios | ', ...
             db(iexp).mouse_name ' ST' num2str(db(iexp).sessionType) ' S' num2str(db(iexp).session) ' | ' ...
             num2str(trialDetails.frameRate) ' Hz'], ...
@@ -124,8 +144,8 @@ for iexp = 1:length(db)
             'FontWeight', 'bold')
         set(gca,'FontSize', figureDetails.fontSize-3)
         
-        figure(2)
-        plot(Ispk, 'b*')
+        figure(3)
+        plot(reliability_william, 'b*')
         hold on
         plot(Isec, 'ro')
         title(['Eichenbaum - Temporal Information | ', ...
