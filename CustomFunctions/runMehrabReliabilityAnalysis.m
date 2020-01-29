@@ -1,5 +1,7 @@
-function [rrb_ratio_vec_final, timeCells_Mehrab] = runMehrabReliabilityAnalysis(learned_only, bk_period_control, non_ov_trials, early_only, ...
-    DATA, CS_onset_frame, US_onset_frame, frame_time, r_iters)
+function [rrb_ratio_vec_final, timeCells_Mehrab] = runMehrabReliabilityAnalysis(learned_only, ...
+    bk_period_control, non_ov_trials, early_only, pk_behav_trial, ...
+    dff_data_mat, CS_onset_frame, US_onset_frame, ridge_h_width, ...
+    frame_time, r_iters)
 
     %condition to use only animals that learned the task
     if learned_only == 1 %operation
@@ -16,12 +18,14 @@ function [rrb_ratio_vec_final, timeCells_Mehrab] = runMehrabReliabilityAnalysis(
         end
     elseif learned_only == 4            %used to make a list of learners
         if learned == 1
-            learned_listi = [learned_listi; dir_counter];
+            learned_listi = [learned_listi; dir_counter]; %appears to be unusued for single session runs
         else
         end
         %continue
     end
     
+    %This next section appears to be unused. Commenting out for now.
+    %{
     %CLIPPING data near point of interest (tone or puff)
     if bk_period_control == 0
         pre_clip = 2000; %2 seconds, I think; change to 8?
@@ -30,14 +34,13 @@ function [rrb_ratio_vec_final, timeCells_Mehrab] = runMehrabReliabilityAnalysis(
         pre_clip = -4000;
         post_clip = 6000;
     end
+    %}
     
-    no_cells = size(DATA,1);
-    no_trials = size(DATA,2);
+    no_cells = size(dff_data_mat,2);
+    no_trials = size(dff_data_mat,3);
     cell_list = 1:1:no_cells;       %using all cells
     %establishing typical response size for each cell
     pk_list_t = zeros(length(cell_list), 2);
-    dff_data_mat = permute(DATA, [3 1 2]);
-    pk_behav_trial = 1; %Short-circuit. !! Have to verify if logic is sound !!
     
     for cell_noi = 1:length(cell_list)
         cell_no = cell_list(cell_noi);
@@ -72,7 +75,6 @@ function [rrb_ratio_vec_final, timeCells_Mehrab] = runMehrabReliabilityAnalysis(
     else
     end
     
-    ridge_h_width = 100;    %in ms
     ridge_h_width_f = floor(ridge_h_width./frame_time);
     %calculating ridge to background ratio for each cell
     
@@ -134,7 +136,7 @@ function [rrb_ratio_vec_final, timeCells_Mehrab] = runMehrabReliabilityAnalysis(
         
         timeCells_Mehrab = []; % Have to populate
         
-        if (mod(cell_noi, 10) == 0) && cell_noi ~= size(DATA,1)
+        if (mod(cell_noi, 10) == 0) && cell_noi ~= size(dff_data_mat,1)
             fprintf('... %i cells examined ...\n', cell_noi)
         end
         

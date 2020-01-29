@@ -5,7 +5,8 @@
 % batch, soon.
 
 tic
-clf
+%clf
+clear
 close all
 
 %% Addpaths
@@ -79,8 +80,10 @@ for iexp = 1:length(db)
     runAdapter4MehrabAnalysis;
     
     DATA = dfbf_sigOnly;
-    [reliability_mehrab, timeCells_Mehrab] = runMehrabReliabilityAnalysis(learned_only, bk_period_control, non_ov_trials, early_only, ...
-        DATA, CS_onset_frame, US_onset_frame, frame_time, r_iters);
+    [reliability_mehrab, timeCells_Mehrab] = runMehrabReliabilityAnalysis(learned_only, ...
+        bk_period_control, non_ov_trials, early_only, pk_behav_trial, ...
+        dff_data_mat, CS_onset_frame, US_onset_frame, ridge_h_width, ...
+        frame_time, r_iters);
     
     %Save Analysis Output from Mehrab's method
     save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_mehrabAnalysis.mat' ], ...
@@ -94,8 +97,9 @@ for iexp = 1:length(db)
         'Isec', 'timeCells_Eichenbaum')
     
     %% Second Order Stats to compare the outputs
-    %Normalize the "reliability vectors
-    reliability_mehrab_norm = reliability_mehrab./max(reliability_mehrab);
+    
+    %Normalize the "reliability" vectors ignoring "Inf"
+    reliability_mehrab_norm = reliability_mehrab./max(reliability_mehrab(~isinf(reliability_mehrab)));
     reliability_william_norm = reliability_william./max(reliability_william);
     
     % 1 - Dot product
@@ -108,13 +112,30 @@ for iexp = 1:length(db)
     % 3 - Scatter plot
     if ops0.fig == 1
         figure(1)
-        scatter(reliability_mehrab_norm, reliability_william_norm);
+        clf
+        scatter(reliability_william_norm, reliability_mehrab_norm);
         title(['R2BR vs TI | ', ...
             db(iexp).mouse_name ' ST' num2str(db(iexp).sessionType) ' S' num2str(db(iexp).session) ' | ' ...
             num2str(trialDetails.frameRate) ' Hz'], ...
             'FontSize', figureDetails.fontSize, ...
             'FontWeight', 'bold')
-        %xlabel()
+        xlabel('Temporal Information', ...
+            'FontSize', figureDetails.fontSize, ...
+            'FontWeight', 'bold')
+        ylabel('Ridge/Background Ratio', ...
+            'FontSize', figureDetails.fontSize, ...
+            'FontWeight', 'bold')
+        set(gca,'FontSize', figureDetails.fontSize-3)
+        
+        if ops0.loadSyntheticData
+            print(['/Users/ananth/Desktop/figs/multipleTCA/multipleTCA_normScatter_' ...
+                db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_synthData'],...
+                '-djpeg');
+        else
+            print(['/Users/ananth/Desktop/figs/multipleTCA/multipleTCA_normScatter_' ...
+                db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session)],...
+                '-djpeg');
+        end
     end
     
     %{
@@ -128,7 +149,11 @@ for iexp = 1:length(db)
     %% Figures
     if ops0.fig == 1
         figure(2)
+        clf
+        plot(ones(length(reliability_mehrab)), 'k--')
+        hold on
         plot(reliability_mehrab, 'g*')
+        hold off
         title(['Mehrab - Ridge/Background Ratios | ', ...
             db(iexp).mouse_name ' ST' num2str(db(iexp).sessionType) ' S' num2str(db(iexp).session) ' | ' ...
             num2str(trialDetails.frameRate) ' Hz'], ...
@@ -144,11 +169,24 @@ for iexp = 1:length(db)
             'FontWeight', 'bold')
         set(gca,'FontSize', figureDetails.fontSize-3)
         
+        if ops0.loadSyntheticData
+            print(['/Users/ananth/Desktop/figs/multipleTCA/multipleTCA_mehrab_' ...
+                db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_synthData'],...
+                '-djpeg');
+        else
+            print(['/Users/ananth/Desktop/figs/multipleTCA/multipleTCA_mehrab_' ...
+                db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session)],...
+                '-djpeg');
+        end
+        
+        
         figure(3)
+        clf
         plot(reliability_william, 'b*')
         hold on
-        plot(Isec, 'ro')
-        title(['Eichenbaum - Temporal Information | ', ...
+        plot(Isec, 'r*')
+        hold off
+        title(['William - Temporal Information | ', ...
             db(iexp).mouse_name ' ST' num2str(db(iexp).sessionType) ' S' num2str(db(iexp).session) ' | '...
             num2str(trialDetails.frameRate) ' Hz | '...
             '3 frames/bin'] , ...
@@ -163,6 +201,16 @@ for iexp = 1:length(db)
             'FontSize', figureDetails.fontSize,...
             'FontWeight', 'bold')
         set(gca,'FontSize', figureDetails.fontSize-3)
+        
+        if ops0.loadSyntheticData
+            print(['/Users/ananth/Desktop/figs/multipleTCA/multipleTCA_william_' ...
+                db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) '_synthData'],...
+                '-djpeg');
+        else
+            print(['/Users/ananth/Desktop/figs/multipleTCA/multipleTCA_william_' ...
+                db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session)],...
+                '-djpeg');
+        end
     end
 end
 toc

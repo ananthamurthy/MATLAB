@@ -10,6 +10,8 @@ bk_period_control = 0;   %0 - analyses tone-puff period, 1 - analyses background
 r_iters = 5000;           %number of iterations of randomisation used to find averaged r-shifted rb ratio - might have to go as high as 3000.
 non_ov_trials = 1;       %1 - non-overlapping trial sets used for kernel estimation and rb ratio calculation, 0 - all trials used for both
 early_only = 0;          %0 - uses all trials; 1 - uses only the first 5 trials of the session
+%ridge_h_width = 500; % in ms
+ridge_h_width = trialDetails.traceDuration;
 
 learned_list   = [];
 saved_scores   = [];
@@ -23,9 +25,11 @@ blink_list = ones(size(myData.dfbf, 2), 1); %Setting blink_list = 1 for all tria
 learned_list = [learned_list; learned]; %!! Handle this better !!
 blink_trials = find(blink_list == 1);
 %Trial specifics
-CS_onset_frame = trialDetails.frameRate*trialDetails.preDuration + 1;
+CS_onset_frame = trialDetails.frameRate*trialDetails.preDuration;
 US_onset_frame = floor(trialDetails.frameRate * ...
     (trialDetails.preDuration + ...
     trialDetails.csDuration + ...
-    trialDetails.traceDuration)) + 1;
+    trialDetails.traceDuration));
 frame_time = 1000/trialDetails.frameRate;
+dff_data_mat = permute(dfbf_sigOnly, [3 1 2]);
+pk_behav_trial = 1; %Short-circuit to analyse all trials, instead of just the last few.
