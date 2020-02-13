@@ -19,7 +19,6 @@ nTotalCells = size(DATA_2D,1);
 nTotalTrials = dataset.nTrials;
 nTotalFrames = dataset.nFrames;
 syntheticDATA = zeros(nTotalCells, nTotalTrials, nTotalFrames);
-syntheticDATA_2D = zeros(nTotalCells, nTotalTrials*nTotalFrames);
 noiseComponent = zeros(nTotalCells, nTotalTrials, nTotalFrames);
 
 %Which cells to select?
@@ -100,7 +99,6 @@ for cell = 1:nTotalCells
                         syntheticDATA(cell, trial, ((frameIndex(cell, trial)+ pad(cell, trial)):(frameIndex(cell, trial) + (pad(cell, trial))+length(event)-1))) = event;
                     end
                     %fprintf('syntheticDATA trial length: %i\n', length(syntheticDATA(cell, trial, :)))
-                    %fprintf('Event added to cell:%i, trial:%i at frame:%i\n', cell, trial, (frameIndex(cell, trial)+ pad (cell, trial)))
                     
                     clear eventIndices
                     clear eventStartIndex
@@ -139,7 +137,7 @@ for cell = 1:nTotalCells
             end
         end
     else
-        error('Unknown nature of cell')
+        
     end
 end
 
@@ -147,9 +145,7 @@ end
 syntheticDATA(syntheticDATA<0) = 0;
 
 %2D Synthetic Data
-for cell = 1:nTotalCells
-    syntheticDATA_2D(cell, :) = reshape(squeeze(syntheticDATA(cell, :, :))', 1, []);
-end
+syntheticDATA_2D = reshape(syntheticDATA, nTotalCells, []);
 
 disp('... done!')
 end

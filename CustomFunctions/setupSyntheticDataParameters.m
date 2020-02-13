@@ -19,16 +19,16 @@ noisePercent = 20; %How much percent of noise to add
 
 %% Synthetic Data Parameters
 timeCellPercent = 50; %in %
-cellOrder = 'Basic'; %Basic or Random
-maxHitTrialPercent = 100; %as a fraction
-hitTrialAssignment = 'random'; %random or fixed
-trialOrder = 'Basic'; %basic or random
-eventWidth = {100, 'stddev'}; % {location, width}; e.g. - {percentile, stddev}; string array
+cellOrder = 'basic'; %basic or random
+maxHitTrialPercent = 50; %as a fraction
+hitTrialPercentAssignment = 'random'; %fixed or random
+trialOrder = 'basic'; %basic or random
+eventWidth = {100, 'stddev'}; %{location, width}; e.g. - {percentile, stddev}; string array
 eventAmplificationFactor = 1;
-eventTiming = 'Sequential'; %sequential or random
+eventTiming = 'sequential'; %sequential or random
 startFrame = 116;
 endFrame = 123;
 imprecisionFWHM = 8; %Will be divided by 2 for positive and negative "width" around the centre
-imprecisionType = 'Uniform'; %Uniform, Normal, or None
-noise = 'Gaussian'; %Gaussian (as noisePercent) or None (renders noisePercent irrelevant)
+imprecisionType = 'uniform'; %Uniform, Normal, or None
+noise = 'gaussian'; %Gaussian (as noisePercent) or None (renders noisePercent irrelevant)
 noisePercent = 20; %How much percent of noise to add
