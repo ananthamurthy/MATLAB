@@ -1,7 +1,7 @@
 %Written by Kambadur Ananthamurthy
 function [frameIndex, pad] = selectFrameIndex(eventTiming, startFrame, endFrame, I, imprecisionFWHM, imprecisionType, cell)
 %What timing/frame to select?
-if strcmpi(eventTiming, 'sequence')
+if strcmpi(eventTiming, 'sequential')
     %Perfect sequence
     frameIndex = (startFrame + cell - 1) - I; %Uses the event peak instead of the event start index
     %fprintf('frameIndex: %i\n', frameIndex)

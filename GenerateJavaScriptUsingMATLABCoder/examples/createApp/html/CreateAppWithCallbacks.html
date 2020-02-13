@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB R2019b"><title>Create App with Callback</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 28.8px; min-height: 0px; white-space: pre-wrap; color: rgb(213, 80, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 24px; font-weight: normal; text-align: left;  }
+.S1 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: normal; text-align: left;  }
+.S2 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 20px; min-height: 0px; white-space: pre-wrap; color: rgb(60, 60, 60); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: bold; text-align: left;  }
+.CodeBlock { background-color: #F7F7F7; margin: 10px 0 10px 0;}
+.S3 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 1px solid rgb(233, 233, 233); border-bottom: 1px solid rgb(233, 233, 233); border-radius: 4px; padding: 6px 45px 4px 13px; line-height: 16.996px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S4 { margin: 10px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: normal; text-align: left;  }
+.S5 { border-left: 0px none rgb(0, 0, 0); border-right: 0px none rgb(0, 0, 0); border-top: 0px none rgb(0, 0, 0); border-bottom: 0px none rgb(0, 0, 0); border-radius: 0px; padding: 0px; line-height: 16px; min-height: 16px; white-space: pre; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 12px;  }
+.S6 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 1px solid rgb(233, 233, 233); border-bottom: 0px none rgb(0, 0, 0); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 16.996px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S7 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 0px none rgb(0, 0, 0); border-bottom: 1px solid rgb(233, 233, 233); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 16.996px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S8 { margin: 10px 0px 20px; padding-left: 0px; font-family: Helvetica, Arial, sans-serif; font-size: 14px;  }
+.S9 { margin-left: 56px; line-height: 21px; min-height: 0px; text-align: left; white-space: pre-wrap;  }</style></head><body><div class = rtcContent><h1  class = 'S0'><span>Create App with Callback</span></h1><div  class = 'S1'><span>This example shows how to use the </span><span style=' font-weight: bold;'>Generate JavaScript using MATLAB Coder</span><span> add-on to create a basic web application with a user interface that runs entirely in a web browser.</span></div><h2  class = 'S2'><span>Set Up the App Project</span></h2><div  class = 'S1'><span>1. In the MATLAB® current folder browser, navigate to a folder where you can create and store your app project and files.</span></div><div  class = 'S1'><span>2. Create the app project by entering this code in MATLAB command line. Specify a name and the directory for your app.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre;"><span>proj = webcoder.setup.project(</span><span style="color: rgb(160, 32, 240);">"My New App"</span><span>,</span><span style="color: rgb(160, 32, 240);">"Directory"</span><span>,pwd);</span></span></div></div></div><div  class = 'S4'><span>3. Open the </span><span style=' font-family: monospace;'>index.html</span><span> file as text. To open HTML files as text, right-click on the file in the folder browser and select </span><span style=' font-weight: bold;'>Open as Text</span><span>. To the HTML code, add one </span><span style=' font-family: monospace;'>&lt;button&gt;</span><span> and two </span><span style=' font-family: monospace;'>&lt;para&gt;</span><span> fields. This HTML code reflects these changes. Both the </span><span style=' font-family: monospace;'>&lt;button&gt;</span><span> and second </span><span style=' font-family: monospace;'>&lt;para&gt;</span><span> have the </span><span style=' font-family: monospace;'>id</span><span> tag with labels </span><span style=' font-family: monospace;'>"myBtn"</span><span> and </span><span style=' font-family: monospace;'>"myCount"</span><span>, respectively. The </span><span style=' font-family: monospace;'>id</span><span> tag is used to link the MATLAB code to the HTML.</span></div><div class = 'preformatted-plain' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S5'><span style="white-space: pre;"><span>&lt;!DOCTYPE html&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>&lt;html lang="en"&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>&lt;head&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;meta charset="UTF-8"&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;meta http-equiv="X-UA-Compatible" content="ie=edge"&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;title&gt;My New App&lt;/title&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>&lt;/head&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>&lt;body&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;!-- Add your code here --&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;button id="myBtn"&gt;Click Me!&lt;/button&gt;&lt;br&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;p&gt;Number of clicks = &lt;/p&gt;&lt;p id="myCount"&gt;0&lt;/p&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    </span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;!-- DO NOT REMOVE - This loads the JS/WASM files --&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;script async type="text/javascript" src="mynewapp.js"&gt;&lt;/script&gt;     </span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>&lt;/body&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>&lt;/html&gt;</span></span></div></div><div  class = 'S1'><span>4. Create a new function file called </span><span style=' font-family: monospace;'>myMouseCallback.m</span><span> in the project folder.</span></div><div class = 'preformatted-matlab' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">function </span><span>myMouseCallback(Event)</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">persistent </span><span>n</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">if </span><span>isempty(n)</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    n = 0;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">end</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>n = n+1;</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>myCountElem = webcoder.dom.Element(</span><span style="color: rgb(160, 32, 240);">'myCount'</span><span>);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>myCountElem.setInnerText(sprintf(</span><span style="color: rgb(160, 32, 240);">'%d'</span><span>,n));</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">end</span></span></div></div><div  class = 'S1'><span>5. Add the function to the project clicking the </span><span style=' font-weight: bold;'>Project tab &gt; Add files</span><span> button. </span></div><div  class = 'S1'><span>6. Add the </span><span style=' font-family: monospace;'>MouseEvent</span><span> label to the function by left-clicking on the function in the project and selecting </span><span style=' font-weight: bold;'>Add label</span><span>. In the Labels to Add dialog box, select </span><span style=' font-weight: bold;'>Callbacks &gt; MouseEvent</span><span>. </span></div><div  class = 'S1'><span>7. Open the </span><span style=' font-family: monospace;'>start</span><span> function and update the function as shown in this code. You must use character arrays for successful code generation. The </span><span style=' font-family: monospace;'>addMouseEventListener</span><span> method registers the function, </span><span style=' font-family: monospace;'>myMouseCallback</span><span>, to be executed on the </span><span style=' font-family: monospace;'>click</span><span> event.</span></div><div class = 'preformatted-matlab' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">function </span><span>start()</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(60, 118, 61);">%START Run once at the start of the app</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(60, 118, 61);">%   The start function is run once at the start of the app to initialize</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(60, 118, 61);">%   values or perform other setup operations. The start function takes no</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(60, 118, 61);">%   inputs and no outputs.</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>webcoder.console.log(</span><span style="color: rgb(160, 32, 240);">'Starting...'</span><span>);</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>myBtn = webcoder.dom.Element(</span><span style="color: rgb(160, 32, 240);">'myBtn'</span><span>);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>addMouseEventListener(myBtn,</span><span style="color: rgb(160, 32, 240);">'click'</span><span>,</span><span style="color: rgb(160, 32, 240);">'myMouseCallback'</span><span>);</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">end</span></span></div></div><h2  class = 'S2'><span>Build the App</span></h2><div  class = 'S1'><span>To build the app project, enter this code at the command prompt. The amount of time it take for the app to build depends on your host computer.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S6'><span style="white-space: pre;"><span>proj = openProject(pwd);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre;"><span>webcoder.build.project(proj);</span></span></div></div></div><div  class = 'S4'><span>The resulting app is the set of 4 files located in the </span><span style=' font-family: monospace;'>dist</span><span> folder.</span></div><h2  class = 'S2'><span>Run the App</span></h2><div  class = 'S1'><span>From the MATLAB command line, you can launch the app in a local server. To create the server and launch the app in the </span><span style=' font-family: monospace;'>dist folder</span><span>, enter this code.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S6'><span style="white-space: pre;"><span>localServer = webcoder.utilities.DevelopmentServer(</span><span style="color: rgb(160, 32, 240);">"Directory"</span><span>,</span><span style="color: rgb(160, 32, 240);">'dist'</span><span>,</span><span style="color: rgb(160, 32, 240);">"Port"</span><span>,8000);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre;"><span>start(localServer);</span></span></div></div></div><div  class = 'S4'><span>Stop the server at any time using this command.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre;"><span>stop(localServer);</span></span></div></div></div><div  class = 'S4'><span>In a modern web browser, you can open the app by navigating to this IP address: </span><a href = "http://localhost:8000"><span>http://localhost:8000</span></a><span>. After the web page opens, you can see a button and counter on the screen. Clickin the button increments the counter shown on screen. You can also open the browser developer tools by pressing </span><span style=' font-weight: bold;'>Ctrl+Shift+i</span><span>. The Console window displays the output of the s</span><span style=' font-family: monospace;'>tart,</span><span> r</span><span style=' font-family: monospace;'>ender</span><span>, and </span><span style=' font-family: monospace;'>myMouseCallback </span><span>functions.</span></div><h2  class = 'S2'><span>See Also</span></h2><ul  class = 'S8'><li  class = 'S9'><span>Create App with Callbacks and Shared Data</span></li><li  class = 'S9'><span>Deploy App onto Github Pages</span></li></ul></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+%% Create App with Callback
+% This example shows how to use the *Generate JavaScript using MATLAB Coder* 
+% add-on to create a basic web application with a user interface that runs entirely 
+% in a web browser.
+%% Set Up the App Project
+% 1. In the MATLAB® current folder browser, navigate to a folder where you can 
+% create and store your app project and files.
+% 
+% 2. Create the app project by entering this code in MATLAB command line. Specify 
+% a name and the directory for your app.
+
+proj = webcoder.setup.project("My New App","Directory",pwd);
+%% 
+% 3. Open the |index.html| file as text. To open HTML files as text, right-click 
+% on the file in the folder browser and select *Open as Text*. To the HTML code, 
+% add one |<button>| and two |<para>| fields. This HTML code reflects these changes. 
+% Both the |<button>| and second |<para>| have the |id| tag with labels |"myBtn"| 
+% and |"myCount"|, respectively. The |id| tag is used to link the MATLAB code 
+% to the HTML.
+%%
+% 
+%  <!DOCTYPE html>
+%  <html lang="en">
+%  <head>
+%      <meta charset="UTF-8">
+%      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+%      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+%      <title>My New App</title>
+%  </head>
+%  <body>
+%      <!REPLACE_WITH_DASH_DASH Add your code here REPLACE_WITH_DASH_DASH>
+%      <button id="myBtn">Click Me!</button><br>
+%      <p>Number of clicks = </p><p id="myCount">0</p>
+%      
+%      <!REPLACE_WITH_DASH_DASH DO NOT REMOVE - This loads the JS/WASM files REPLACE_WITH_DASH_DASH>
+%      <script async type="text/javascript" src="mynewapp.js"></script>     
+%  </body>
+%  </html>
+%
+%% 
+% 4. Create a new function file called |myMouseCallback.m| in the project folder.
+%%
+% 
+%   function myMouseCallback(Event)
+%   
+%   persistent n
+%   if isempty(n)
+%       n = 0;
+%   end
+%   n = n+1;
+%   
+%   myCountElem = webcoder.dom.Element('myCount');
+%   myCountElem.setInnerText(sprintf('%d',n));
+%   
+%   end
+%
+%% 
+% 5. Add the function to the project clicking the *Project tab > Add files* 
+% button. 
+% 
+% 6. Add the |MouseEvent| label to the function by left-clicking on the function 
+% in the project and selecting *Add label*. In the Labels to Add dialog box, select 
+% *Callbacks > MouseEvent*. 
+% 
+% 7. Open the |start| function and update the function as shown in this code. 
+% You must use character arrays for successful code generation. The |addMouseEventListener| 
+% method registers the function, |myMouseCallback|, to be executed on the |click| 
+% event.
+%%
+% 
+%   function start()
+%   %START Run once at the start of the app
+%   %   The start function is run once at the start of the app to initialize
+%   %   values or perform other setup operations. The start function takes no
+%   %   inputs and no outputs.
+%   
+%   webcoder.console.log('Starting...');
+%   
+%   myBtn = webcoder.dom.Element('myBtn');
+%   addMouseEventListener(myBtn,'click','myMouseCallback');
+%   
+%   end
+%
+%% Build the App
+% To build the app project, enter this code at the command prompt. The amount 
+% of time it take for the app to build depends on your host computer.
+
+proj = openProject(pwd);
+webcoder.build.project(proj);
+%% 
+% The resulting app is the set of 4 files located in the |dist| folder.
+%% Run the App
+% From the MATLAB command line, you can launch the app in a local server. To 
+% create the server and launch the app in the |dist folder|, enter this code.
+
+localServer = webcoder.utilities.DevelopmentServer("Directory",'dist',"Port",8000);
+start(localServer);
+%% 
+% Stop the server at any time using this command.
+
+stop(localServer);
+%% 
+% In a modern web browser, you can open the app by navigating to this IP address: 
+% <http://localhost:8000 http://localhost:8000>. After the web page opens, you 
+% can see a button and counter on the screen. Clickin the button increments the 
+% counter shown on screen. You can also open the browser developer tools by pressing 
+% *Ctrl+Shift+i*. The Console window displays the output of the s|tart,| r|ender|, 
+% and |myMouseCallback| functions.
+%% See Also
+%% 
+% * Create App with Callbacks and Shared Data
+% * Deploy App onto Github Pages
+##### SOURCE END #####
+--></body></html>

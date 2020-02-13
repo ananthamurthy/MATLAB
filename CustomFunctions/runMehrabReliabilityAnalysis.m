@@ -24,18 +24,6 @@ function [rrb_ratio_vec_final, timeCells_Mehrab] = runMehrabReliabilityAnalysis(
         %continue
     end
     
-    %This next section appears to be unused. Commenting out for now.
-    %{
-    %CLIPPING data near point of interest (tone or puff)
-    if bk_period_control == 0
-        pre_clip = 2000; %2 seconds, I think; change to 8?
-        post_clip = 2000; %2 seconds, I think; change to 8?
-    elseif bk_period_control == 1
-        pre_clip = -4000;
-        post_clip = 6000;
-    end
-    %}
-    
     no_cells = size(dff_data_mat,2);
     no_trials = size(dff_data_mat,3);
     cell_list = 1:1:no_cells;       %using all cells

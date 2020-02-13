@@ -1,6 +1,6 @@
 function trialDetails = getTrialDetails(dataset)
 
-disp('Getting session details ...')
+disp('Getting trial details ...')
 trialDetails.nFrames = dataset.nFrames;
 
 trialDetails.frameRate          = round((dataset.nFrames/dataset.trialDuration),1);

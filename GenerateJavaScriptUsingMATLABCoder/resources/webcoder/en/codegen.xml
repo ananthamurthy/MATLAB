@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 1994-2018 The MathWorks, Inc. -->
+<rsccat version="1.0" locale="en_US" product="webcoder" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../schema/msgcat.xsd">
+<message>    
+    <entry key="CallbackFunctionNotFound">Callback function ''{0}'' not found in the project.</entry>
+    <entry key="CallbackFunctionRequiresEventLabel">Callback function ''{0}'' in project ''{1}'' must be labeled as Event.</entry>
+    <entry key="CallbackFunctionRequiresUIEventLabel">Callback function ''{0}'' in project ''{1}'' must be labeled as UIEvent.</entry>
+    <entry key="CallbackFunctionRequiresMouseEventLabel">Callback function ''{0}'' must be labeled as MouseEvent.</entry>
+    <entry key="CallbackFunctionRequiresChangeEventLabel">Callback function ''{0}'' must be labeled as ChangeEvent.</entry>
+    <entry key="CallbackFunctionRequiresDeviceOrientationEventLabel">Callback function ''{0}'' must be labeled as DeviceOrientationEvent.</entry>  
+    <entry key="CallbackFunctionRequiresDeviceMotionEventLabel">Callback function ''{0}'' must be labeled as DeviceMotionEvent.</entry>  
+</message>
+</rsccat>

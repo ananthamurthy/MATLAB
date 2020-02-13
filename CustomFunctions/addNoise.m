@@ -1,5 +1,6 @@
 %Written by Kambadur Ananthamurthy
-function DATA_trialWithNoise = addNoise(DATA_trial, noise, noisePercent)
+function [DATA_trialWithNoise, noiseComponent] = addNoise(DATA_trial, noise, noisePercent)
+
 s = (noisePercent/100) * max(DATA_trial);
 
 if strcmpi(noise, 'gaussian')

@@ -16,7 +16,7 @@ addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth')
 %% Dataset
 make_db
 ops0.fig             = 1;
-ops0.saveData        = 1;
+ops0.saveData        = 0;
 %ops0.onlyProbeTrials = 0;
 
 %% Synthetic Data Parameters
@@ -24,27 +24,27 @@ setupSyntheticDataParameters
 
 %%
 if ops0.fig
-    figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'hot'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+    figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 end
 
 for iexp = 1:length(db)
-    fprintf('Analyzing %s_%i_%i - Date: %s\n', db(iexp).mouse_name, ...
+    fprintf('Analyzing %s_%i_%i - Date: %s\n', db(iexp).mouseName, ...
         db(iexp).sessionType, ...
         db(iexp).session, ...
         db(iexp).date)
     saveDirec = '/Users/ananth/Desktop/Work/Analysis/Imaging/';
-    saveFolder = [saveDirec db(iexp).mouse_name '/' db(iexp).date '/'];
+    saveFolder = [saveDirec db(iexp).mouseName '/' db(iexp).date '/'];
     
     %Load processed data (processed dfbf for dataset/session)
-    realProcessedData = load([saveFolder db(iexp).mouse_name '_' db(iexp).date '.mat']);
+    realProcessedData = load([saveFolder db(iexp).mouseName '_' db(iexp).date '.mat']);
     trialDetails = getTrialDetails(db(iexp));
     
     %% Curate Calcium Event Library
     %Cell specific curation of the calcium event library
     %Check to see if the library exits
-    if isfile([saveFolder db(iexp).mouse_name '_' db(iexp).date '_eventLibrary_2D.mat'])
+    if isfile([saveFolder db(iexp).mouseName '_' db(iexp).date '_eventLibrary_2D.mat'])
         disp('Loading existing event library ...')
-        load([saveFolder db(iexp).mouse_name '_' db(iexp).date '_eventLibrary_2D.mat'])
+        load([saveFolder db(iexp).mouseName '_' db(iexp).date '_eventLibrary_2D.mat'])
         disp('... done!')
     else
         %Use real 2D data
@@ -86,7 +86,7 @@ for iexp = 1:length(db)
     disp('... done!')
     
     if ops0.saveData == 1
-        save([saveFolder db(iexp).mouse_name '_' db(iexp).date '_eventLibrary_2D.mat'], 'eventLibrary_2D')
+        save([saveFolder db(iexp).mouseName '_' db(iexp).date '_eventLibrary_2D.mat'], 'eventLibrary_2D')
         save([saveFolder ...
             'synthDATA' ...
             '_pTC' num2str(percentTimeCells) ...
@@ -116,34 +116,22 @@ for iexp = 1:length(db)
     if ops0.fig == 1
         fig1 = figure(1);
         set(fig1,'Position', [300, 300, 1200, 500]);
-        %         imagesc(squeeze(mean(syntheticDATA,2)))
-        %         title(['Trial-Averaged Synthetic Data | ' ...
-        %             db(iexp).mouse_name ...
-        %             ' ST' num2str(db(iexp).sessionType) ...
-        %             ' S' num2str(db(iexp).session) ...
-        %             ' eventSize:' eventSize ...
-        %             ' maxImprecision: ' num2str(max(imprecision)) ...
-        %             ' noise: ' noise])
-        %         xlabel('Frame Number', ...
-        %             'FontSize', figureDetails.fontSize,...
-        %             'FontWeight', 'bold')
-        %         ylabel('Cell Number', ...
-        %             'FontSize', figureDetails.fontSize,...
-        %             'FontWeight', 'bold')
-        %         set(gca,'FontSize', figureDetails.fontSize-2)
         plotdFbyF(db(iexp), syntheticDATA_2D, trialDetails, 'Frame Number', 'Cell Numbers', figureDetails, 0)
         colormap(figureDetails.colorMap)
-        %         print(['/Users/ananth/Desktop/figs/syntheticData/synthData_' ...
-        %             db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session) ...
-        %             '_eventWidth_percentile' eventWidth (1) ...
-        %             '_eventWidth_width' eventWidth (2) ...
-        %             '_eventTiming-' eventTiming ...
-        %             '_maxImprecision-' num2str(max(imprecision)) ...
-        %             '_noise-' noise], ...
-        %             '-djpeg');
+        
         print(['/Users/ananth/Desktop/figs/syntheticData/synthData_' ...
-            db(iexp).mouse_name '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session)], ...
+            db(iexp).mouseName '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session)], ...
             '-djpeg');
+        
+        fig2 = figure(2);
+        set(fig2,'Position', [300, 300, 1200, 500]);
+        plotdFbyF(db(iexp), syntheticDATA_2D(:,1:(3*trialDetails.nFrames)), trialDetails, 'Frame Number', 'Cell Numbers', figureDetails, 0)
+        colormap(figureDetails.colorMap)
+        
+        print(['/Users/ananth/Desktop/figs/syntheticData/synthData_first3trials_' ...
+            db(iexp).mouseName '_' num2str(db(iexp).sessionType) '_' num2str(db(iexp).session)], ...
+            '-djpeg');
+        
     else
     end
 end

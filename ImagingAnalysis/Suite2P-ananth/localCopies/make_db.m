@@ -1,7 +1,7 @@
 %disp('Establishing dataset details ...')
 i = 0;
 % i = i+1; %1
-% db(i).mouse_name    = 'M30';
+% db(i).mouseName    = 'M30';
 % db(i).date          = '20191011';
 % db(i).isDayOne      = 0; %1 - Yes; 0 - No
 % db(i).sessionType   = 'An2';
@@ -22,7 +22,7 @@ i = 0;
 
 %% Multiple sessions
 % i = i+1; %1
-% db(i).mouse_name    = 'M27';
+% db(i).mouseName    = 'M27';
 % db(i).date          = '20190613';
 % db(i).isDayOne      = 1; %1 - Yes; 0 - No
 % db(i).sessionType   = 'An2';
@@ -42,7 +42,7 @@ i = 0;
 % db(i).nchannels_red = 0;
 
 % i = i+1; %2
-% db(i).mouse_name    = 'M27';
+% db(i).mouseName    = 'M27';
 % db(i).date          = '20190614';
 % db(i).isDayOne      = 0; %1 - Yes; 0 - No
 % db(i).sessionType   = 'An2';
@@ -62,7 +62,7 @@ i = 0;
 % db(i).nchannels_red = 0;
 %  
 % i = i+1; %3
-% db(i).mouse_name    = 'M27';
+% db(i).mouseName    = 'M27';
 % db(i).date          = '20190615';
 % db(i).isDayOne      = 0; %1 - Yes; 0 - No
 % db(i).sessionType   = 'An2';
@@ -82,7 +82,7 @@ i = 0;
 % db(i).nchannels_red = 0;
 %   
 % i = i+1; %1
-% db(i).mouse_name    = 'M11';
+% db(i).mouseName    = 'M11';
 % db(i).date          = '20170711';
 % db(i).isDayOne      = 1; %1 - Yes; 0 - No
 % db(i).sessionType   = 9;
@@ -102,7 +102,7 @@ i = 0;
 % db(i).nchannels_red = 0;
 % 
 % i = i+1; %4
-% db(i).mouse_name    = 'M11';
+% db(i).mouseName    = 'M11';
 % db(i).date          = '20170712';
 % db(i).isDayOne      = 1; %1 - Yes; 0 - No
 % db(i).sessionType   = 11;
@@ -122,7 +122,7 @@ i = 0;
 % db(i).nchannels_red = 0;
 % 
 % i = i+1; %5
-% db(i).mouse_name    = 'M11';
+% db(i).mouseName    = 'M11';
 % db(i).date          = '20170713';
 % db(i).isDayOne      = 1; %1 - Yes; 0 - No
 % db(i).sessionType   = 11;
@@ -143,7 +143,7 @@ i = 0;
 
 %% Reference I
 % i = i+1; %1
-% db(i).mouse_name    = 'M26';
+% db(i).mouseName    = 'M26';
 % db(i).date          = '20180508';
 % db(i).isDayOne      = 0; %1 - Yes; 0 - No
 % db(i).sessionType   = 5;
@@ -163,7 +163,7 @@ i = 0;
 % db(i).nchannels_red = 0;
 
 % i = i+1; %1
-% db(i).mouse_name    = 'M26';
+% db(i).mouseName    = 'M26';
 % db(i).date          = '20180509';
 % db(i).isDayOne      = 0; %1 - Yes; 0 - No
 % db(i).sessionType   = 5;
@@ -183,7 +183,7 @@ i = 0;
 % db(i).nchannels_red = 0;
 
 i = i+1; %1
-db(i).mouse_name    = 'M26';
+db(i).mouseName    = 'M26';
 db(i).date          = '20180514';
 db(i).isDayOne      = 0; %1 - Yes; 0 - No
 db(i).sessionType   = 5;
@@ -203,7 +203,7 @@ db(i).expred        = [];
 db(i).nchannels_red = 0;
 
 % i = i+1; %1
-% db(i).mouse_name    = 'M26';
+% db(i).mouseName    = 'M26';
 % db(i).date          = '20180515';
 % db(i).isDayOne      = 0; %1 - Yes; 0 - No
 % db(i).sessionType   = 5;
@@ -223,7 +223,7 @@ db(i).nchannels_red = 0;
 % db(i).nchannels_red = 0;
 
 % i = i+1; %1
-% db(i).mouse_name    = 'M26';
+% db(i).mouseName    = 'M26';
 % db(i).date          = '20180516';
 % db(i).isDayOne      = 0; %1 - Yes; 0 - No
 % db(i).sessionType   = 5;
@@ -244,7 +244,7 @@ db(i).nchannels_red = 0;
 
 %% Reference II
 % i = i+1; %1
-% db(i).mouse_name    = 'M16';
+% db(i).mouseName    = 'M16';
 % db(i).date          = '20171005';
 % db(i).isDayOne      = 1; %1 - Yes; 0 - No
 % db(i).sessionType   = 3;
@@ -265,7 +265,7 @@ db(i).nchannels_red = 0;
 
 %% Misc
 % i = i+1; %1
-% db(i).mouse_name    = 'G71';
+% db(i).mouseName    = 'G71';
 % db(i).date          = '20190625';
 % db(i).isDayOne      = 0; %1 - Yes; 0 - No
 % db(i).sessionType   = 'So1';

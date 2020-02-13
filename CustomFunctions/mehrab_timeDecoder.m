@@ -8,20 +8,19 @@ addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth')
 
 %% Dataset
 make_db
-ops0.method   = 'C'; % A: only PSTH; B: PSTH then filter; C: filter then PSTH; use 'C'
 ops0.fig      = 1;
 if ops0.fig
-    figureDetails = compileFigureDetails(20, 2, 10, 0.5, 'hot'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+    figureDetails = compileFigureDetails(20, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 end
 
 % Method specifics from Mehrab's code
-pretr_control = 1;         %0 - analyses control no puff datasets, 1 - analyses training (trace or pseudo) datasets
-learned_only = 2;        %1 - use only datasets for animals that have learned the task 0 - use all datasets in list, 2 - analyses only non-learner datasets
-Ca_width = 250;          %in ms
-stimOI = 1;              %stimulus of interest - 1 = tone, 2 = puff (useful with pseudorand datasets)
+%pretr_control = 1;       %0 - analyses control no puff datasets, 1 - analyses training (trace or pseudo) datasets
+%learned_only = 2;        %1 - use only datasets for animals that have learned the task 0 - use all datasets in list, 2 - analyses only non-learner datasets
+%Ca_width = 500;          %in ms
+%stimOI = 1;              %stimulus of interest - 1 = tone, 2 = puff (useful with pseudorand datasets)
 unique_tr_sets = 1;      %1 - unique lists of trials for kernel calculation and decoder testing. 0 - same set of trials for both
-bk_period_control = 0;   %0 - analyses tone-puff period, 1 - analyses background period
-vec_sim_measure = 2;     %1 - uses Pearson's correlation coeff to comapre single frame pop vec with kernels, 2 - uses vector dot product, 3 - uses RMS error
+%bk_period_control = 0;   %0 - analyses tone-puff period, 1 - analyses background period
+vec_sim_measure = 1;     %1 - uses Pearson's correlation coeff to comapre single frame pop vec with kernels, 2 - uses vector dot product, 3 - uses RMS error
 saving = 0;              %0 - doesnt write scores to file; 1 - writes scores to file (remember to change filename!)
 score_method = 1;        %1 - original scoring, with penalties; 2 - simple scoring, only distance from correct frame
 
@@ -42,7 +41,7 @@ for iexp = 1:length(db)
     saveFolder = [saveDirec db(iexp).mouse_name '/' db(iexp).date '/'];
     
     %Load processed data (processed dfbf for dataset/session)
-    realProcessedData = load([saveFolder db(iexp).mouse_name '_' db(iexp).date '_' ops0.method '.mat']);
+    realProcessedData = load([saveFolder db(iexp).mouse_name '_' db(iexp).date '.mat']);
     trialDetails = getTrialDetails(db(iexp));
     
     %Change of hands
@@ -51,67 +50,6 @@ for iexp = 1:length(db)
     blink_list = ones(size(realProcessedData.dfbf,2),1); %Setting blink_list = 1 for all trials
     learned_list = [learned_list; learned];
     blink_trials = find(blink_list == 1);
-    
-    %condition to use only animals that learned the task
-    if learned_only == 1 %operation
-        if learned == 0 %data dependent
-            continue
-        elseif learned == 1
-            
-        end
-    elseif learned_only == 0 %opeartion: analyses all trials
-    elseif learned_only == 2
-        if learned == 1
-            continue
-        elseif learned == 0
-        end
-    elseif learned_only == 4            %used to make a list of learners
-        if learned == 1
-            learned_listi = [learned_listi; dir_counter];
-        else
-        end
-        continue
-    end
-    
-    %CLIPPING data near point of interest (tone or puff)
-    if bk_period_control == 0
-        pre_clip = 2000; %2 seconds, I think; change to 8?
-        post_clip = 2000; %2 seconds, I think; change to 8?
-    elseif bk_period_control == 1
-        pre_clip = -3000;
-        post_clip = 5000;
-    end
-    
-    % Skipping this section since I already have my dfbf data ready
-    %     [raw_data_mat no_frames CS_onset_frame US_onset_frame] = rand_raw_data_clipper(raw_data_mat, set_type,...
-    %         stimOI, rand_times_list, pre_clip, post_clip, frame_time, CS_onset_frame, US_onset_frame, CS_US_delay, bk_period_control);
-    %     %calculating dF/F and suppressing peaks of width lesser than Ca_width
-    %     [dff_data_mat dffdata_peaks] = dff_maker(raw_data_mat, frame_time, Ca_width);
-    %     %sanitising data based on no. of infs/nans
-    %     [dff_data_mat dff_data_mat_orig dffdata_peaks dffdata_peaks_orig trial_type_vec bad_cellsi] = imaging_data_sanitiser(dff_data_mat, dffdata_peaks, trial_type_vec);
-    %     sanit_ratio = ((size(dff_data_mat, 1).* size(dff_data_mat, 2).* size(dff_data_mat, 1))./(size(dff_data_mat_orig, 1).* size(dff_data_mat_orig, 2).* size(dff_data_mat_orig, 1)));
-    %     no_cells = size(dff_data_mat, 2);
-    %     no_trials_orig = no_trials;
-    %     no_trials = size(dff_data_mat, 3);
-    %     if no_cells < 5
-    %         continue
-    %     elseif no_trials_orig - no_trials > (no_trials_orig./2.5)
-    %         %if no_trials_orig - no_trials > (no_trials_orig./5)
-    %         continue
-    %     else
-    %     end
-    
-    %list of learning trials for learners - mean used for other
-    %datasets
-    %     if pretr_control == 1 && learned_only == 1
-    %         iter = iter + 1;
-    %         pk_list = [22, 23, 27, 29, 22, 23];
-    %         pk_behav_trial = pk_list(1, iter);
-    %     elseif pretr_control == 0 && learned_only == 1
-    %         pk_behav_trial = mean([22, 23, 27, 29, 22, 23]);
-    %     elseif learned_only == 0 || learned_only == 2
-    %         pk_behav_trial = mean([22, 23, 27, 29, 22, 23]);
-    %     end
     
     no_cells = size(realProcessedData.dfbf,1);
     no_trials = size(realProcessedData.dfbf,2);
@@ -145,22 +83,22 @@ for iexp = 1:length(db)
     
     %making lists of trials for kernel caluclation and for testing decoder
     if unique_tr_sets == 1
-        trial_list_kernel = (pk_behav_trial - 5):2:no_trials;
-        trial_list_test = (pk_behav_trial - 4):2:no_trials;
+        %trial_list_kernel = (pk_behav_trial - 5):2:no_trials;
+        trial_list_kernel = (pk_behav_trial):2:no_trials;
+        trial_list_test = (pk_behav_trial + 1):2:no_trials;
     elseif unique_tr_sets == 0
-        trial_list_kernel = (pk_behav_trial - 5):no_trials;
-        trial_list_test = (pk_behav_trial - 5):no_trials;
+        trial_list_kernel = (pk_behav_trial):no_trials;
+        trial_list_test = (pk_behav_trial):no_trials;
     end
-    
-    
+       
     %calculating kernels for each cell - with overlapping or non-overlapping trials
     kernels = nanmean(dff_data_mat(CS_onset_frame:US_onset_frame, cell_list, trial_list_kernel), 3);
-    
-    
+
     %normalising each kernel and thresholding
-    thresh = .7;
+    %thresh = .7;
+    thresh = 0;
     kernels_nt = zeros(size(kernels));
-    for cell_no = 1:size(kernels, 2);
+    for cell_no = 1:size(kernels, 2)
         kernels_nt(:, cell_no) = kernels(:, cell_no)./max(kernels(:, cell_no));
         pk_list(1, cell_no) = max(kernels(:, cell_no));
     end
@@ -175,7 +113,7 @@ for iexp = 1:length(db)
     saved_scorevec_mat = [];
     for trial_noi = 1:length(trial_list_test)
         trial_no = trial_list_test(trial_noi);          %ensuring ability to use non-overlapping sets of trials for kernel calc. and testing decoder
-        for frame_no = 1:size(kernels, 1);
+        for frame_no = 1:size(kernels, 1)
             data = squeeze(dff_data_mat((frame_no + CS_onset_frame - 1 ), cell_list, trial_no));
             
             %normalising to typical pk and thresholding to identify only active cells
@@ -198,6 +136,7 @@ for iexp = 1:length(db)
                     score_vec(cr_frame_no, 1) = sqrt((sum((kernels_nt(cr_frame_no) - data).^2))./length(data));
                     score_vec = max(score_vec) - score_vec;
                 else
+                    error('Unknown similarity test')
                 end
             end
             
@@ -230,9 +169,7 @@ for iexp = 1:length(db)
             
             [del, pred_fi] = nanmax(score_vec);
             recorded_preds = [recorded_preds; frame_no, pred_fi];
-            
-            
-            
+                   
             %scores for each frame being weighted by distance
             %from actual frame (actual frame's weight is 0)
             dist_vec = zeros(size(kernels, 1), 1);
@@ -264,9 +201,7 @@ for iexp = 1:length(db)
             
             pred_score_mat(frame_no, trial_no) = pred_score;
             err_mat(frame_no, trial_no) = err_score;
-            
-            
-            
+           
             %random predictor as control - generated by randomly
             %re-arranging the corr-coeffs obtained
             err_score_r_vec = zeros(1, 500);
@@ -322,7 +257,8 @@ for iexp = 1:length(db)
     no_entries = length(no_entries);
     ses = [nanstd(reshape(perf_mat, 1, [])), nanstd(reshape(perf_mat_r, 1, []))]./sqrt(no_entries);
 
-    saved_scores = [saved_scores;(means(1)./means(2) ), p, means(1), means(2), ses(1), ses(2), dir_counter ];
+    %saved_scores = [saved_scores;(means(1)./means(2) ), p, means(1), means(2), ses(1), ses(2), dir_counter ];
+    saved_scores = [saved_scores;(means(1)./means(2) ), means(1), means(2), ses(1), ses(2)];
     
     all_scores = [all_scores; [reshape(perf_mat, [], 1), reshape(perf_mat_r, [], 1)]];      %saved decoder performance scores, and randomised control scores
     

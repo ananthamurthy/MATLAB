@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB R2019b"><title>Pass Data to a Library</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 28.8px; min-height: 0px; white-space: pre-wrap; color: rgb(213, 80, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 24px; font-weight: normal; text-align: left;  }
+.S1 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: normal; text-align: left;  }
+.S2 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 20px; min-height: 0px; white-space: pre-wrap; color: rgb(60, 60, 60); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: bold; text-align: left;  }
+.CodeBlock { background-color: #F7F7F7; margin: 10px 0 10px 0;}
+.S3 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 1px solid rgb(233, 233, 233); border-bottom: 1px solid rgb(233, 233, 233); border-radius: 4px; padding: 6px 45px 4px 13px; line-height: 16.996px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S4 { margin: 10px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: normal; text-align: left;  }
+.S5 { border-left: 0px none rgb(0, 0, 0); border-right: 0px none rgb(0, 0, 0); border-top: 0px none rgb(0, 0, 0); border-bottom: 0px none rgb(0, 0, 0); border-radius: 0px; padding: 0px; line-height: 16px; min-height: 16px; white-space: pre; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 12px;  }
+.S6 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 1px solid rgb(233, 233, 233); border-bottom: 0px none rgb(0, 0, 0); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 16.996px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S7 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 0px none rgb(0, 0, 0); border-bottom: 1px solid rgb(233, 233, 233); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 16.996px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }</style></head><body><div class = rtcContent><h1  class = 'S0'><span>Pass Data to a Library</span></h1><div  class = 'S1'><span>This example shows how to use the </span><span style=' font-weight: bold;'>Generate JavaScript using MATLAB Coder</span><span> add-on to create a  library that can share data between the JavaScript® in the browser and the generated code.</span></div><h2  class = 'S2'><span>Set Up the Project</span></h2><div  class = 'S1'><span>1. In the MATLAB® current folder browser, navigate to a folder where you can create and store your library project and files.</span></div><div  class = 'S1'><span>2. Create the library project by entering this code in MATLAB command line. Specify a name and the directory for your library.The </span><span style=' font-family: monospace;'>dll</span><span> argument creates the project with a library configuration.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre;"><span>proj = webcoder.setup.project(</span><span style="color: rgb(160, 32, 240);">"My Library"</span><span>,</span><span style="color: rgb(160, 32, 240);">"Directory"</span><span>,pwd,</span><span style="color: rgb(160, 32, 240);">"OutputType"</span><span>,</span><span style="color: rgb(160, 32, 240);">'dll'</span><span>);</span></span></div></div></div><div  class = 'S4'><span>3. Create a MATLAB function that performs an element wise addition of two vectors and returns the resulting vector.</span></div><div class = 'preformatted-matlab' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">function </span><span>C = AddTwoArrays(A,B)</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    </span><span style="color: rgb(60, 118, 61);">%ADDTWOARRAYS Add the elements in two arrays </span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    </span><span style="color: rgb(60, 118, 61);">%   Add the elements, on an element-by-element basis to create</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    </span><span style="color: rgb(60, 118, 61);">%   a new array.</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>    </span><span style="color: rgb(60, 118, 61);">% Specify the Dimensions and Data Types</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    assert(isa(A, </span><span style="color: rgb(160, 32, 240);">'int32'</span><span>));</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    assert(all( size(A) == [ 1, 5 ]))</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    assert(isa(B, </span><span style="color: rgb(160, 32, 240);">'int32'</span><span>));</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    assert(all( size(B) == [ 1, 5 ]))</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>    </span><span style="color: rgb(60, 118, 61);">% Add the Arrays</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    C = A + B;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">end</span></span></div></div><div  class = 'S1'><span>4. Add the </span><span style=' font-family: monospace;'>AddTwoArrays.m</span><span> function file to the project.</span></div><div  class = 'S1'><span>5. Add the </span><span style=' font-weight: bold;'>UserEntryPoints &gt; Function</span><span> label to the </span><span style=' font-family: monospace;'>AddTwoArrays.m</span><span> function file.</span></div><h2  class = 'S2'><span>Generate the JavaScript and WebAssembly Code</span></h2><div  class = 'S1'><span>At the MATLAB command prompt, enter this code to build the project and MATLAB code.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S6'><span style="white-space: pre;"><span>proj = openProject(pwd);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre;"><span>webcoder.build.project(proj);</span></span></div></div></div><div  class = 'S4'><span>This generates C/C++ code into the build folder. The C/C++ code then compiles to a JavaScript file, </span><span style=' font-family: monospace;'>mylibrary.js</span><span>, and a WebAssembly file, </span><span style=' font-family: monospace;'>mylibrary.wasm</span><span>, in the </span><span style=' font-family: monospace;'>dist</span><span> folder. </span></div><div  class = 'S1'><span>You can add this code as a sample </span><span style=' font-family: monospace;'>index.html </span><span>file for a web page to the </span><span style=' font-family: monospace;'>dist</span><span> folder. It includes code to run the generated code </span><span style=' font-family: monospace;'>mylibrary.js</span><span> file in the browser. The JavaScript in the HTML file uses typed arrays to pass data. For more information on JavaScript typed arrays, see </span><a href = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays"><span>JavaScript typed arrays</span></a><span>.</span></div><div class = 'preformatted-plain' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S5'><span style="white-space: pre;"><span>&lt;!DOCTYPE html&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>&lt;html lang="en"&gt;</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>&lt;head&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;meta charset="UTF-8"&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;meta http-equiv="X-UA-Compatible" content="ie=edge"&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;title&gt;Passing Data&lt;/title&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>&lt;/head&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>&lt;body&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;script async type="text/javascript" src="mylibrary.js"&gt;&lt;/script&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;script&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>        // JavaScript Array to Emscripten Heap</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>        function _arrayToHeap(typedArray) {</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>            var numBytes = typedArray.length * typedArray.BYTES_PER_ELEMENT;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>            var ptr = Module._malloc(numBytes);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>            var heapBytes = new Uint8Array(Module.HEAPU8.buffer, ptr, numBytes);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>            heapBytes.set(new Uint8Array(typedArray.buffer));</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>            return heapBytes;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>        }</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>        // Emscripten Heap to JavasSript Array</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>        function _heapToArray(heapBytes, array) {</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>            return new Int32Array(</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                heapBytes.buffer,</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                heapBytes.byteOffset,</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                heapBytes.length / array.BYTES_PER_ELEMENT);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>        }</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>        // Free Heap</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>        function _freeArray(heapBytes) {</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>            Module._free(heapBytes.byteOffset);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>        }</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>        // Example of Passing Data Arrays</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>        var Module = {</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>            onRuntimeInitialized: function () {</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>                var a = [1, 2, 3, 4, 5];</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                var b = [1, 2, 3, 4, 5];</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>                // Create Data    </span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                var A = new Int32Array(a);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                var B = new Int32Array(b);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                var C = new Int32Array(5);</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>                // Move Data to Heap</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                var Abytes = _arrayToHeap(A);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                var Bbytes = _arrayToHeap(B);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                var Cbytes = _arrayToHeap(C);</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>                // Run Function</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                Module._mylibrary_initialize();</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                Module._AddTwoArrays(Abytes.byteOffset, Bbytes.byteOffset, Cbytes.byteOffset)</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                Module._mylibrary_terminate();</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>                //  Copy Data from Heap</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                C = _heapToArray(Cbytes, C);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                var c = Array.from(C);</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>                // Free Data from Heap</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                _freeArray(Abytes);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                _freeArray(Bbytes);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                _freeArray(Cbytes);</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>                // Display Results</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                console.log(a + " + " + b + " = " + c);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>            }</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>        };</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;/script&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>&lt;/body&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>&lt;/html&gt;</span></span></div></div><h2  class = 'S2'><span>Run the JavaScript and WebAssembly Code</span></h2><div  class = 'S1'><span>From the MATLAB command line, you can launch the sample web page in a local server. To create the server and launch the app in the </span><span style=' font-family: monospace;'>dist folder</span><span>, enter this code. Run the commands in the same folder as the provided </span><span style=' font-family: monospace;'>index.html</span><span> file.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S6'><span style="white-space: pre;"><span>server = webcoder.utilities.DevelopmentServer(</span><span style="color: rgb(160, 32, 240);">"Port"</span><span>,8125)</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre;"><span>start(server);</span></span></div></div></div><div  class = 'S4'><span>Stop the server at any time using this command.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre;"><span>stop(server);</span></span></div></div></div><div  class = 'S4'><span>Open the web page using any modern browser at this IP address: </span><a href = "http://127.0.0.1:8125"><span>127.0.0.1:8125</span></a><span>. While in the browser, press </span><span style=' font-weight: bold;'>Ctrl+Shift+I</span><span> to open the development view. The output from the </span><span style=' font-family: monospace;'>mylibrary.js</span><span> file will displays in the Console tab.</span></div></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+%% Pass Data to a Library
+% This example shows how to use the *Generate JavaScript using MATLAB Coder* 
+% add-on to create a  library that can share data between the JavaScript® in the 
+% browser and the generated code.
+%% Set Up the Project
+% 1. In the MATLAB® current folder browser, navigate to a folder where you can 
+% create and store your library project and files.
+% 
+% 2. Create the library project by entering this code in MATLAB command line. 
+% Specify a name and the directory for your library.The |dll| argument creates 
+% the project with a library configuration.
+
+proj = webcoder.setup.project("My Library","Directory",pwd,"OutputType",'dll');
+%% 
+% 3. Create a MATLAB function that performs an element wise addition of two 
+% vectors and returns the resulting vector.
+%%
+% 
+%   function C = AddTwoArrays(A,B)
+%       %ADDTWOARRAYS Add the elements in two arrays 
+%       %   Add the elements, on an element-by-element basis to create
+%       %   a new array.
+%   
+%       % Specify the Dimensions and Data Types
+%       assert(isa(A, 'int32'));
+%       assert(all( size(A) == [ 1, 5 ]))
+%       assert(isa(B, 'int32'));
+%       assert(all( size(B) == [ 1, 5 ]))
+%   
+%       % Add the Arrays
+%       C = A + B;
+%   end
+%
+%% 
+% 4. Add the |AddTwoArrays.m| function file to the project.
+% 
+% 5. Add the *UserEntryPoints > Function* label to the |AddTwoArrays.m| function 
+% file.
+%% Generate the JavaScript and WebAssembly Code
+% At the MATLAB command prompt, enter this code to build the project and MATLAB 
+% code.
+
+proj = openProject(pwd);
+webcoder.build.project(proj);
+%% 
+% This generates C/C++ code into the build folder. The C/C++ code then compiles 
+% to a JavaScript file, |mylibrary.js|, and a WebAssembly file, |mylibrary.wasm|, 
+% in the |dist| folder. 
+% 
+% You can add this code as a sample |index.html| file for a web page to the 
+% |dist| folder. It includes code to run the generated code |mylibrary.js| file 
+% in the browser. The JavaScript in the HTML file uses typed arrays to pass data. 
+% For more information on JavaScript typed arrays, see <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays 
+% JavaScript typed arrays>.
+%%
+% 
+%  <!DOCTYPE html>
+%  <html lang="en">
+%  
+%  <head>
+%      <meta charset="UTF-8">
+%      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+%      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+%      <title>Passing Data</title>
+%  </head>
+%  <body>
+%      <script async type="text/javascript" src="mylibrary.js"></script>
+%      <script>
+%          // JavaScript Array to Emscripten Heap
+%          function _arrayToHeap(typedArray) {
+%              var numBytes = typedArray.length * typedArray.BYTES_PER_ELEMENT;
+%              var ptr = Module._malloc(numBytes);
+%              var heapBytes = new Uint8Array(Module.HEAPU8.buffer, ptr, numBytes);
+%              heapBytes.set(new Uint8Array(typedArray.buffer));
+%              return heapBytes;
+%          }
+%  
+%          // Emscripten Heap to JavasSript Array
+%          function _heapToArray(heapBytes, array) {
+%  
+%              return new Int32Array(
+%                  heapBytes.buffer,
+%                  heapBytes.byteOffset,
+%                  heapBytes.length / array.BYTES_PER_ELEMENT);
+%          }
+%  
+%          // Free Heap
+%          function _freeArray(heapBytes) {
+%              Module._free(heapBytes.byteOffset);
+%          }
+%  
+%          // Example of Passing Data Arrays
+%          var Module = {
+%              onRuntimeInitialized: function () {
+%  
+%                  var a = [1, 2, 3, 4, 5];
+%                  var b = [1, 2, 3, 4, 5];
+%  
+%                  // Create Data    
+%                  var A = new Int32Array(a);
+%                  var B = new Int32Array(b);
+%                  var C = new Int32Array(5);
+%  
+%                  // Move Data to Heap
+%                  var Abytes = _arrayToHeap(A);
+%                  var Bbytes = _arrayToHeap(B);
+%                  var Cbytes = _arrayToHeap(C);
+%  
+%                  // Run Function
+%                  Module._mylibrary_initialize();
+%                  Module._AddTwoArrays(Abytes.byteOffset, Bbytes.byteOffset, Cbytes.byteOffset)
+%                  Module._mylibrary_terminate();
+%  
+%                  //  Copy Data from Heap
+%                  C = _heapToArray(Cbytes, C);
+%                  var c = Array.from(C);
+%  
+%                  // Free Data from Heap
+%                  _freeArray(Abytes);
+%                  _freeArray(Bbytes);
+%                  _freeArray(Cbytes);
+%  
+%                  // Display Results
+%                  console.log(a + " + " + b + " = " + c);
+%              }
+%          };
+%      </script>
+%  </body>
+%  </html>
+%
+%% Run the JavaScript and WebAssembly Code
+% From the MATLAB command line, you can launch the sample web page in a local 
+% server. To create the server and launch the app in the |dist folder|, enter 
+% this code. Run the commands in the same folder as the provided |index.html| 
+% file.
+
+server = webcoder.utilities.DevelopmentServer("Port",8125)
+start(server);
+%% 
+% Stop the server at any time using this command.
+
+stop(server);
+%% 
+% Open the web page using any modern browser at this IP address: <http://127.0.0.1:8125 
+% 127.0.0.1:8125>. While in the browser, press *Ctrl+Shift+I* to open the development 
+% view. The output from the |mylibrary.js| file will displays in the Console tab.
+##### SOURCE END #####
+--></body></html>

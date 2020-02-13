@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB R2019b"><title>Setup for Generate JavaScript Using MATLAB Coder</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 28.8px; min-height: 0px; white-space: pre-wrap; color: rgb(213, 80, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 24px; font-weight: normal; text-align: center;  }
+.S1 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 20px; min-height: 0px; white-space: pre-wrap; color: rgb(60, 60, 60); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: bold; text-align: left;  }
+.S2 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: normal; text-align: left;  }
+.CodeBlock { background-color: #F7F7F7; margin: 10px 0 10px 0;}
+.S3 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 1px solid rgb(233, 233, 233); border-bottom: 0px none rgb(0, 0, 0); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 16.996px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S4 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 0px none rgb(0, 0, 0); border-bottom: 0px none rgb(0, 0, 0); border-radius: 0px; padding: 0px 45px 0px 13px; line-height: 16.996px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S5 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 0px none rgb(0, 0, 0); border-bottom: 1px solid rgb(233, 233, 233); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 16.996px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S6 { margin: 10px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: normal; text-align: left;  }
+.S7 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 1px solid rgb(233, 233, 233); border-bottom: 1px solid rgb(233, 233, 233); border-radius: 4px; padding: 6px 45px 4px 13px; line-height: 16.996px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }</style></head><body><div class = rtcContent><h1  class = 'S0'><span style=' font-weight: bold;'>Setup for Generate JavaScript Using MATLAB Coder</span></h1><h2  class = 'S1'><span>Introduction</span></h2><div  class = 'S2'><span>The Generate JavaScript Using MATLAB Coder add-on requires you to install the Emscripten software development kit (SDK) on your computer. The Emscripten SDK uses a group of tools to convert C/C++ code into optimized JavaScript. For more information on Emscripten, see </span><a href = "https://kripken.github.io/emscripten-site/docs/introducing_emscripten/about_emscripten.html"><span>About Emscripten</span></a><span>. </span></div><h2  class = 'S1'><span>Install Emscripten and Setup WebCoder Tools</span></h2><div  class = 'S2'><span>1. Download and install the Emscripten SDK onto your computer. For details, see </span><a href = "https://kripken.github.io/emscripten-site/docs/getting_started/downloads.html#"><span>Download and install</span></a><span>. Carefully follow the instructions provided on the Emscripten website, as different operating systems require specific extra steps to install all necessary third-party tools.</span></div><div  class = 'S2'><span style=' font-style: italic;'>Note: This add-on does not modify your system environment variables. On Windows, you can install the Emscripten SDK without using the global (-g) flag.</span></div><div  class = 'S2'><span style=' font-style: italic;'></span></div><div  class = 'S2'><span>2. In MATLAB®, for OS X® and Linux® operating systems, verify MATLAB uses a BASH shell environment.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">if </span><span>ismac || isunix</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre;"><span>    webcoder.setup.verifyShellEnvironment;</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">end</span></span></div></div></div><div  class = 'S6'><span></span></div><div  class = 'S2'><span>3.  Provide the path to the Emscripten SDK root folder. The folder is typically named </span><span style=' font-family: monospace;'>emsdk</span><span>. Enter this command to navigate to the folder by opening a file explorer.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre;"><span>emsdkRootDir = webcoder.setup.getEmscriptenRootDirectory;</span></span></div></div></div><div  class = 'S6'><span></span></div><div  class = 'S2'><span>4. Verify the installation of all tools required by this add-on and Emsripten.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre;"><span>webcoder.setup.verifyThirdPartyTools(emsdkRootDir);</span></span></div></div></div><div  class = 'S6'><span></span></div><div  class = 'S2'><span>5. Save the location of the third-party tools into this add-on.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre;"><span>webcoder.setup.saveThirdPartyToolPaths(emsdkRootDir);</span></span></div></div></div><div  class = 'S6'><span></span></div><div  class = 'S2'><span>6. Create and register the Emscripten toolchain with MATLAB Coder™.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre;"><span>webcoder.setup.createAndRegisterToolchain;</span></span></div></div></div><div  class = 'S6'><span></span></div><h2  class = 'S1'><span>Next Steps</span></h2><div  class = 'S2'><span>To learn how to create JavaScript and WebAssembly libraries and apps, see examples for the </span><span style=' font-style: italic;'>Generate JavaScript Using MATLAB Coder</span><span> add-on in the MATLAB documentation. Open the main Help browser by entering this command at the MATLAB command prompt.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre;"><span>doc</span></span></div></div></div><div  class = 'S6'><span>At the bottom of the page, find </span><span style=' font-weight: bold;'>Supplemental Software &gt; Generate JavaScript using MATLAB Coder</span><span> to access this add-on's documentation and see the examples.</span></div></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+%% *Setup for Generate JavaScript Using MATLAB Coder*
+%% Introduction
+% The Generate JavaScript Using MATLAB Coder add-on requires you to install 
+% the Emscripten software development kit (SDK) on your computer. The Emscripten 
+% SDK uses a group of tools to convert C/C++ code into optimized JavaScript. For 
+% more information on Emscripten, see <https://kripken.github.io/emscripten-site/docs/introducing_emscripten/about_emscripten.html 
+% About Emscripten>. 
+%% Install Emscripten and Setup WebCoder Tools
+% 1. Download and install the Emscripten SDK onto your computer. For details, 
+% see <https://kripken.github.io/emscripten-site/docs/getting_started/downloads.html# 
+% Download and install>. Carefully follow the instructions provided on the Emscripten 
+% website, as different operating systems require specific extra steps to install 
+% all necessary third-party tools.
+% 
+% _Note: This add-on does not modify your system environment variables. On Windows, 
+% you can install the Emscripten SDK without using the global (-g) flag._
+% 
+% 
+% 
+% 2. In MATLAB®, for OS X® and Linux® operating systems, verify MATLAB uses 
+% a BASH shell environment.
+
+if ismac || isunix
+    webcoder.setup.verifyShellEnvironment;
+end
+%% 
+% 
+% 
+% 3.  Provide the path to the Emscripten SDK root folder. The folder is typically 
+% named |emsdk|. Enter this command to navigate to the folder by opening a file 
+% explorer.
+
+emsdkRootDir = webcoder.setup.getEmscriptenRootDirectory;
+%% 
+% 
+% 
+% 4. Verify the installation of all tools required by this add-on and Emsripten.
+
+webcoder.setup.verifyThirdPartyTools(emsdkRootDir);
+%% 
+% 
+% 
+% 5. Save the location of the third-party tools into this add-on.
+
+webcoder.setup.saveThirdPartyToolPaths(emsdkRootDir);
+%% 
+% 
+% 
+% 6. Create and register the Emscripten toolchain with MATLAB Coder™.
+
+webcoder.setup.createAndRegisterToolchain;
+%% 
+% 
+%% Next Steps
+% To learn how to create JavaScript and WebAssembly libraries and apps, see 
+% examples for the _Generate JavaScript Using MATLAB Coder_ add-on in the MATLAB 
+% documentation. Open the main Help browser by entering this command at the MATLAB 
+% command prompt.
+
+doc
+%% 
+% At the bottom of the page, find *Supplemental Software > Generate JavaScript 
+% using MATLAB Coder* to access this add-on's documentation and see the examples.
+##### SOURCE END #####
+--></body></html>

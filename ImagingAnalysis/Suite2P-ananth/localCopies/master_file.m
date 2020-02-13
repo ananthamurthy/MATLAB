@@ -66,7 +66,7 @@ ops0.redmax                 = 1; % the higher the max the more NON-red cells
 %% RUN THE PIPELINE HERE
 db0 = db;
 for iexp = 1:length(db) %[3:length(db) 1:2]
-    fprintf('Analyzing %s_%i_%i - Date: %s\n', db(iexp).mouse_name, ...
+    fprintf('Analyzing %s_%i_%i - Date: %s\n', db(iexp).mouseName, ...
         db(iexp).sessionType, ...
         db(iexp).session, ...
         db(iexp).date)
@@ -83,7 +83,7 @@ for iexp = 1:length(db) %[3:length(db) 1:2]
         run_REDaddon(iexp, db0, ops0) ; % create redcell array
         DetectRedCells; % fills dat.cl.redcell and dat.cl.notred
     end
-    %load(sprintf('%s/F_%s_%s_plane%d.mat', ops0.ResultsSavePath, db(iexp).mouse_name, db(iexp).date, db(iexp).nplanes))
+    %load(sprintf('%s/F_%s_%s_plane%d.mat', ops0.ResultsSavePath, db(iexp).mouseName, db(iexp).date, db(iexp).nplanes))
     %disp('Suite2P pipeline complete!')
 end
 toc

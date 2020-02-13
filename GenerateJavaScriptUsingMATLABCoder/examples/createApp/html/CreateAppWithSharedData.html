@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB R2019b"><title>Create App with Shared Data</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 28.8px; min-height: 0px; white-space: pre-wrap; color: rgb(213, 80, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 24px; font-weight: normal; text-align: left;  }
+.S1 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: normal; text-align: left;  }
+.S2 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 20px; min-height: 0px; white-space: pre-wrap; color: rgb(60, 60, 60); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: bold; text-align: left;  }
+.CodeBlock { background-color: #F7F7F7; margin: 10px 0 10px 0;}
+.S3 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 1px solid rgb(233, 233, 233); border-bottom: 1px solid rgb(233, 233, 233); border-radius: 4px; padding: 6px 45px 4px 13px; line-height: 16.996px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S4 { margin: 10px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: normal; text-align: left;  }
+.S5 { border-left: 0px none rgb(0, 0, 0); border-right: 0px none rgb(0, 0, 0); border-top: 0px none rgb(0, 0, 0); border-bottom: 0px none rgb(0, 0, 0); border-radius: 0px; padding: 0px; line-height: 16px; min-height: 16px; white-space: pre; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 12px;  }
+.S6 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 1px solid rgb(233, 233, 233); border-bottom: 0px none rgb(0, 0, 0); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 16.996px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S7 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 0px none rgb(0, 0, 0); border-bottom: 1px solid rgb(233, 233, 233); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 16.996px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S8 { margin: 10px 0px 20px; padding-left: 0px; font-family: Helvetica, Arial, sans-serif; font-size: 14px;  }
+.S9 { margin-left: 56px; line-height: 21px; min-height: 0px; text-align: left; white-space: pre-wrap;  }</style></head><body><div class = rtcContent><h1  class = 'S0'><span>Create App with Shared Data</span></h1><div  class = 'S1'><span>This example shows how to use the </span><span style=' font-weight: bold;'>Generate JavaScript using MATLAB Coder</span><span> add-on to create a basic web application with a user interface that runs entirely in a web browser.</span></div><h2  class = 'S2'><span>Create the App Project</span></h2><div  class = 'S1'><span>1. In the MATLAB® current folder browser, navigate to a folder where you can create and store your app project and files.</span></div><div  class = 'S1'><span>2. Create the app project by entering this code in MATLAB command line. Specify a name and the directory for your app.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre;"><span>proj = webcoder.setup.project(</span><span style="color: rgb(160, 32, 240);">"My New App"</span><span>,</span><span style="color: rgb(160, 32, 240);">"Directory"</span><span>,pwd);</span></span></div></div></div><div  class = 'S4'><span>3. Open the </span><span style=' font-family: monospace;'>index.html</span><span> file as text. To open HTML files as text, right-click on the file in the folder browser and select </span><span style=' font-weight: bold;'>Open as Text</span><span>. To the HTML code, add six </span><span style=' font-family: monospace;'>&lt;para&gt;</span><span> fields and two </span><span style=' font-family: monospace;'>&lt;para&gt;</span><span> fields. This HTML code reflects these changes. The even </span><span style=' font-family: monospace;'>&lt;para&gt; fields</span><span> have </span><span style=' font-family: monospace;'>id</span><span> tag with labels </span><span style=' font-family: monospace;'>"roll",</span><span> </span><span style=' font-family: monospace;'>"picth"</span><span>, and </span><span style=' font-family: monospace;'>"yaw"</span><span>. The </span><span style=' font-family: monospace;'>id</span><span> tag is used to link the MATLAB code to the HTML. </span></div><div class = 'preformatted-plain' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S5'><span style="white-space: pre;"><span>&lt;!DOCTYPE html&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>&lt;html lang="en"&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>&lt;head&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;meta charset="UTF-8"&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;meta http-equiv="X-UA-Compatible" content="ie=edge"&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;title&gt;My New App&lt;/title&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>&lt;/head&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>&lt;body&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;!-- Add your code here --&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;p&gt;Roll:&lt;/p&gt;&lt;p id="roll"&gt;0&lt;/p&gt;&lt;br&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;p&gt;Pitch:&lt;/p&gt;&lt;p id="pitch"&gt;0&lt;/p&gt;&lt;br&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;p&gt;Yaw:&lt;/p&gt;&lt;p id="yaw"&gt;0&lt;/p&gt;&lt;br&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    </span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;!-- DO NOT REMOVE - This loads the JS/WASM files --&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    &lt;script async type="text/javascript" src="index.js"&gt;&lt;/script&gt;     </span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>&lt;/body&gt;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>&lt;/html&gt;</span></span></div></div><div  class = 'S1'><span>4. Create a new stored data class called </span><span style=' font-family: monospace;'>StoreData</span><span>.. This class enables data to be shared between callback functions and with the </span><span style=' font-family: monospace;'>render</span><span> function. Add the </span><span style=' font-family: monospace;'>StoreData</span><span> class to the project. For more information on static data, see </span><a href = "https://www.mathworks.com/help/releases/R2019a/matlab/matlab_oop/static-data.html"><span>Static Data</span></a><span>. </span></div><div class = 'preformatted-matlab' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">classdef </span><span>StoreData</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    </span><span style="color: rgb(0, 0, 255);">methods </span><span>(Access = private, Static)</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>        </span><span style="color: rgb(0, 0, 255);">function </span><span>out = setgetAttitude(data)</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>            </span><span style="color: rgb(0, 0, 255);">persistent </span><span>attitude</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>            </span><span style="color: rgb(0, 0, 255);">if </span><span>isempty(attitude)</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                 attitude = [NaN,NaN,NaN];</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>            </span><span style="color: rgb(0, 0, 255);">end</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>            </span><span style="color: rgb(0, 0, 255);">if </span><span>nargin</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>                attitude = data;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>            </span><span style="color: rgb(0, 0, 255);">end</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>            out = attitude;</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>        </span><span style="color: rgb(0, 0, 255);">end</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    </span><span style="color: rgb(0, 0, 255);">end</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    </span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    </span><span style="color: rgb(0, 0, 255);">methods </span><span>(Static)</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>        </span><span style="color: rgb(0, 0, 255);">function </span><span>setAttitude(data)</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>            StoreData.setgetAttitude(data);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>        </span><span style="color: rgb(0, 0, 255);">end</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>        </span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>        </span><span style="color: rgb(0, 0, 255);">function </span><span>data = getAttitude</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>            data = StoreData.setgetAttitude();</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>        </span><span style="color: rgb(0, 0, 255);">end</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>    </span><span style="color: rgb(0, 0, 255);">end</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">end</span></span></div></div><div  class = 'S1'><span>5. Create a new function file called </span><span style=' font-family: monospace;'>myOrientationCallback.m</span><span> in the project folder. </span></div><div class = 'preformatted-matlab' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">function </span><span>myOrientationCallback(Event)</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>webcoder.console.log(</span><span style="color: rgb(160, 32, 240);">'Recieved orientation event'</span><span>);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>orientation = [Event.gamma,Event.beta,Event.alpha];</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>StoreData.setAttitude(orientation);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">end</span></span></div></div><div  class = 'S1'><span>5. Add the function to the project clicking the </span><span style=' font-weight: bold;'>Project tab &gt; Add files</span><span> button. </span></div><div  class = 'S1'><span>6. Add the </span><span style=' font-family: monospace;'>MouseEvent</span><span> label to the function by left-clicking on the function in the project and selecting </span><span style=' font-weight: bold;'>Add label</span><span>. In the Labels to Add dialog box, select </span><span style=' font-weight: bold;'>Callbacks &gt; DeviceOrientationEvent</span><span>. </span></div><div  class = 'S1'><span>7. Open the </span><span style=' font-family: monospace;'>start</span><span> function and update the function as shown in this code. The </span><span style=' font-family: monospace;'>addDeviceOrientationEventListener</span><span> method registers the function, </span><span style=' font-family: monospace;'>myOrientationCallback</span><span>, to be executed when new sensor data arrives.</span></div><div class = 'preformatted-matlab' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">function </span><span>start()</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(60, 118, 61);">%START Run once at the start of the app</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(60, 118, 61);">%   The start function is run once at the start of the app to initialize</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(60, 118, 61);">%   values or perform other setup operations. The start function takes no</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(60, 118, 61);">%   inputs and no outputs.</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>webcoder.console.log(</span><span style="color: rgb(160, 32, 240);">'Starting...'</span><span>);</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>device = webcoder.sensor.DeviceMotion();</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>addDeviceOrientationEventListener(device,</span><span style="color: rgb(160, 32, 240);">'myOrientationCallback'</span><span>);</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">end</span></span></div></div><div  class = 'S1'><span>8. Open the </span><span style=' font-family: monospace;'>render</span><span> function and update the function as shown in the following code. The current value in the StoreData class gets displayed to the screen into the &lt;p&gt; elements with ids equal to roll, pitch, and yaw every 1/60 second.</span></div><div class = 'preformatted-matlab' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">function </span><span>render()</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(60, 118, 61);">%RENDER Runs in an infinite loop</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(60, 118, 61);">%   The render function is run in an infinite loop at a specified update</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(60, 118, 61);">%   rate. Use the render function to make updates to graphics and dom</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(60, 118, 61);">%   objects. You can also use the render() function to perform simple</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(60, 118, 61);">%   polling of data. The render function takes zero inputs and zero</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(60, 118, 61);">%   outputs.</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>webcoder.console.log(</span><span style="color: rgb(160, 32, 240);">'... Updating the display ...'</span><span>);</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>attitude = StoreData.getAttitude();</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>rollElem = webcoder.dom.Element(</span><span style="color: rgb(160, 32, 240);">'roll'</span><span>);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>rollElem.setInnerText(sprintf(</span><span style="color: rgb(160, 32, 240);">'%f'</span><span>,attitude(1)));</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>pitchElem = webcoder.dom.Element(</span><span style="color: rgb(160, 32, 240);">'pitch'</span><span>);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>pitchElem.setInnerText(sprintf(</span><span style="color: rgb(160, 32, 240);">'%f'</span><span>,attitude(2)));</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span>yawElem = webcoder.dom.Element(</span><span style="color: rgb(160, 32, 240);">'yaw'</span><span>);</span></span></div><div  class = 'S5'><span style="white-space: pre;"><span>yawElem.setInnerText(sprintf(</span><span style="color: rgb(160, 32, 240);">'%f'</span><span>,attitude(3)));</span></span></div><div  class = 'S5'></div><div  class = 'S5'><span style="white-space: pre;"><span style="color: rgb(0, 0, 255);">end</span></span></div></div><h2  class = 'S2'><span>Build the App</span></h2><div  class = 'S1'><span>To build the app project, enter this code at the command prompt. The amount of time it take for the app to build depends on your host computer.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S6'><span style="white-space: pre;"><span>proj = openProject(pwd);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre;"><span>webcoder.build.project(proj);</span></span></div></div></div><div  class = 'S4'><span>The resulting app is the set of 4 files located in the </span><span style=' font-family: monospace;'>dist</span><span> folder.</span></div><h2  class = 'S2'><span>Run the App</span></h2><div  class = 'S1'><span>From the MATLAB command line, you can launch the app in a local server. To create the server and launch the app in the </span><span style=' font-family: monospace;'>dist folder</span><span>, enter this code.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S6'><span style="white-space: pre;"><span>localServer = webcoder.utilities.DevelopmentServer(</span><span style="color: rgb(160, 32, 240);">"Directory"</span><span>,</span><span style="color: rgb(160, 32, 240);">'dist'</span><span>,</span><span style="color: rgb(160, 32, 240);">"Port"</span><span>,8125);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre;"><span>start(localServer);</span></span></div></div></div><div  class = 'S4'><span>Stop the server at any time using this command.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre;"><span>stop(localServer);</span></span></div></div></div><div  class = 'S4'><span>In a Chrome™ browser, you can open the app by navigating to the address </span><a href = "http://localhost:8000"><span>http://localhost:8125</span></a><span> . After the page opens, open the browser developer tools by pressing </span><span style=' font-family: monospace;'>Ctrl+Shift+i</span><span>. In the top right corner of the developer tools window, expand the vertical ellipsis and click </span><span style=' font-weight: bold;'>More tools &gt; Sensors</span><span>. In the </span><span style=' font-weight: bold;'>Sensors</span><span> pane, set </span><span style=' font-weight: bold;'>Orientation</span><span> to </span><span style=' font-family: monospace;'>Custom orientation</span><span>. Move the image of the phone to simulate the device sensors and generate a response in your app display.</span></div><h2  class = 'S2'><span>See Also</span></h2><ul  class = 'S8'><li  class = 'S9'><span>Create App with Callbacks</span></li><li  class = 'S9'><span>Deploy App to Github Pages</span></li></ul></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+%% Create App with Shared Data
+% This example shows how to use the *Generate JavaScript using MATLAB Coder* 
+% add-on to create a basic web application with a user interface that runs entirely 
+% in a web browser.
+%% Create the App Project
+% 1. In the MATLAB® current folder browser, navigate to a folder where you can 
+% create and store your app project and files.
+% 
+% 2. Create the app project by entering this code in MATLAB command line. Specify 
+% a name and the directory for your app.
+
+proj = webcoder.setup.project("My New App","Directory",pwd);
+%% 
+% 3. Open the |index.html| file as text. To open HTML files as text, right-click 
+% on the file in the folder browser and select *Open as Text*. To the HTML code, 
+% add six |<para>| fields and two |<para>| fields. This HTML code reflects these 
+% changes. The even |<para> fields| have |id| tag with labels |"roll",| |"picth"|, 
+% and |"yaw"|. The |id| tag is used to link the MATLAB code to the HTML. 
+%%
+% 
+%  <!DOCTYPE html>
+%  <html lang="en">
+%  <head>
+%      <meta charset="UTF-8">
+%      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+%      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+%      <title>My New App</title>
+%  </head>
+%  <body>
+%      <!REPLACE_WITH_DASH_DASH Add your code here REPLACE_WITH_DASH_DASH>
+%      <p>Roll:</p><p id="roll">0</p><br>
+%      <p>Pitch:</p><p id="pitch">0</p><br>
+%      <p>Yaw:</p><p id="yaw">0</p><br>
+%      
+%      <!REPLACE_WITH_DASH_DASH DO NOT REMOVE - This loads the JS/WASM files REPLACE_WITH_DASH_DASH>
+%      <script async type="text/javascript" src="index.js"></script>     
+%  </body>
+%  </html>
+%
+%% 
+% 4. Create a new stored data class called |StoreData|.. This class enables 
+% data to be shared between callback functions and with the |render| function. 
+% Add the |StoreData| class to the project. For more information on static data, 
+% see <https://www.mathworks.com/help/releases/R2019a/matlab/matlab_oop/static-data.html 
+% Static Data>. 
+%%
+% 
+%   classdef StoreData
+%       methods (Access = private, Static)
+%           function out = setgetAttitude(data)
+%               persistent attitude
+%               if isempty(attitude)
+%                    attitude = [NaN,NaN,NaN];
+%               end
+%   
+%               if nargin
+%                   attitude = data;
+%               end
+%               out = attitude;
+%           end
+%       end
+%       
+%       methods (Static)
+%           function setAttitude(data)
+%               StoreData.setgetAttitude(data);
+%           end
+%           
+%           function data = getAttitude
+%               data = StoreData.setgetAttitude();
+%           end
+%       end
+%   end
+%
+%% 
+% 5. Create a new function file called |myOrientationCallback.m| in the project 
+% folder. 
+%%
+% 
+%   function myOrientationCallback(Event)
+%   webcoder.console.log('Recieved orientation event');
+%   orientation = [Event.gamma,Event.beta,Event.alpha];
+%   StoreData.setAttitude(orientation);
+%   end
+%
+%% 
+% 5. Add the function to the project clicking the *Project tab > Add files* 
+% button. 
+% 
+% 6. Add the |MouseEvent| label to the function by left-clicking on the function 
+% in the project and selecting *Add label*. In the Labels to Add dialog box, select 
+% *Callbacks > DeviceOrientationEvent*. 
+% 
+% 7. Open the |start| function and update the function as shown in this code. 
+% The |addDeviceOrientationEventListener| method registers the function, |myOrientationCallback|, 
+% to be executed when new sensor data arrives.
+%%
+% 
+%   function start()
+%   %START Run once at the start of the app
+%   %   The start function is run once at the start of the app to initialize
+%   %   values or perform other setup operations. The start function takes no
+%   %   inputs and no outputs.
+%   
+%   webcoder.console.log('Starting...');
+%   
+%   device = webcoder.sensor.DeviceMotion();
+%   addDeviceOrientationEventListener(device,'myOrientationCallback');
+%   
+%   end
+%
+%% 
+% 8. Open the |render| function and update the function as shown in the following 
+% code. The current value in the StoreData class gets displayed to the screen 
+% into the <p> elements with ids equal to roll, pitch, and yaw every 1/60 second.
+%%
+% 
+%   function render()
+%   %RENDER Runs in an infinite loop
+%   %   The render function is run in an infinite loop at a specified update
+%   %   rate. Use the render function to make updates to graphics and dom
+%   %   objects. You can also use the render() function to perform simple
+%   %   polling of data. The render function takes zero inputs and zero
+%   %   outputs.
+%   
+%   webcoder.console.log('... Updating the display ...');
+%   
+%   attitude = StoreData.getAttitude();
+%   
+%   rollElem = webcoder.dom.Element('roll');
+%   rollElem.setInnerText(sprintf('%f',attitude(1)));
+%   
+%   pitchElem = webcoder.dom.Element('pitch');
+%   pitchElem.setInnerText(sprintf('%f',attitude(2)));
+%   
+%   yawElem = webcoder.dom.Element('yaw');
+%   yawElem.setInnerText(sprintf('%f',attitude(3)));
+%   
+%   end
+%
+%% Build the App
+% To build the app project, enter this code at the command prompt. The amount 
+% of time it take for the app to build depends on your host computer.
+
+proj = openProject(pwd);
+webcoder.build.project(proj);
+%% 
+% The resulting app is the set of 4 files located in the |dist| folder.
+%% Run the App
+% From the MATLAB command line, you can launch the app in a local server. To 
+% create the server and launch the app in the |dist folder|, enter this code.
+
+localServer = webcoder.utilities.DevelopmentServer("Directory",'dist',"Port",8125);
+start(localServer);
+%% 
+% Stop the server at any time using this command.
+
+stop(localServer);
+%% 
+% In a Chrome™ browser, you can open the app by navigating to the address <http://localhost:8000 
+% http://localhost:8125> . After the page opens, open the browser developer tools 
+% by pressing |Ctrl+Shift+i|. In the top right corner of the developer tools window, 
+% expand the vertical ellipsis and click *More tools > Sensors*. In the *Sensors* 
+% pane, set *Orientation* to |Custom orientation|. Move the image of the phone 
+% to simulate the device sensors and generate a response in your app display.
+%% See Also
+%% 
+% * Create App with Callbacks
+% * Deploy App to Github Pages
+##### SOURCE END #####
+--></body></html>
