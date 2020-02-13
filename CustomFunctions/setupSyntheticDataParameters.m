@@ -3,7 +3,7 @@
 JUST FOR REFERENCE
 timeCellPercent = 50; %in %
 cellOrder = 'Basic'; %Basic or Random
-maxHitTrialPercent = 100; %as a fraction
+maxHitTrialPercent = 100; %in %
 hitTrialAssignment = 'fixed'; %random or fixed
 trialOrder = 'Basic'; %basic or random
 eventWidth = {50, 'stddev'}; % {location, width}; e.g. - {percentile, stddev}; string array
@@ -20,12 +20,12 @@ noisePercent = 20; %How much percent of noise to add
 %% Synthetic Data Parameters
 timeCellPercent = 50; %in %
 cellOrder = 'basic'; %basic or random
-maxHitTrialPercent = 50; %as a fraction
+maxHitTrialPercent = 100; %in %
 hitTrialPercentAssignment = 'random'; %fixed or random
 trialOrder = 'random'; %basic or random
 eventWidth = {100, 'stddev'}; %{location, width}; e.g. - {percentile, stddev}; string array
 eventAmplificationFactor = 1;
-eventTiming = 'random'; %sequential or random
+eventTiming = 'sequential'; %sequential or random
 startFrame = 116;
 endFrame = 123;
 imprecisionFWHM = 8; %Will be divided by 2 for positive and negative "width" around the centre

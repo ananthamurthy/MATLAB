@@ -84,35 +84,39 @@ for cell = 1:nTotalCells
                     (eventLibrary_2D(cell).eventLengths < actualEventWidth(cell, 2)));
                 eventStartIndex = randomlyPickEvent(eventIndices, eventLibrary_2D, cell);
                 %Now, we pick out exactly one event per trial
-                event = DATA_2D(cell, eventStartIndex:1:eventStartIndex+actualEventWidth(cell)-1) * eventAmplificationFactor;
-                [~, I] = max(event);
+                event = DATA_2D(cell, eventStartIndex:1:eventStartIndex+actualEventWidth(cell)-1);
+                
+                % Generate noise
+                noiseComponent(cell, trial, :) = generateNoise(event, noise, noisePercent, nTotalFrames);
+                % Add noise
+                if ~strcmpi(noise, 'none')
+                    syntheticDATA(cell, trial, :) = noiseComponent(cell, trial, :);
+                end
+                
                 %disp('Selecting the Frame Index ...')
+                [~, I] = max(event);
                 while (frameIndex(cell, trial) + pad(cell, trial)) <= I
                     %Pick event(s) based on requiredEventLength
                     [frameIndex(cell, trial), pad(cell, trial)] = selectFrameIndex(eventTiming, startFrame, endFrame, I, imprecisionFWHM, imprecisionType, cell);
-                    %Prune trial lengths, if necessary
-                    tailClip = (frameIndex(cell, trial) + pad(cell, trial)) + length(event) - 1 - nTotalFrames;
-                    
-                    if tailClip > 0
-                        %fprintf('tail-clip: %i\n', tailClip)
-                        syntheticDATA(cell, trial, ((frameIndex(cell, trial) + pad(cell, trial)):((frameIndex(cell, trial) + (pad(cell, trial))+length(event)) - 1 - tailClip))) = event(1:(length(event) - tailClip));
-                    else
-                        syntheticDATA(cell, trial, ((frameIndex(cell, trial)+ pad(cell, trial)):(frameIndex(cell, trial) + (pad(cell, trial))+length(event)-1))) = event;
-                    end
-                    %fprintf('syntheticDATA trial length: %i\n', length(syntheticDATA(cell, trial, :)))
-                    %fprintf('Event added to cell:%i, trial:%i at frame:%i\n', cell, trial, (frameIndex(cell, trial)+ pad (cell, trial)))
-                    
-                    clear eventIndices
-                    clear eventStartIndex
-                    clear event
-                    clear tailClip
                 end
-                %disp(frameIndex(cell, trial) + pad(cell, trial))
                 
-                % Add noise (to hit trials of putative time cells; implicit)
-                if ~strcmpi(noise, 'none')
-                    [syntheticDATA(cell, trial, :), noiseComponent(cell, trial, :)] = addNoise(squeeze(syntheticDATA(cell, trial, :))', noise, noisePercent);
+                %Prune trial lengths, if necessary
+                tailClip = (frameIndex(cell, trial) + pad(cell, trial)) + length(event) - 1 - nTotalFrames;
+                
+                if tailClip > 0
+                    %fprintf('tail-clip: %i\n', tailClip)
+                    syntheticDATA(cell, trial, ((frameIndex(cell, trial) + pad(cell, trial)):((frameIndex(cell, trial) + (pad(cell, trial))+length(event)) - 1 - tailClip))) = event(1:(length(event) - tailClip)) * eventAmplificationFactor;
+                else
+                    syntheticDATA(cell, trial, ((frameIndex(cell, trial)+ pad(cell, trial)):(frameIndex(cell, trial) + (pad(cell, trial))+length(event)-1))) = event * eventAmplificationFactor;
                 end
+                %fprintf('syntheticDATA trial length: %i\n', length(syntheticDATA(cell, trial, :)))
+                %fprintf('Event added to cell:%i, trial:%i at frame:%i\n', cell, trial, (frameIndex(cell, trial)+ pad (cell, trial)))
+                
+                clear eventIndices
+                clear eventStartIndex
+                clear event
+                clear tailClip
+                %disp(frameIndex(cell, trial) + pad(cell, trial))
             elseif hitTrials(cell, trial) == 0 % For Non-Hit Trials
                 % Add noise
                 currentTrialOptions = find(hitTrials(cell, 1:trial));
