@@ -26,10 +26,10 @@ else
     error('Unknown Cell Order')
 end
 
-actualEventWidth = zeros(nTotalCells,2);
-requiredEventWidth = zeros(nTotalCells,1);
+actualEventWidth = zeros(nTotalCells, 2);
+requiredEventWidth = zeros(nTotalCells, 1);
 hitTrials = zeros(nTotalCells, nTotalTrials);
-hitTrialPercent = zeros(nTotalCells,1);
+hitTrialPercent = zeros(nTotalCells, 1);
 
 frameIndex = zeros(nTotalCells, nTotalTrials);
 pad = zeros(nTotalCells, nTotalTrials);
@@ -58,20 +58,23 @@ for cell = 1:nTotalCells
         end
         
         %What size of calcium events to select?
-        if strcmpi(control.eventWidth(2), 'stddev') %Only defined case with a string argument
+        if strcmpi(control.eventWidth(2), 'stddev') %One stddev worth of options
             requiredEventWidth(cell) = std(eventLibrary_2D(cell).eventLengths);
             actualEventWidth(cell, 1) = floor(max(eventLibrary_2D(cell).eventLengths) - requiredEventWidth(cell)); % Min
             actualEventWidth(cell, 2) = ceil(max(eventLibrary_2D(cell).eventLengths) + requiredEventWidth(cell)); % Max
+        elseif strcmpi(control.eventWidth(2), 'same') %same option every time
+            actualEventWidth(cell, 1) = prctile(eventLibrary_2D(cell).eventLengths, control.eventWidth{1});
+            actualEventWidth(cell, 2) = prctile(eventLibrary_2D(cell).eventLengths, control.eventWidth{1}); %NOTE: keeping max and min the same.
         else
-            requiredEventWidth(cell) = control.eventWidth{2}; %Use the actual argument value
+            requiredEventWidth(cell) = control.eventWidth{2};
             actualEventWidth(cell, 1) = floor(prctile(eventLibrary_2D(cell).eventLengths, control.eventWidth{1})) - requiredEventWidth(cell); % Min
             actualEventWidth(cell, 2) = ceil(prctile(eventLibrary_2D(cell).eventLengths, control.eventWidth{1})) + requiredEventWidth(cell); % Max
         end
         
         for trial = 1:nTotalTrials
             if hitTrials(cell, trial) == 1
-                eventIndices = find((eventLibrary_2D(cell).eventLengths > actualEventWidth(cell, 1)) & ...
-                    (eventLibrary_2D(cell).eventLengths < actualEventWidth(cell, 2)));
+                eventIndices = find((eventLibrary_2D(cell).eventLengths >= actualEventWidth(cell, 1)) & ...
+                    (eventLibrary_2D(cell).eventLengths <= actualEventWidth(cell, 2)));
                 eventStartIndex = randomlyPickEvent(eventIndices, eventLibrary_2D, cell);
                 %Now, we pick out exactly one event per trial
                 event = DATA_2D(cell, eventStartIndex:1:eventStartIndex+actualEventWidth(cell)-1);
