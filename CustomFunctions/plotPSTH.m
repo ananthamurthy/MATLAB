@@ -1,13 +1,13 @@
 % AUTHOR - Kambadur Ananthmurthy
-function plotPSTH(dataset, PSTH, trialDetails, xtitle, ytitle, figureDetails, normalizeCell2Max)
+function plotETH(dataset, ETH, trialDetails, xtitle, ytitle, figureDetails, normalizeCell2Max)
 
 if normalizeCell2Max
-    for cell = 1:size(PSTH,1)
-        PSTH(cell,:) = PSTH(cell,:)/max(PSTH(cell,:));
+    for cell = 1:size(ETH,1)
+        ETH(cell,:) = ETH(cell,:)/max(ETH(cell,:));
     end
 end
 
-imagesc(PSTH);
+imagesc(ETH);
 colorbar
 z = colorbar;
 if normalizeCell2Max == 1
@@ -20,7 +20,7 @@ else
         'FontWeight', 'bold')
 end
 
-title(['PSTH | ', ...
+title(['ETH | ', ...
     dataset.mouseName ' ST' num2str(dataset.sessionType) ' S' num2str(dataset.session) ' | '...
     num2str(trialDetails.frameRate) ' Hz | '...
     '3 frames/bin'] , ...

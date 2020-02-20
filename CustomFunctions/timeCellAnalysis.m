@@ -156,7 +156,7 @@ for iexp = 1:length(db)
         myData = dfbf_sigOnly; % crucial
     end
     
-    %% Tuning and time field fidelity using PSTH
+    %% Tuning and time field fidelity using ETH
     if ops0.findTimeCells
         %Area Under Curve
         %AUC = doAUC(myData(:,:,window)); %(Data, percentile)
@@ -168,47 +168,47 @@ for iexp = 1:length(db)
         skipFrames = [];
         %NOTE: Make sure to use significant-only traces else a second
         %trialThreshold needs to be passed as an argument
-        % PSTH based identification of tuning curves
+        % ETH based identification of tuning curves
         trialThreshold = floor(0.25 * (size(myData,2))); %trialThreshold is 25% of the session trials
         shuffleThreshold = 99; %percent of nShuffles for time cell qualification
         nShuffles = 1000;
         delta = 3; %for now; works out to 207 ms if sampling at 14.5 Hz
         allCells = ones(size(myData,1),1); %for indexing only
         
-        disp('First filtering for percentage of trials with activity, then PSTH ...')
+        disp('First filtering for percentage of trials with activity, then ETH ...')
         [cellRastor, cellFrequency, timeLockedCells_temp, importantTrials] = ...
             getFreqBasedTimeCellList(myData, allCells, trialThreshold, skipFrames, delta);
         %iTimeCells_temp = find(selectedIndices);
-        %Develop PSTH only for cells passing >25% activity
-        [PSTH, PSTH_3D, nbins] = getPSTH(myData, delta, skipFrames);
+        %Develop ETH only for cells passing >25% activity
+        [ETH, ETH_3D, nbins] = getETH(myData, delta, skipFrames);
         %Finally, identifying true time-locked cells, using the TI metric
-        [timeLockedCells, TI] = getTimeLockedCells(PSTH_3D, timeLockedCells_temp, nShuffles, shuffleThreshold);
+        [timeLockedCells, TI] = getTimeLockedCells(ETH_3D, timeLockedCells_temp, nShuffles, shuffleThreshold);
         iTimeCells = find(timeLockedCells); %Absolute indexing
         dfbf_timeLockedCells = myData(iTimeCells,:,:);
         fprintf('%i time-locked cells found\n', length(iTimeCells))
-        %PSTH_probeTrials = sum(PSTH_3D(:,iProbeTrials,:),2);
+        %ETH_probeTrials = sum(ETH_3D(:,iProbeTrials,:),2);
         %2. There should be at least two consecutive bins with significant
-        %values for PSTH. TBA
+        %values for ETH. TBA
         
         % Sorting
         if isempty(find(timeLockedCells,1))
             %disp('No time cells found')
-            %[sortedPSTHindices, peakIndicies] = [0, 0];
-            sortedPSTHindices = [];
+            %[sortedETHindices, peakIndicies] = [0, 0];
+            sortedETHindices = [];
             peakIndicies = [];
-            PSTH_sorted = [];
+            ETH_sorted = [];
             dfbf_sorted_timeLockedCells = [];
             dfbf_2D_sorted_timeCells = [];
         else
-            [sortedPSTHindices, peakIndicies] = sortPSTH(PSTH(iTimeCells,:));
+            [sortedETHindices, peakIndicies] = sortETH(ETH(iTimeCells,:));
             %%%
             %Add a section to use the median time onset delay
-            %maybe use PSTH_3D
+            %maybe use ETH_3D
             %%%
-            PSTH_timeLocked = PSTH(iTimeCells,:);
-            PSTH_sorted = PSTH_timeLocked(sortedPSTHindices,:);
-            dfbf_sorted_timeLockedCells = dfbf_timeLockedCells(sortedPSTHindices,:,:);
-            %dfbf_2D_sorted_timeCells = dfbf_2D_timeLockedCells(sortedPSTHindices,:);
+            ETH_timeLocked = ETH(iTimeCells,:);
+            ETH_sorted = ETH_timeLocked(sortedETHindices,:);
+            dfbf_sorted_timeLockedCells = dfbf_timeLockedCells(sortedETHindices,:,:);
+            %dfbf_2D_sorted_timeCells = dfbf_2D_timeLockedCells(sortedETHindices,:);
         end
     else
         %Populate library for simulated data
@@ -242,10 +242,10 @@ for iexp = 1:length(db)
     disp('... calcium activity library updated!')
 end
 %     if ~ops0.onlyProbeTrials
-%         % Sort PSTHs for only Probe Trials
-%         [sortedPSTHindices_probeTrials, peakIndicies_probeTrials] = sortPSTH(PSTH_probeTrials(iTimeCells,:));
-%         PSTH_timeLocked_probeTrials = PSTH(iTimeCells,:);
-%         PSTH_sorted_probeTrials = PSTH_timeLocked_probeTrials(sortedPSTHindices,:);
+%         % Sort ETHs for only Probe Trials
+%         [sortedETHindices_probeTrials, peakIndicies_probeTrials] = sortETH(ETH_probeTrials(iTimeCells,:));
+%         ETH_timeLocked_probeTrials = ETH(iTimeCells,:);
+%         ETH_sorted_probeTrials = ETH_timeLocked_probeTrials(sortedETHindices,:);
 %     end
 
 if ops0.useLOTO
@@ -275,7 +275,7 @@ if ops0.saveData
                         'trialThreshold', ...
                         'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
                         'delta', ...
-                        'PSTH', 'iTimeCells', 'consolidated_iTimeCells_loto', 'TI', 'consolidated_TI_loto', ...
+                        'ETH', 'iTimeCells', 'consolidated_iTimeCells_loto', 'TI', 'consolidated_TI_loto', ...
                         'largeEvents')
                 else
                     save([saveFolder db(iexp).mouseName '_' db(iexp).date '_multiDay.mat' ], ...
@@ -286,7 +286,7 @@ if ops0.saveData
                         'trialThreshold', ...
                         'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
                         'delta', ...
-                        'PSTH', 'iTimeCells', 'consolidated_iTimeCells_loto', 'TI', 'consolidated_TI_loto', ...
+                        'ETH', 'iTimeCells', 'consolidated_iTimeCells_loto', 'TI', 'consolidated_TI_loto', ...
                         'largeEvents')
                 end
             else
@@ -300,7 +300,7 @@ if ops0.saveData
                         'trialThreshold', ...
                         'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
                         'delta', ...
-                        'PSTH', 'iTimeCells', 'consolidated_iTimeCells_loto', 'TI', 'consolidated_TI_loto', ...
+                        'ETH', 'iTimeCells', 'consolidated_iTimeCells_loto', 'TI', 'consolidated_TI_loto', ...
                         'largeEvents')
                 else
                     save([saveFolder db(iexp).mouseName '_' db(iexp).date '.mat' ], ...
@@ -311,7 +311,7 @@ if ops0.saveData
                         'trialThreshold', ...
                         'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
                         'delta', ...
-                        'PSTH', 'iTimeCells', 'consolidated_iTimeCells_loto', 'TI', 'consolidated_TI_loto', ...
+                        'ETH', 'iTimeCells', 'consolidated_iTimeCells_loto', 'TI', 'consolidated_TI_loto', ...
                         'largeEvents')
                 end
             end
@@ -327,7 +327,7 @@ if ops0.saveData
                         'trialThreshold', ...
                         'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
                         'delta', ...
-                        'PSTH', 'iTimeCells', 'TI', ...
+                        'ETH', 'iTimeCells', 'TI', ...
                         'largeEvents')
                 else
                     save([saveFolder db(iexp).mouseName '_' db(iexp).date '_multiDay.mat' ], ...
@@ -338,7 +338,7 @@ if ops0.saveData
                         'trialThreshold', ...
                         'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
                         'delta', ...
-                        'PSTH', 'iTimeCells', 'TI', ...
+                        'ETH', 'iTimeCells', 'TI', ...
                         'largeEvents')
                 end
             else
@@ -352,7 +352,7 @@ if ops0.saveData
                         'trialThreshold', ...
                         'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
                         'delta', ...
-                        'PSTH', 'iTimeCells', 'TI', ...
+                        'ETH', 'iTimeCells', 'TI', ...
                         'largeEvents')
                 else
                     save([saveFolder db(iexp).mouseName '_' db(iexp).date '.mat' ], ...
@@ -363,7 +363,7 @@ if ops0.saveData
                         'trialThreshold', ...
                         'cellRastor', 'cellFrequency', 'timeLockedCells', 'importantTrials', ...
                         'delta', ...
-                        'PSTH', 'iTimeCells', 'TI', ...
+                        'ETH', 'iTimeCells', 'TI', ...
                         'largeEvents')
                 end
             end
@@ -382,14 +382,14 @@ if ops0.findTimeCells
     if ops0.fig
         disp('Plotting data ...')
         
-        % PSTH
+        % ETH
         fig1 = figure(1);
         clf
         set(fig1,'Position',[300,300,1200,500])
         subFig1 = subplot(1,2,1);
-        plotPSTH(db(iexp), PSTH(iTimeCells,:), trialDetails, 'Bin No.', 'Unsorted Cells', figureDetails, 1)
+        plotETH(db(iexp), ETH(iTimeCells,:), trialDetails, 'Bin No.', 'Unsorted Cells', figureDetails, 1)
         subFig2 = subplot(1,2,2);
-        plotPSTH(db(iexp), PSTH_sorted, trialDetails, 'Bin No.', 'Sorted Cells', figureDetails, 1)
+        plotETH(db(iexp), ETH_sorted, trialDetails, 'Bin No.', 'Sorted Cells', figureDetails, 1)
         colormap(figureDetails.colorMap)
         
         if ops0.multiDayAnalysis
@@ -473,7 +473,7 @@ if ops0.findTimeCells
         fig4 = figure(4);
         clf
         set(fig4,'Position',[300,300,800,400])
-        %TI_all_sorted = TI(sortedPSTHindices,:);
+        %TI_all_sorted = TI(sortedETHindices,:);
         plot(TI, 'b*', ...
             'LineWidth', figureDetails.lineWidth, ...
             'MarkerSize', figureDetails.markerSize)
@@ -507,7 +507,7 @@ if ops0.findTimeCells
         
         % Trends in Temporal Information
         TI_timeLockedCells = TI(iTimeCells,:);
-        TI_sorted = TI_timeLockedCells(sortedPSTHindices,:);
+        TI_sorted = TI_timeLockedCells(sortedETHindices,:);
         fig5 = figure(5);
         clf
         set(fig5,'Position',[300,300,800,400])
