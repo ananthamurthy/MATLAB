@@ -1,4 +1,4 @@
-function [Isec, Ispk, timeCells_Eichenbaum] = runMauTIAnalysis(DATA)
+function [mauOutput] = runMauTIAnalysis(DATA)
 nCells = size(DATA,1);
 %Preallocations
 MI = zeros(nCells,1);
@@ -10,4 +10,11 @@ for cell = 1:size(DATA,1)
     [MI(cell), Isec(cell), Ispk(cell), Itime(cell, :)] = tempInfoOneNeuron(squeeze(DATA(cell,:,:)));
 end
 
-timeCells_Eichenbaum = []; %Have to populate
+timeCells = []; %Have to populate
+time = [];
+
+mauOutput.Isec = Isec;
+mauOutput.Q = Ispk;
+mauOutput.T = time;
+mauOutput.timeCells = timeCells;
+end

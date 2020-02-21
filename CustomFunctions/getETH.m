@@ -2,7 +2,7 @@
 function [ETH, ETH_3D, nbins] = getETH(Data, delta, skipFrames)
 %Develop PSTH
 
-fprintf('Now, developing PSTH for %i cells ...\n', size(Data,1))
+fprintf('Now, developing ETH for %i cells ...\n', size(Data,1))
 %disp('Now, developing PSTH ...')
 
 %nFrames = size(Data,3);

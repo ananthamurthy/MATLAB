@@ -200,7 +200,7 @@ for iexp = 1:length(db)
             dfbf_sorted_timeLockedCells = [];
             dfbf_2D_sorted_timeCells = [];
         else
-            [sortedETHindices, peakIndicies] = sortETH(ETH(iTimeCells,:));
+            [sortedETHindices, peakIndices] = sortETH(ETH(iTimeCells,:));
             %%%
             %Add a section to use the median time onset delay
             %maybe use ETH_3D
