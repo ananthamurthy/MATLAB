@@ -21,6 +21,7 @@ ops0.fig                       = 1;
 ops0.saveData                  = 1;
 ops0.onlyProbeTrials           = 0;
 ops0.loadSyntheticData         = 1;
+ops0.doSigOnly                 = 0;
 
 if ops0.loadSyntheticData
     setupSyntheticDataParameters
@@ -40,9 +41,13 @@ for iexp = 1:length(db)
     saveDirec = '/Users/ananth/Desktop/Work/Analysis/Imaging/';
     saveFolder = [saveDirec db(iexp).mouseName '/' db(iexp).date '/'];
     
+    %for i = 1:length(sdcp)
+    %i = 1;
+    i = length(sdcp);
     if ops0.loadSyntheticData
         load([saveFolder ...
             'synthDATA' ...
+            '-' num2str(i) ...
             '_tCP' num2str(sdcp.timeCellPercent) ...
             '_cO' lower(sdcp.cellOrder) ...
             '_mHTP' num2str(sdcp.maxHitTrialPercent) ...
@@ -59,8 +64,8 @@ for iexp = 1:length(db)
             '_np' num2str(sdcp.noisePercent) ...
             '.mat']);
         myData.dfbf = sdo.syntheticDATA;
-        myData.baselines = zeros(size(sdo.syntheticDATA));
         myData.dfbf_2D = sdo.syntheticDATA_2D;
+        myData.baselines = zeros(size(sdo.syntheticDATA)); %initialization
     else
         %Load processed data (processed dfbf for dataset/session)
         myData = load([saveFolder db(iexp).mouseName '_' db(iexp).date '.mat']);
@@ -68,17 +73,21 @@ for iexp = 1:length(db)
     trialDetails = getTrialDetails(db(iexp));
     
     %Significant-Only Traces
-    if ops0.onlyProbeTrials
-        disp('Only analysing Probe Trials ...')
-        dfbf_sigOnly = findSigOnly(myData.dfbf(:, iProbeTrials, :));
+    if ops0.doSigOnly
+        if ops0.onlyProbeTrials
+            disp('Only analysing Probe Trials ...')
+            dfbf_sigOnly = findSigOnly(myData.dfbf(:, iProbeTrials, :));
+        else
+            dfbf_sigOnly = findSigOnly(myData.dfbf);
+        end
+        DATA = dfbf_sigOnly;
     else
-        dfbf_sigOnly = findSigOnly(myData.dfbf);
+        DATA = myData.dfbf;
     end
     
     %% Analysis Pipelines
-    DATA = dfbf_sigOnly;
     
-    %I -Mehrab's Reliability Analysis (Bhalla Lab)
+    %I - Mehrab's Reliability Analysis (Bhalla Lab)
     runAdapter4MehrabAnalysis;
     
     [mehrabOutput] = runMehrabR2BAnalysis(non_ov_trials, early_only, pk_behav_trial, ...
@@ -131,7 +140,7 @@ for iexp = 1:length(db)
         hold on
         plot(mehrabOutput.Q, 'g*')
         hold off
-        title(['Mehrab Analysis| ', ...
+        title(['Mehrab | ', ...
             db(iexp).mouseName ' ST' num2str(db(iexp).sessionType) ' S' num2str(db(iexp).session) ' | ' ...
             num2str(trialDetails.frameRate) ' Hz'], ...
             'FontSize', figureDetails.fontSize, ...
@@ -159,7 +168,7 @@ for iexp = 1:length(db)
         figure(2)
         clf
         plot(williamOutput.Q, 'b*')
-        title(['William Analysis | ', ...
+        title(['William | ', ...
             db(iexp).mouseName ' ST' num2str(db(iexp).sessionType) ' S' num2str(db(iexp).session) ' | '...
             num2str(trialDetails.frameRate) ' Hz | '...
             '3 frames/bin'] , ...
@@ -188,7 +197,7 @@ for iexp = 1:length(db)
         figure(3)
         clf
         plot(stcaOutput.Q, 'b*')
-        title(['Simple TC Analysis | ', ...
+        title(['Simple | ', ...
             db(iexp).mouseName ' ST' num2str(db(iexp).sessionType) ' S' num2str(db(iexp).session) ' | '...
             num2str(trialDetails.frameRate) ' Hz | '...
             '3 frames/bin'] , ...

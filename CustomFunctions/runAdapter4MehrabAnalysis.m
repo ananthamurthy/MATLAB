@@ -31,5 +31,5 @@ US_onset_frame = floor(trialDetails.frameRate * ...
     trialDetails.csDuration + ...
     trialDetails.traceDuration));
 frame_time = 1000/trialDetails.frameRate;
-dff_data_mat = permute(dfbf_sigOnly, [3 1 2]);
+dff_data_mat = permute(DATA, [3 1 2]);
 pk_behav_trial = 1; %Short-circuit to analyse all trials, instead of just the last few.

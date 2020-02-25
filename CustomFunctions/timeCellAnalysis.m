@@ -41,9 +41,13 @@ for iexp = 1:length(db)
     saveDirec = '/Users/ananth/Desktop/Work/Analysis/Imaging/';
     saveFolder = [saveDirec db(iexp).mouseName '/' db(iexp).date '/'];
     
+    %for i = 1:length(sdcp)
+    %i = 1;
+    i = length(sdcp);
     if ops0.loadSyntheticData == 1
         load([saveFolder ...
             'synthDATA' ...
+            '-' num2str(i) ...
             '_tCP' num2str(sdcp.timeCellPercent) ...
             '_cO' lower(sdcp.cellOrder) ...
             '_mHTP' num2str(sdcp.maxHitTrialPercent) ...
@@ -240,7 +244,7 @@ for iexp = 1:length(db)
         clear Lengths
     end
     disp('... calcium activity library updated!')
-end
+ends
 %     if ~ops0.onlyProbeTrials
 %         % Sort ETHs for only Probe Trials
 %         [sortedETHindices_probeTrials, peakIndicies_probeTrials] = sortETH(ETH_probeTrials(iTimeCells,:));
