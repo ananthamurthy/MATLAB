@@ -1,21 +1,22 @@
 function [stcaOutput] = runSimpleTCAnalysis(DATA, delta, skipFrames, trialThreshold)
 
-[ETH, ETH_3D, ~] = getETH(DATA, delta, skipFrames);
+[ETH, trialAUCs, nbins] = getETH(Data, delta, skipFrames);
 
-nCells = size(ETH_3D, 1);
-nTrials = size(ETH_3D, 2);
-%nBins = size(ETH_3D, 3);
+nCells = size(DATA, 1);
+nTrials = size(DATA, 2);
 
 %Preallocation
 meanETH = zeros(size(ETH, 1));
 medianETH = zeros(size(ETH, 1));
-zeroSkewCase = zeros(size(ETH, 1));
+
 %unimodalCase = zeros(size(ETH, 1));
-%event = zeros(size(ETH_3D));
-hitTrial = zeros(size(DATA,1), size(DATA,2));
-Q = zeros(size(DATA, 1), 1);
-time = zeros(size(DATA, 1), 1);
-timeCells = zeros(size(DATA, 1), 1);
+%event = zeros(size(trialAUCs));
+hitTrial = zeros(nCells, nTrials);
+Q = zeros(nCells, 1);
+time = zeros(nCells, 1);
+timeCells = zeros(nCells, 1);
+k = zeros(nCells, 1);
+peakBin = zeros(nCells, nTrials);
 
 for cell = 1:nCells
     % Skewness to check for time cells
@@ -25,34 +26,23 @@ for cell = 1:nCells
     % Time Vector
     [~, time(cell)] = max(squeeze(ETH(cell, :)));
     
-    if meanETH(cell) == medianETH(cell)
-        zeroSkewCase(cell) = 1;
-    end
-    
     for trial = 1:nTrials
-        m = mean(squeeze(ETH_3D(cell, trial, :)));
-        s = std(squeeze(ETH_3D(cell, trial, :)));
+        m = mean(squeeze(trialAUCs(cell, trial, :)));
+        s = std(squeeze(trialAUCs(cell, trial, :)));
         
         threshold = m + 2*s;
         
         % Check for Hit Trials
-        if ETH_3D(cell, trial, time(cell)) >= threshold
+        if trialAUCs(cell, trial, time(cell)) >= threshold
             hitTrial(cell, trial) = 1;
         end
-        
-%         % Check for Events
-%         for bin = 1:size(ETH_3D,3)
-%             if ETH_3D(cell, trial, bin) > threshold
-%                 event(cell, trial, bin) = 1;
-%             end
-%         end
-    end
-    if sum(squeeze(hitTrial(cell, :))) >= (trialThreshold/100)
-        timeCells(cell) = 1;
+        [~, peakBin(cell, trial)] = max(trialAUCs(cell, trial, :));
     end
     
+    k(cell) = kurtosis(peakBin(cell, :));
+    
     %Develop Q
-    Q(cell) = sum(squeeze(hitTrial(cell, :)))/nTrials;
+    Q(cell) = (sum(squeeze(hitTrial(cell, :)))/nTrials) * k(cell);
 end
 
 timeCells = [];

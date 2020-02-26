@@ -184,7 +184,7 @@ for iexp = 1:length(db)
             getFreqBasedTimeCellList(myData, allCells, trialThreshold, skipFrames, delta);
         %iTimeCells_temp = find(selectedIndices);
         %Develop ETH only for cells passing >25% activity
-        [ETH, trialAUCs, nbins] = getETH(Data, delta, skipFrames);
+        [ETH, ETH_3D, nbins] = getETH(myData, delta, skipFrames);
         %Finally, identifying true time-locked cells, using the TI metric
         [timeLockedCells, TI] = getTimeLockedCells(ETH_3D, timeLockedCells_temp, nShuffles, shuffleThreshold);
         iTimeCells = find(timeLockedCells); %Absolute indexing

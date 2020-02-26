@@ -1,5 +1,5 @@
 % AUTHOR - Kambadur Ananthmurthy
-function [ETH, ETH_3D, nbins] = getETH(Data, delta, skipFrames)
+function [ETH, trialAUCs, nbins] = getETH(Data, delta, skipFrames)
 %Develop PSTH
 
 fprintf('Now, developing ETH for %i cells ...\n', size(Data,1))
@@ -15,7 +15,7 @@ else
 end
 %NOTE: 'Data' is organized as cells, trials, frames
 nbins = nFrames/delta;
-ETH_3D = zeros(size(Data,1), size(Data,2), nbins);
+trialAUCs = zeros(size(Data,1), size(Data,2), nbins);
 ETH = zeros(size(Data,1), nbins);
 
 for cell = 1:size(Data,1)
@@ -29,22 +29,21 @@ for cell = 1:size(Data,1)
         %Now the total number of frames/delta should be an integer (assuming delta = 3)
         
         bin = 1;
-        trialAUCs = zeros(nbins,1);
         for frame = 1:delta:nFrames
             %fprintf('Frame: %i\n', frame)
             windowAUC = trapz(Data(cell, trial, frame:(frame+delta-1)));
-            trialAUCs(bin) = windowAUC;
+            trialAUCs(cell, trial, bin) = windowAUC;
             bin = bin + 1;
         end
         clear bin
         %check if trialSums has the same length as nbins
         %fprintf('Length of trialSums is %i \n', length(trialSums))
-        if length(trialAUCs) ~= nbins
+        if length(squeeze(trialAUCs(cell, trial, :))) ~= nbins
             error('Length of trialSums ~= nbins for trial %i', trial)
         end
-        ETH_3D(cell, trial, :) = trialAUCs;
+        trialAUCs(cell, trial, :) = trialAUCs;
     end
-    ETH = squeeze(sum(ETH_3D,2));
+    ETH = squeeze(sum(trialAUCs,2));
     
     if (mod(cell, 10) == 0) && cell ~= size(Data,1)
         fprintf('... %i cells analysed ...\n', cell)
