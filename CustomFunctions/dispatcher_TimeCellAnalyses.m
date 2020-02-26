@@ -114,7 +114,8 @@ for iexp = 1:length(db)
     %Method C - Simple Analysis
     delta = 3;
     skipFrames = [];
-    [stcaOutput] = runSimpleTCAnalysis(DATA, delta, skipFrames);
+    trialThreshold = 25; % in %
+    [stcaOutput] = runSimpleTCAnalysis(DATA, delta, skipFrames, trialThreshold);
     save([saveFolder db(iexp).mouseName '_' db(iexp).date '_simpleTCAnalysis.mat' ], 'stcaOutput')
     
     %% Second Order Stats to compare the outputs

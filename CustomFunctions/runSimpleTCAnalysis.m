@@ -1,4 +1,4 @@
-function [stcaOutput] = runSimpleTCAnalysis(DATA, delta, skipFrames)
+function [stcaOutput] = runSimpleTCAnalysis(DATA, delta, skipFrames, trialThreshold)
 
 [ETH, ETH_3D, ~] = getETH(DATA, delta, skipFrames);
 
@@ -15,6 +15,7 @@ zeroSkewCase = zeros(size(ETH, 1));
 hitTrial = zeros(size(DATA,1), size(DATA,2));
 Q = zeros(size(DATA, 1), 1);
 time = zeros(size(DATA, 1), 1);
+timeCells = zeros(size(DATA, 1), 1);
 
 for cell = 1:nCells
     % Skewness to check for time cells
@@ -45,6 +46,9 @@ for cell = 1:nCells
 %                 event(cell, trial, bin) = 1;
 %             end
 %         end
+    end
+    if sum(squeeze(hitTrial(cell, :))) >= (trialThreshold/100)
+        timeCells(cell) = 1;
     end
     
     %Develop Q
