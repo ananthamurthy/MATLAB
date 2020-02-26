@@ -26,7 +26,7 @@ else
     error('Unknown Cell Order')
 end
 
-actualEventWidth = zeros(nTotalCells, 2);
+actualEventWidthRange = zeros(nTotalCells, 2);
 requiredEventWidth = zeros(nTotalCells, 1);
 hitTrials = zeros(nTotalCells, nTotalTrials);
 hitTrialPercent = zeros(nTotalCells, 1);
@@ -35,6 +35,7 @@ frameIndex = zeros(nTotalCells, nTotalTrials);
 pad = zeros(nTotalCells, nTotalTrials);
 
 for cell = 1:nTotalCells
+    %disp(cell)
     %For Putative Time Cells
     if ismember(cell, ptcList)
         if strcmpi(control.hitTrialPercentAssignment, 'fixed')
@@ -59,25 +60,29 @@ for cell = 1:nTotalCells
         
         %What size of calcium events to select?
         if strcmpi(control.eventWidth(2), 'stddev') %One stddev worth of options
-            requiredEventWidth(cell) = std(eventLibrary_2D(cell).eventLengths);
-            actualEventWidth(cell, 1) = floor(max(eventLibrary_2D(cell).eventLengths) - requiredEventWidth(cell)); % Min
-            actualEventWidth(cell, 2) = ceil(max(eventLibrary_2D(cell).eventLengths) + requiredEventWidth(cell)); % Max
+            requiredEventWidth(cell) = std(eventLibrary_2D(cell).eventWidths);
+            actualEventWidthRange(cell, 1) = floor(max(eventLibrary_2D(cell).eventWidths) - requiredEventWidth(cell)); % Min
+            actualEventWidthRange(cell, 2) = ceil(max(eventLibrary_2D(cell).eventWidths) + requiredEventWidth(cell)); % Max
         elseif strcmpi(control.eventWidth(2), 'same') %same option every time
-            actualEventWidth(cell, 1) = prctile(eventLibrary_2D(cell).eventLengths, control.eventWidth{1});
-            actualEventWidth(cell, 2) = prctile(eventLibrary_2D(cell).eventLengths, control.eventWidth{1}); %NOTE: keeping max and min the same.
+            actualEventWidthRange(cell, 1) = prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1});
+            actualEventWidthRange(cell, 2) = prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1}); %NOTE: keeping max and min the same.
         else
             requiredEventWidth(cell) = control.eventWidth{2};
-            actualEventWidth(cell, 1) = floor(prctile(eventLibrary_2D(cell).eventLengths, control.eventWidth{1})) - requiredEventWidth(cell); % Min
-            actualEventWidth(cell, 2) = ceil(prctile(eventLibrary_2D(cell).eventLengths, control.eventWidth{1})) + requiredEventWidth(cell); % Max
+            actualEventWidthRange(cell, 1) = floor(prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1})) - requiredEventWidth(cell); % Min
+            actualEventWidthRange(cell, 2) = ceil(prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1})) + requiredEventWidth(cell); % Max
         end
         
         for trial = 1:nTotalTrials
             if hitTrials(cell, trial) == 1
-                eventIndices = find((eventLibrary_2D(cell).eventLengths >= actualEventWidth(cell, 1)) & ...
-                    (eventLibrary_2D(cell).eventLengths <= actualEventWidth(cell, 2)));
+                eventIndices = find((eventLibrary_2D(cell).eventWidths >= actualEventWidthRange(cell, 1)) & ...
+                    (eventLibrary_2D(cell).eventWidths <= actualEventWidthRange(cell, 2)));
+                if isempty(eventIndices)
+                    warning('No suitable events found for cell: %i. Continuing to next cell ...', num2str(cell));
+                    break
+                end
                 eventStartIndex = randomlyPickEvent(eventIndices, eventLibrary_2D, cell);
                 %Now, we pick out exactly one event per trial
-                event = DATA_2D(cell, eventStartIndex:1:eventStartIndex+actualEventWidth(cell)-1);
+                event = DATA_2D(cell, eventStartIndex:1:eventStartIndex+actualEventWidthRange(cell)-1);
                 
                 % Generate noise
                 noiseComponent(cell, trial, :) = generateNoise(event, control.noise, control.noisePercent, nTotalFrames);
@@ -111,8 +116,8 @@ for cell = 1:nTotalCells
                 clear tailClip
                 %disp(frameIndex(cell, trial) + pad(cell, trial))
             elseif hitTrials(cell, trial) == 0 % For Non-Hit Trials
-%                 frameIndex(cell, trial) = nan;
-%                 pad(cell, trial) = nan;
+                %                 frameIndex(cell, trial) = nan;
+                %                 pad(cell, trial) = nan;
                 
                 % Add noise
                 currentTrialOptions = find(hitTrials(cell, 1:trial));
@@ -140,9 +145,9 @@ for cell = 1:nTotalCells
                 syntheticDATA(cell, trial, :) = syntheticDATA(cell, trial, :) + noiseComponent(cell, trial, :);
             end
             
-%             % Since no target frame is required
-%             frameIndex(cell, trial) = nan;
-%             pad(cell, trial) = nan;
+            %             % Since no target frame is required
+            %             frameIndex(cell, trial) = nan;
+            %             pad(cell, trial) = nan;
         end
     else
         error('Unknown nature of cell')
@@ -162,7 +167,7 @@ output.syntheticDATA = syntheticDATA;
 output.syntheticDATA_2D = syntheticDATA_2D;
 output.ptcList = ptcList;
 output.ocList = ocList;
-output.actualEventWidth = actualEventWidth;
+output.actualEventWidth = actualEventWidthRange;
 output.hitTrialPercent = hitTrialPercent;
 output.hitTrials = hitTrials;
 output.frameIndex = frameIndex;

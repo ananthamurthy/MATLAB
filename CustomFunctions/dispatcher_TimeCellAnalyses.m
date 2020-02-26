@@ -226,7 +226,7 @@ for iexp = 1:length(db)
         end
         
         fig4 = figure(4);
-        set(fig4,'Position',[300,300,1200,500])
+        
         clf
         subplot(1,3,1)
         scatter(sdo.Q_norm, mehrabOutput.Q_norm);

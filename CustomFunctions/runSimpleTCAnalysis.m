@@ -1,6 +1,8 @@
-function [stcaOutput] = runSimpleTCAnalysis(DATA, delta, skipFrames, trialThreshold)
+function [stcaOutput] = runSimpleTCAnalysis(DATA, delta, skipFrames, ~)
 
-[ETH, trialAUCs, nbins] = getETH(Data, delta, skipFrames);
+%Use some 'tcellThreshold' to determine time cells.
+
+[ETH, trialAUCs, ~] = getETH(Data, delta, skipFrames);
 
 nCells = size(DATA, 1);
 nTrials = size(DATA, 2);
