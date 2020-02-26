@@ -1,6 +1,25 @@
-function [mehrabOutput] = runMehrabR2BAnalysis(non_ov_trials, early_only, pk_behav_trial, ...
-    dff_data_mat, CS_onset_frame, US_onset_frame, ridge_h_width, ...
-    frame_time, r_iters)
+function [mehrabOutput] = runMehrabR2BAnalysis(DATA)
+
+% learned_list   = [];
+% saved_scores   = [];
+% all_scores     = [];
+% saved_pk_times = [];
+
+%Change of hands
+% !! Requires further thought; currently just trying to run the code !!
+%learned = 1;
+blink_list = ones(size(myData.dfbf, 2), 1); %Setting blink_list = 1 for all trials
+%learned_list = [learned_list; learned]; %!! Handle this better !!
+blink_trials = find(blink_list == 1);
+%Trial specifics
+CS_onset_frame = trialDetails.frameRate*trialDetails.preDuration;
+US_onset_frame = floor(trialDetails.frameRate * ...
+    (trialDetails.preDuration + ...
+    trialDetails.csDuration + ...
+    trialDetails.traceDuration));
+frame_time = 1000/trialDetails.frameRate;
+dff_data_mat = permute(DATA, [3 1 2]);
+pk_behav_trial = 1; %Short-circuit to analyse all trials, instead of just the last few.
 
 no_cells = size(dff_data_mat,2);
 no_trials = size(dff_data_mat,3);

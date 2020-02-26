@@ -87,9 +87,17 @@ for iexp = 1:length(db)
     
     %% Analysis Pipelines
     
-    %I - Mehrab's Reliability Analysis (Bhalla Lab)
-    runAdapter4MehrabAnalysis;
-    
+    %Method A - Mehrab's Reliability Analysis (Bhalla Lab)
+    pretr_control = 1;         %0 - analyses control no puff datasets, 1 - analyses training (trace or pseudo) datasets
+    learned_only = 0;        %1 - use only datasets for animals that have learned the task 0 - use all datasets in list, 2 - analyses only non-learner datasets
+    %Ca_width = 250;          %in ms
+    stimOI = 1;              %stimulus of interest - 1 = tone, 2 = puff (useful with pseudorand datasets)
+    %bk_period_control = 0;   %0 - analyses tone-puff period, 1 - analyses background period
+    r_iters = 5000;           %number of iterations of randomisation used to find averaged r-shifted rb ratio - might have to go as high as 3000.
+    non_ov_trials = 1;       %1 - non-overlapping trial sets used for kernel estimation and rb ratio calculation, 0 - all trials used for both
+    early_only = 0;          %0 - uses all trials; 1 - uses only the first 5 trials of the session
+    %ridge_h_width = 500; % in ms
+    ridge_h_width = trialDetails.traceDuration;
     [mehrabOutput] = runMehrabR2BAnalysis(non_ov_trials, early_only, pk_behav_trial, ...
         dff_data_mat, CS_onset_frame, US_onset_frame, ridge_h_width, ...
         frame_time, r_iters);
@@ -97,13 +105,13 @@ for iexp = 1:length(db)
     
     % ----
     
-    %II - William Mau's Temporal Information (Eichenbaum Lab)
+    %Method B - William Mau's Temporal Information (Eichenbaum Lab)
     [williamOutput] = runWilliamTIAnalysis(DATA);
     save([saveFolder db(iexp).mouseName '_' db(iexp).date '_williamAnalysis.mat' ], 'williamOutput')
     
     % ----
     
-    %III - Simple Analysis
+    %Method C - Simple Analysis
     delta = 3;
     skipFrames = [];
     [stcaOutput] = runSimpleTCAnalysis(DATA, delta, skipFrames);
@@ -116,13 +124,6 @@ for iexp = 1:length(db)
     mehrabOutput.Q_norm = (mehrabOutput.Q) ./max(mehrabOutput.Q(~isinf(mehrabOutput.Q)));
     williamOutput.Q_norm = (williamOutput.Q) ./max(williamOutput.Q);
     stcaOutput.Q_norm = (stcaOutput.Q) ./max(stcaOutput.Q);
-    
-    % 1 - Dot product
-    dotProduct = dot(mehrabOutput.Q_norm, williamOutput.Q_norm);
-    
-    % 2 - RMS
-    rms_mehrab = rms(mehrabOutput.Q_norm);
-    rms_william = rms(williamOutput.Q_norm);
     
     %{
     %Combined save
