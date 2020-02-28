@@ -1,32 +1,30 @@
-function [stcaOutput] = runSimpleTCAnalysis(DATA, delta, skipFrames, ~)
+function [stcaOutput] = runSimpleTCAnalysis(DATA, simpleInput)
+delta = simpleInput.delta;
+skipFrames = simpleInput.skipFrames;
+%trialThreshold = simpleInput.trialThreshold;
 
-%Use some 'tcellThreshold' to determine time cells.
+%{
+THINGS TO DO:
+Use some 'tcellThreshold' to determine time cells.
+%}
 
-[ETH, trialAUCs, ~] = getETH(Data, delta, skipFrames);
+[ETH, trialAUCs, ~] = getETH(DATA, delta, skipFrames);
 
 nCells = size(DATA, 1);
 nTrials = size(DATA, 2);
 
 %Preallocation
-meanETH = zeros(size(ETH, 1));
-medianETH = zeros(size(ETH, 1));
-
-%unimodalCase = zeros(size(ETH, 1));
-%event = zeros(size(trialAUCs));
 hitTrial = zeros(nCells, nTrials);
-Q = zeros(nCells, 1);
-time = zeros(nCells, 1);
+Q1 = zeros(nCells, 1);
+Q2 = zeros(nCells, 1);
+peakTimeBin = zeros(nCells, 1);
 timeCells = zeros(nCells, 1);
 k = zeros(nCells, 1);
-peakBin = zeros(nCells, nTrials);
+peakTrialTimeBin = zeros(nCells, nTrials);
 
 for cell = 1:nCells
-    % Skewness to check for time cells
-    meanETH(cell) = mean(squeeze(ETH(cell, :)));
-    medianETH(cell) = prctile(ETH(cell, :), 50);
-    
     % Time Vector
-    [~, time(cell)] = max(squeeze(ETH(cell, :)));
+    [~, peakTimeBin(cell)] = max(squeeze(ETH(cell, :)));
     
     for trial = 1:nTrials
         m = mean(squeeze(trialAUCs(cell, trial, :)));
@@ -35,23 +33,31 @@ for cell = 1:nCells
         threshold = m + 2*s;
         
         % Check for Hit Trials
-        if trialAUCs(cell, trial, time(cell)) >= threshold
+        if trialAUCs(cell, trial, peakTimeBin(cell)) >= threshold
             hitTrial(cell, trial) = 1;
         end
-        [~, peakBin(cell, trial)] = max(trialAUCs(cell, trial, :));
+        [~, peakTrialTimeBin(cell, trial)] = max(trialAUCs(cell, trial, :));
+        
+        clear m
+        clear s
+        clear threshold
     end
     
-    k(cell) = kurtosis(peakBin(cell, :));
+    k(cell) = kurtosis(peakTrialTimeBin(cell, :));
     
-    %Develop Q
-    Q(cell) = (sum(squeeze(hitTrial(cell, :)))/nTrials) * k(cell);
+    %Develop Q1
+    Q1(cell) = (sum(squeeze(hitTrial(cell, :)))/nTrials) * k(cell); %Q1 = hit trial ratio * kurtosis
+    
+    % Develop Q2
+    meanTimedPeak = mean(trialAUCs(cell, :, peakTimeBin(cell)));
+    stdTimedPeak = std(trialAUCs(cell, :, peakTimeBin(cell)));
+    Q2(cell) = meanTimedPeak/stdTimedPeak;
 end
 
-timeCells = [];
-
 stcaOutput.ETH = ETH;
-stcaOutput.Q = Q;
-stcaOutput.T = time;
+stcaOutput.Q1 = Q1;
+stcaOutput.Q2 = Q2;
+stcaOutput.T = peakTimeBin;
 stcaOutput.timeCells = timeCells;
 
 end

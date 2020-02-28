@@ -47,6 +47,7 @@ for iexp = 1:length(db)
     learned_list = [learned_list; learned];
     blink_trials = find(blink_list == 1);
     
+    
     %condition to use only animals that learned the task
     if learned_only == 1 %operation
         if learned == 0 %data dependent
