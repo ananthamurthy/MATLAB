@@ -10,15 +10,12 @@ early_only = mehrabInput.earlyOnly;
 pk_behav_trial = mehrabInput.startTrial;
 
 %Preallocation
-timeCells = zeros(size(DATA, 1), 1); %Will change to 'nCells' at some point
+timeCells = nan(size(DATA, 1), 1); %Will change to 'nCells' at some point
 
 %Trial specifics
 frame_time = 1000/trialDetails.frameRate;
-
 ridge_h_width_f = floor(ridge_h_width/frame_time); %in frames
-
 dff_data_mat = permute(DATA, [3 1 2]);
-
 no_trials = size(dff_data_mat, 3);
 
 %establishing typical response size for each cell

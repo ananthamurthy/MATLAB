@@ -15,12 +15,12 @@ nTrials = size(DATA, 2);
 
 %Preallocation
 hitTrial = zeros(nCells, nTrials);
-Q1 = zeros(nCells, 1);
-Q2 = zeros(nCells, 1);
-peakTimeBin = zeros(nCells, 1);
-timeCells = zeros(nCells, 1);
-k = zeros(nCells, 1);
-peakTrialTimeBin = zeros(nCells, nTrials);
+Q1 = nan(nCells, 1);
+Q2 = nan(nCells, 1);
+peakTimeBin = nan(nCells, 1);
+timeCells = nan(nCells, 1);
+k = nan(nCells, 1);
+peakTrialTimeBin = nan(nCells, nTrials);
 
 for cell = 1:nCells
     % Time Vector
