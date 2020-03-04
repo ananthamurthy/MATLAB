@@ -1,11 +1,10 @@
 %Written by Kambadur Ananthamurthy
-function [frameIndex, pad] = selectFrameIndex(eventTiming, startFrame, endFrame, I, imprecisionFWHM, imprecisionType, cell)
+function [frameIndex, pad] = selectFrameIndex(eventTiming, startFrame, endFrame, I, imprecisionFWHM, imprecisionType, frameGroup)
 %What timing/frame to select?
 if strcmpi(eventTiming, 'sequential')
     %Perfect sequence
-    frameIndex = (startFrame + cell - 1) - I; %Uses the event peak instead of the event start index
+    frameIndex = startFrame + (frameGroup - 1) - I;
     %fprintf('frameIndex: %i\n', frameIndex)
-    
 elseif strcmpi(eventTiming, 'random')
     %randomized
     frameIndex = floor(rand()*(endFrame - startFrame)) + startFrame - I; %Uses the event peak instead of the event start index

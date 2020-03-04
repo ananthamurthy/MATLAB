@@ -72,6 +72,16 @@ for cell = 1:nTotalCells
             actualEventWidthRange(cell, 2) = ceil(prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1})) + requiredEventWidth(cell); % Max
         end
         
+        %This section is only important for the sequential case
+        %Here we need to define which frame each cell gets targetted to
+        if control.eventTiming == 'sequential'
+            nGroups = control.endFrame - control.startFrame;
+            nCellsPerFrame = floor(length(ptcList)/nGroups);
+            frameGroup = ceil(find(ptcList == cell)/nCellsPerFrame);
+        else
+            frameGroup = 0;
+        end
+        
         for trial = 1:nTotalTrials
             if hitTrials(cell, trial) == 1
                 eventIndices = find((eventLibrary_2D(cell).eventWidths >= actualEventWidthRange(cell, 1)) & ...
@@ -93,9 +103,10 @@ for cell = 1:nTotalCells
                 
                 %disp('Selecting the Frame Index ...')
                 [~, I] = max(event);
+                
                 while (frameIndex(cell, trial) + pad(cell, trial)) <= I
                     %Pick event(s) based on requiredEventLength
-                    [frameIndex(cell, trial), pad(cell, trial)] = selectFrameIndex(control.eventTiming, control.startFrame, control.endFrame, I, control.imprecisionFWHM, control.imprecisionType, cell);
+                    [frameIndex(cell, trial), pad(cell, trial)] = selectFrameIndex(control.eventTiming, control.startFrame, control.endFrame, I, control.imprecisionFWHM, control.imprecisionType, frameGroup);
                 end
                 
                 %Prune trial lengths, if necessary
