@@ -31,7 +31,7 @@ requiredEventWidth = zeros(nTotalCells, 1);
 hitTrials = zeros(nTotalCells, nTotalTrials);
 hitTrialPercent = zeros(nTotalCells, 1);
 
-frameIndex = zeros(nTotalCells, nTotalTrials);
+frameIndex = nan(nTotalCells, nTotalTrials);
 pad = zeros(nTotalCells, nTotalTrials);
 
 for cell = 1:nTotalCells
@@ -76,8 +76,12 @@ for cell = 1:nTotalCells
         %Here we need to define which frame each cell gets targetted to
         if control.eventTiming == 'sequential'
             nGroups = control.endFrame - control.startFrame;
-            nCellsPerFrame = floor(length(ptcList)/nGroups);
-            frameGroup = ceil(find(ptcList == cell)/nCellsPerFrame);
+            if length(ptcList) >= nGroups
+                nCellsPerFrame = floor(length(ptcList)/nGroups);
+                frameGroup = ceil(find(ptcList == cell)/nCellsPerFrame);
+            else
+                frameGroup = cell; %uses the cell index
+            end
         else
             frameGroup = 0;
         end
@@ -102,21 +106,18 @@ for cell = 1:nTotalCells
                 end
                 
                 %disp('Selecting the Frame Index ...')
+                [frameIndex(cell, trial), pad(cell, trial)] = selectFrameIndex(control.eventTiming, control.startFrame, control.endFrame, control.imprecisionFWHM, control.imprecisionType, frameGroup);
+                %fprintf('For cell: %i, trial: %i, the frameIndex is %i and the pad is %i\n', cell, trial, frameIndex(cell, trial), pad(cell, trial))
+                
                 [~, I] = max(event);
-                
-                while (frameIndex(cell, trial) + pad(cell, trial)) <= I
-                    %Pick event(s) based on requiredEventLength
-                    [frameIndex(cell, trial), pad(cell, trial)] = selectFrameIndex(control.eventTiming, control.startFrame, control.endFrame, I, control.imprecisionFWHM, control.imprecisionType, frameGroup);
-                end
-                
                 %Prune trial lengths, if necessary
                 tailClip = (frameIndex(cell, trial) + pad(cell, trial)) + length(event) - 1 - nTotalFrames;
                 
                 if tailClip > 0
                     %fprintf('tail-clip: %i\n', tailClip)
-                    syntheticDATA(cell, trial, ((frameIndex(cell, trial) + pad(cell, trial)):((frameIndex(cell, trial) + (pad(cell, trial))+length(event)) - 1 - tailClip))) = event(1:(length(event) - tailClip)) * control.eventAmplificationFactor;
+                    syntheticDATA(cell, trial, ((frameIndex(cell, trial) + pad(cell, trial)) - I :((frameIndex(cell, trial) + (pad(cell, trial)) - I + length(event)) - 1 - tailClip))) = event(1:(length(event) - tailClip)) * control.eventAmplificationFactor;
                 else
-                    syntheticDATA(cell, trial, ((frameIndex(cell, trial)+ pad(cell, trial)):(frameIndex(cell, trial) + (pad(cell, trial))+length(event)-1))) = event * control.eventAmplificationFactor;
+                    syntheticDATA(cell, trial, ((frameIndex(cell, trial)+ pad(cell, trial)) - I :(frameIndex(cell, trial) + (pad(cell, trial)) - I + length(event) - 1))) = event * control.eventAmplificationFactor;
                 end
                 %fprintf('syntheticDATA trial length: %i\n', length(syntheticDATA(cell, trial, :)))
                 %fprintf('Event added to cell:%i, trial:%i at frame:%i\n', cell, trial, (frameIndex(cell, trial)+ pad (cell, trial)))
@@ -127,8 +128,8 @@ for cell = 1:nTotalCells
                 clear tailClip
                 %disp(frameIndex(cell, trial) + pad(cell, trial))
             elseif hitTrials(cell, trial) == 0 % For Non-Hit Trials
-                %                 frameIndex(cell, trial) = nan;
-                %                 pad(cell, trial) = nan;
+                frameIndex(cell, trial) = nan;
+                pad(cell, trial) = nan;
                 
                 % Add noise
                 currentTrialOptions = find(hitTrials(cell, 1:trial));
@@ -144,6 +145,8 @@ for cell = 1:nTotalCells
             end
         end
     elseif ismember(cell, ocList) % For Other Cells
+        frameIndex(cell, :) = nan;
+        pad(cell, :) = nan;
         
         % Add noise
         selectedCellOption = ptcList(randperm(length(ptcList), 1));
@@ -184,7 +187,6 @@ output.hitTrials = hitTrials;
 output.frameIndex = frameIndex;
 output.pad = pad;
 output.noiseComponent = noiseComponent;
-
 
 disp('... done!')
 end
