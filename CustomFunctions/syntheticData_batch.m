@@ -96,10 +96,7 @@ s.T = zeros(nCells, 1);
 sdo_batch = repmat(s, 1, length(sdcp));
 clear s
 
-%sdo = struct();
-%Iterating backwards helps preallocate memory for the output "sdo"
-%for i = length(sdcp): -1 : 1
-for i = length(sdcp):-1:1
+for i = length(sdcp):-1:1 %Cool move; not super necessary given preallocation
     fprintf('Currently running control parameter set: %i\n', i)
     sdo = syntheticDataMaker(db, realProcessedData.dfbf_2D, eventLibrary_2D, sdcp(i));
     

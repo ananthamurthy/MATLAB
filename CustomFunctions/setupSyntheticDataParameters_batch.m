@@ -65,63 +65,63 @@ sdcp(i).noisePercent = 25;
 sdcp(i).randomseed = 'default';
 sdcp(i).comment = '25% gaussian noise';
 rng(sdcp(i).randomseed)
-% 
-% %i = 3
-% i = i + 1;
-% sdcp(i).timeCellPercent = 50;
-% sdcp(i).cellOrder = 'basic';
-% sdcp(i).maxHitTrialPercent = 100;
-% sdcp(i).hitTrialPercentAssignment = 'fixed';
-% sdcp(i).trialOrder = 'basic';
-% sdcp(i).eventWidth = {100, 'same'};
-% sdcp(i).eventAmplificationFactor = 1;
-% sdcp(i).eventTiming = 'sequential';
-% sdcp(i).startFrame = 100;
-% sdcp(i).endFrame = 200;
-% sdcp(i).imprecisionFWHM = 8;
-% sdcp(i).imprecisionType = 'none';
-% sdcp(i).noise = 'gaussian';
-% sdcp(i).noisePercent = 50;
-% sdcp(i).randomseed = 'default';
-% sdcp(i).comment = '50% gaussian noise';
-% rng(sdcp(i).randomseed)
-% 
-% %i = 4
-% i = i + 1;
-% sdcp(i).timeCellPercent = 50;
-% sdcp(i).cellOrder = 'basic';
-% sdcp(i).maxHitTrialPercent = 100;
-% sdcp(i).hitTrialPercentAssignment = 'fixed';
-% sdcp(i).trialOrder = 'basic';
-% sdcp(i).eventWidth = {100, 'same'};
-% sdcp(i).eventAmplificationFactor = 1;
-% sdcp(i).eventTiming = 'sequential';
-% sdcp(i).startFrame = 100;
-% sdcp(i).endFrame = 200;
-% sdcp(i).imprecisionFWHM = 8;
-% sdcp(i).imprecisionType = 'none';
-% sdcp(i).noise = 'gaussian';
-% sdcp(i).noisePercent = 75;
-% sdcp(i).randomseed = 'default';
-% sdcp(i).comment = '75% gaussian noise';
-% rng(sdcp(i).randomseed)
-% 
-% %i = 5
-% i = i + 1;
-% sdcp(i).timeCellPercent = 50;
-% sdcp(i).cellOrder = 'basic';
-% sdcp(i).maxHitTrialPercent = 100;
-% sdcp(i).hitTrialPercentAssignment = 'fixed';
-% sdcp(i).trialOrder = 'basic';
-% sdcp(i).eventWidth = {100, 'same'};
-% sdcp(i).eventAmplificationFactor = 1;
-% sdcp(i).eventTiming = 'sequential';
-% sdcp(i).startFrame = 100;
-% sdcp(i).endFrame = 200;
-% sdcp(i).imprecisionFWHM = 8;
-% sdcp(i).imprecisionType = 'none';
-% sdcp(i).noise = 'gaussian';
-% sdcp(i).noisePercent = 100;
-% sdcp(i).randomseed = 'default';
-% sdcp(i).comment = '100% gaussian noise';
-% rng(sdcp(i).randomseed)
+
+%i = 3
+i = i + 1;
+sdcp(i).timeCellPercent = 50;
+sdcp(i).cellOrder = 'basic';
+sdcp(i).maxHitTrialPercent = 100;
+sdcp(i).hitTrialPercentAssignment = 'fixed';
+sdcp(i).trialOrder = 'basic';
+sdcp(i).eventWidth = {100, 'same'};
+sdcp(i).eventAmplificationFactor = 1;
+sdcp(i).eventTiming = 'sequential';
+sdcp(i).startFrame = 100;
+sdcp(i).endFrame = 200;
+sdcp(i).imprecisionFWHM = 8;
+sdcp(i).imprecisionType = 'none';
+sdcp(i).noise = 'gaussian';
+sdcp(i).noisePercent = 50;
+sdcp(i).randomseed = 'default';
+sdcp(i).comment = '50% gaussian noise';
+rng(sdcp(i).randomseed)
+
+%i = 4
+i = i + 1;
+sdcp(i).timeCellPercent = 50;
+sdcp(i).cellOrder = 'basic';
+sdcp(i).maxHitTrialPercent = 100;
+sdcp(i).hitTrialPercentAssignment = 'fixed';
+sdcp(i).trialOrder = 'basic';
+sdcp(i).eventWidth = {100, 'same'};
+sdcp(i).eventAmplificationFactor = 1;
+sdcp(i).eventTiming = 'sequential';
+sdcp(i).startFrame = 100;
+sdcp(i).endFrame = 200;
+sdcp(i).imprecisionFWHM = 8;
+sdcp(i).imprecisionType = 'none';
+sdcp(i).noise = 'gaussian';
+sdcp(i).noisePercent = 75;
+sdcp(i).randomseed = 'default';
+sdcp(i).comment = '75% gaussian noise';
+rng(sdcp(i).randomseed)
+
+%i = 5
+i = i + 1;
+sdcp(i).timeCellPercent = 50;
+sdcp(i).cellOrder = 'basic';
+sdcp(i).maxHitTrialPercent = 100;
+sdcp(i).hitTrialPercentAssignment = 'fixed';
+sdcp(i).trialOrder = 'basic';
+sdcp(i).eventWidth = {100, 'same'};
+sdcp(i).eventAmplificationFactor = 1;
+sdcp(i).eventTiming = 'sequential';
+sdcp(i).startFrame = 100;
+sdcp(i).endFrame = 200;
+sdcp(i).imprecisionFWHM = 8;
+sdcp(i).imprecisionType = 'none';
+sdcp(i).noise = 'gaussian';
+sdcp(i).noisePercent = 100;
+sdcp(i).randomseed = 'default';
+sdcp(i).comment = '100% gaussian noise';
+rng(sdcp(i).randomseed)
