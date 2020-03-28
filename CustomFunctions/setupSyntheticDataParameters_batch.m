@@ -25,7 +25,6 @@ rng('seed', 'generator')  %See help rng for details; Typically: 'default' or 'sh
 %%
 i = 0;
 %% Synthetic Data Parameters - Batch
-
 %i = 1
 i = i + 1;
 sdcp(i).timeCellPercent = 50;
@@ -45,7 +44,6 @@ sdcp(i).noisePercent = 0;
 sdcp(i).randomseed = 'default';
 sdcp(i).comment = '0% gaussian noise';
 rng(sdcp(i).randomseed)
-
 %i = 2
 i = i + 1;
 sdcp(i).timeCellPercent = 50;
@@ -65,7 +63,6 @@ sdcp(i).noisePercent = 25;
 sdcp(i).randomseed = 'default';
 sdcp(i).comment = '25% gaussian noise';
 rng(sdcp(i).randomseed)
-
 %i = 3
 i = i + 1;
 sdcp(i).timeCellPercent = 50;
@@ -85,7 +82,6 @@ sdcp(i).noisePercent = 50;
 sdcp(i).randomseed = 'default';
 sdcp(i).comment = '50% gaussian noise';
 rng(sdcp(i).randomseed)
-
 %i = 4
 i = i + 1;
 sdcp(i).timeCellPercent = 50;
@@ -105,7 +101,6 @@ sdcp(i).noisePercent = 75;
 sdcp(i).randomseed = 'default';
 sdcp(i).comment = '75% gaussian noise';
 rng(sdcp(i).randomseed)
-
 %i = 5
 i = i + 1;
 sdcp(i).timeCellPercent = 50;

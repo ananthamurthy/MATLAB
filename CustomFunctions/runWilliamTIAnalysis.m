@@ -12,7 +12,7 @@ for cell = 1:size(DATA,1)
     [MI(cell), Isec(cell), Ispk(cell), Itime(cell, :)] = tempInfoOneNeuron(squeeze(DATA(cell,:,:)));
 end
 
-williamOutput.Isec = Isec;
+%williamOutput.Isec = Isec;
 williamOutput.Q = Ispk;
 williamOutput.T = time;
 williamOutput.timeCells = timeCells;

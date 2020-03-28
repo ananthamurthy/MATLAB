@@ -1,3 +1,9 @@
+% "Synthetic Data Generator" by Kambadur Ananthamurthy
+% This code uses real dfbf data, eventLibrary_2D, and control parameters to
+% generate synthetic datasets.
+% Currently uses one session of real data, but can generate synthetic
+% datasets in batch.
+
 tic
 close all
 clear
@@ -8,6 +14,7 @@ addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth')
 
 %ops0.fig             = 1;
 ops0.saveData        = 1;
+ops0.comment         = 'EffectOfNoisePercent'; %No spaces; capitalization is handled
 
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %ops0.onlyProbeTrials = 0
@@ -96,9 +103,9 @@ s.T = zeros(nCells, 1);
 sdo_batch = repmat(s, 1, length(sdcp));
 clear s
 
-for i = length(sdcp):-1:1 %Cool move; not super necessary given preallocation
-    fprintf('Currently running control parameter set: %i\n', i)
-    sdo = syntheticDataMaker(db, realProcessedData.dfbf_2D, eventLibrary_2D, sdcp(i));
+for runi = 1: 1: length(sdcp)
+    fprintf('Currently running control parameter set: %i\n', runi)
+    sdo = syntheticDataMaker(db, realProcessedData.dfbf_2D, eventLibrary_2D, sdcp(runi));
     
     %Run specifics
     scurr = rng;
@@ -108,10 +115,12 @@ for i = length(sdcp):-1:1 %Cool move; not super necessary given preallocation
     % Develop Quality (Q)
     params4Q.nTotalCells = sdo.nTotalCells;
     params4Q.hitTrialPercent = sdo.hitTrialPercent;
+    params4Q.noisePercent = sdcp(i).noisePercent;
     params4Q.eventAmplificationFactor = sdcp(i).eventAmplificationFactor;
+    params4Q.maxSignal = sdo.maxSignal;
     params4Q.actualEventWidth = sdo.actualEventWidth;
     params4Q.imprecisionFWHM = sdcp(i).imprecisionFWHM;
-    params4Q.noisePercent = sdcp(i).noisePercent;
+    params4Q.nTotalFrames = size(sdo.syntheticDATA, 3);
     
     sdo.Q = developQ(params4Q);
     
@@ -123,29 +132,15 @@ for i = length(sdcp):-1:1 %Cool move; not super necessary given preallocation
     [~, derivedT] = max(ETH(:,:), [], 2); % Actual Time Vector
     sdo.T = derivedT;
     
-    sdo_batch(i) = sdo;
+    sdo_batch(runi) = sdo;
 end
 
 %% Save Everything
 if ops0.saveData == 1
     save([saveFolder ...
         'synthDATA' ...
-        '-' num2str(i) ...
-        '_tCP' num2str(sdcp(i).timeCellPercent) ...
-        '_cO' lower(sdcp(i).cellOrder) ...
-        '_mHTP' num2str(sdcp(i).maxHitTrialPercent) ...
-        '_hTPA' lower(sdcp(i).hitTrialPercentAssignment) ...
-        '_tO' lower(sdcp(i).trialOrder) ...
-        '_eW' num2str(sdcp(i).eventWidth{1}) ...
-        '_eAF' sdcp(i).eventAmplificationFactor ...
-        '_eT' lower(sdcp(i).eventTiming) ...
-        '_sF' num2str(sdcp(i).startFrame) ...
-        '_eF' num2str(sdcp(i).endFrame) ...
-        '_iFWHM' num2str(sdcp(i).imprecisionFWHM) ...
-        '_iT' lower(sdcp(i).imprecisionType) ...
-        '_n' lower(sdcp(i).noise) ...
-        '_np' num2str(sdcp(i).noisePercent) ...
-        '_batch', ...
+        '_batch_', ...
+        lower(ops0.comment), ...
         '.mat'], ...
         'sdcp', 'sdo_batch')
 end

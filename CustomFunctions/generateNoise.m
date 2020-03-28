@@ -1,15 +1,20 @@
-function noiseComponent = generateNoise(event, noise, noisePercent, nFrames)
+function noiseComponent = generateNoise(maxSignal, noise, noisePercent, nFrames, ceil2zero)
 
 %Preallocation
-noiseComponent = zeros(nFrames,1);
+noiseComponent = zeros(1, nFrames);
 
-s = (noisePercent/100) * max(event);
+s = floor((noisePercent/100) * maxSignal);
 
 if strcmpi(noise, 'gaussian')
     for frame = 1:nFrames
-        noiseComponent(frame) = s .* randn();
+        noiseComponent(1, frame) = s .* randn();
     end
 else
     %error('Unable to identify noise case')
 end
+
+if ceil2zero
+    noiseComponent(noiseComponent < 0) = 0;
+end
+
 end

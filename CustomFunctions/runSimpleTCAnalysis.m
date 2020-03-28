@@ -54,7 +54,7 @@ for cell = 1:nCells
     Q2(cell) = meanTimedPeak/stdTimedPeak;
 end
 
-stcaOutput.ETH = ETH;
+%stcaOutput.ETH = ETH;
 stcaOutput.Q1 = Q1;
 stcaOutput.Q2 = Q2;
 stcaOutput.T = peakTimeBin;
