@@ -1,14 +1,19 @@
 % AUTHOR - Kambadur Ananthmurthy
-function [smoothedData, gaussianKernel] = doGaussianSmoothing(Data, nSamples)
+function [smoothedDATA, gaussianKernel] = doGaussianSmoothing(DATA, nSamples)
+nCells = size(DATA, 1);
+nTrials = size(DATA, 2);
+nFrames = size(DATA, 3);
+
 w = gausswin(nSamples);
 gaussianKernel = w/sum(w) ; %normalized
 %wvtool(gaussianKernel)
 % Data is organized as cells, trials, frames.
-smoothedData = zeros(size(Data,1), size(Data,2), (size(Data,3)+nSamples-1));
-for cell = 1:size(Data,1)
-    for trial = 1:size(Data,2)
-        originalSignal = squeeze(Data(cell, trial, :));
-        smoothedData(cell,trial,:) = conv(originalSignal, gaussianKernel);
+smoothedDATA = zeros(nCells, nTrials, nFrames);
+for cell = 1:nCells
+    for trial = 1:nTrials
+        originalSignal = squeeze(DATA(cell, trial, :));
+        smoothedTrial = conv(originalSignal, gaussianKernel);
+        smoothedDATA(cell, trial, :) = smoothedTrial(1:nFrames, 1);
     end
 end
 end
