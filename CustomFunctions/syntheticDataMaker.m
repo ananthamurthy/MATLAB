@@ -5,38 +5,38 @@ function output = syntheticDataMaker(dataset, DATA_2D, eventLibrary_2D, control)
 disp('Creating synthetic data ...')
 
 %Preallocation
-nTotalCells = size(DATA_2D,1);
-nTotalTrials = dataset.nTrials;
-nTotalFrames = dataset.nFrames;
-syntheticDATA = zeros(nTotalCells, nTotalTrials, nTotalFrames);
-syntheticDATA_2D = zeros(nTotalCells, nTotalTrials*nTotalFrames);
-noiseComponent = zeros(nTotalCells, nTotalFrames);
-eventMax = zeros(nTotalCells, nTotalTrials);
-maxSignal = zeros(nTotalCells, 1);
+nCells = size(DATA_2D,1);
+nTrials = dataset.nTrials;
+nFrames = dataset.nFrames;
+syntheticDATA = zeros(nCells, nTrials, nFrames);
+syntheticDATA_2D = zeros(nCells, nTrials*nFrames);
+noiseComponent = zeros(nCells, nFrames);
+eventMax = zeros(nCells, nTrials);
+maxSignal = zeros(nCells, 1);
 
 %Which cells to select?
-nPutativeTimeCells = floor((control.timeCellPercent/100) * nTotalCells);
+nPutativeTimeCells = floor((control.timeCellPercent/100) * nCells);
 fprintf('... Number of Putative Time Cells: %i\n', nPutativeTimeCells)
 if strcmpi(control.cellOrder, 'basic')
     ptcList = 1:nPutativeTimeCells;
-    ocList = (nPutativeTimeCells+1):nTotalCells;
+    ocList = (nPutativeTimeCells+1):nCells;
 elseif strcmpi(control.cellOrder, 'random')
-    ptcList = randperm(nTotalCells, nPutativeTimeCells);
-    ocList = 1:nTotalCells;
+    ptcList = randperm(nCells, nPutativeTimeCells);
+    ocList = 1:nCells;
     ocList(ptcList) = [];
 else
     error('Unknown Cell Order')
 end
 
-actualEventWidthRange = zeros(nTotalCells, 2);
-requiredEventWidth = zeros(nTotalCells, 1);
-hitTrials = zeros(nTotalCells, nTotalTrials);
-hitTrialPercent = zeros(nTotalCells, 1);
+actualEventWidthRange = zeros(nCells, 2);
+requiredEventWidth = zeros(nCells, 1);
+hitTrials = zeros(nCells, nTrials);
+hitTrialPercent = zeros(nCells, 1);
 
-frameIndex = nan(nTotalCells, nTotalTrials);
-pad = zeros(nTotalCells, nTotalTrials);
+frameIndex = nan(nCells, nTrials);
+pad = zeros(nCells, nTrials);
 
-for cell = 1:nTotalCells
+for cell = 1:nCells
     %disp(cell)
     %For Putative Time Cells
     if ismember(cell, ptcList)
@@ -50,12 +50,12 @@ for cell = 1:nTotalCells
         end
         
         %What trials to select?
-        nHitTrials = floor((hitTrialPercent(cell)/100) * nTotalTrials);
+        nHitTrials = floor((hitTrialPercent(cell)/100) * nTrials);
         if strcmpi(control.trialOrder, 'basic')
             hitTrials(cell, 1:nHitTrials) = 1;
         elseif strcmpi(control.trialOrder, 'random')
             hitTrials(cell, 1) = 1;
-            hitTrials(cell, randperm(nTotalTrials, (nHitTrials-1))) = 1;
+            hitTrials(cell, randperm(nTrials, (nHitTrials-1))) = 1;
         else
             error('Unknown sdcp.trialOrder')
         end
@@ -88,7 +88,7 @@ for cell = 1:nTotalCells
             frameGroup = 0;
         end
         
-        for trial = 1:nTotalTrials
+        for trial = 1:nTrials
             if hitTrials(cell, trial) == 1
                 eventIndices = find((eventLibrary_2D(cell).eventWidths >= actualEventWidthRange(cell, 1)) & ...
                     (eventLibrary_2D(cell).eventWidths <= actualEventWidthRange(cell, 2)));
@@ -106,7 +106,7 @@ for cell = 1:nTotalCells
                 
                 [eventMax(cell, trial), I] = max(event);
                 %Prune trial lengths, if necessary
-                tailClip = (frameIndex(cell, trial) + pad(cell, trial)) + length(event) - 1 - nTotalFrames;
+                tailClip = (frameIndex(cell, trial) + pad(cell, trial)) + length(event) - 1 - nFrames;
                 
                 if tailClip > 0
                     %fprintf('tail-clip: %i\n', tailClip)
@@ -144,15 +144,15 @@ end
 
 % Noise
 if ~strcmpi(control.noise, 'none')
-    for cell = 1:nTotalCells
+    for cell = 1:nCells
         if ismember(cell, ptcList)
             %disp(cell)
             ceil2zero = 1;
             % Generate noise
-            noiseComponent(cell, :) = squeeze(generateNoise(maxSignal(cell), control.noise, control.noisePercent, nTotalFrames, ceil2zero));
+            noiseComponent(cell, :) = squeeze(generateNoise(maxSignal(cell), control.noise, control.noisePercent, nFrames, ceil2zero));
             
             % Add noise
-            for trial = 1:nTotalTrials
+            for trial = 1:nTrials
                 syntheticDATA(cell, trial, :) = squeeze(syntheticDATA(cell, trial, :)) + noiseComponent(cell, :)';
             end
             
@@ -161,7 +161,7 @@ if ~strcmpi(control.noise, 'none')
             noiseComponent(cell, :) = noiseComponent(selectedCellOption, :);
             
             %Add noise
-            for trial = 1:nTotalTrials
+            for trial = 1:nTrials
                 syntheticDATA(cell, trial, :) = squeeze(syntheticDATA(cell, trial, :)) + noiseComponent(cell, :)';
             end
         else
@@ -171,7 +171,7 @@ if ~strcmpi(control.noise, 'none')
 end
 
 %2D Synthetic Data
-for cell = 1:nTotalCells
+for cell = 1:nCells
     syntheticDATA_2D(cell, :) = reshape(squeeze(syntheticDATA(cell, :, :))', 1, []);
 end
 
@@ -181,7 +181,7 @@ output.syntheticDATA_2D = syntheticDATA_2D;
 output.maxSignal = maxSignal;
 output.ptcList = ptcList;
 output.ocList = ocList;
-output.nTotalCells = nTotalCells;
+output.nCells = nCells;
 output.actualEventWidth = actualEventWidthRange;
 output.hitTrialPercent = hitTrialPercent;
 output.hitTrials = hitTrials;

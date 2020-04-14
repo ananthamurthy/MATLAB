@@ -73,27 +73,38 @@ else %Manual mode
     set(gcf,'Visible','off')
 end
 
+% seqAnalysisOutput.coeff = coeff;
+% seqAnalysisOutput.score = score;
+% seqAnalysisOutput.explained = explained;
+% seqAnalysisOutput.mu = mu;
 
-seqAnalysisOutput.coeff = coeff;
-seqAnalysisOutput.score = score;
-seqAnalysisOutput.explained = explained;
-seqAnalysisOutput.mu = mu;
+%seqAnalysisOutput.recDATA = ((score(:, selectedIndex) * coeff(selectedIndex, :)) + mu)';
 
-seqAnalysisOutput.recDATA = ((score(:, selectedIndex) * coeff(selectedIndex, :)) + mu)';
-
-%Take derivative of Selected Principal Component
-seqAnalysisOutput.selectedPC = squeeze(coeff(:, selectedIndex));
-size(seqAnalysisOutput.selectedPC);
+%Take the first derivative of Selected Principal Component
+seqAnalysisOutput.selectedPC = squeeze(score(:, selectedIndex));
+%size(seqAnalysisOutput.selectedPC);
 dx = seqAnalysisOutput.selectedPC(2:end) - seqAnalysisOutput.selectedPC(1:end-1);
-dt = seqAnalysisInput.timeVector(2:end) - seqAnalysisInput.timeVector(1:end-1);
-seqAnalysisOutput.d1 = dx./dt;
+dt = (seqAnalysisInput.timeVector(2:end) - seqAnalysisInput.timeVector(1:end-1))'; %Transpose
+seqAnalysisOutput.d1 = dx ./ dt;
 
-%Cross-correlate with the activity of each cell to get Quality (Q)
+seqAnalysisOutput.dx = dx;
+seqAnalysisOutput.dt = dt;
 
-%seqAnalysisOutput.Q = xcorr(seqAnalysisOutput.d1, seqAnalysisOutput.selectedPC);
 
-%seqAnalysisOutput.T = peakTimeBin;
+[ETH, ~, ~] = getETH(DATA, seqAnalysisInput.delta, seqAnalysisInput.skipFrames);
+
+% Quality (Q) and Time Vector (T)
+peakTimeBin = zeros(nCells, 1);
+for cell = 1:nCells
+    %disp(cell)
+    %Cross-correlate with the activity of each cell to get Quality (Q)
+    corrCoeffMatrix2b2 = corrcoef(seqAnalysisOutput.d1, DATA_2D(cell, 2:end)'); %pads smaller vector with 0s
+    seqAnalysisOutput.Q(cell, 1) = corrCoeffMatrix2b2(1,2);
+    
+    %Time Vector
+    [~, peakTimeBin(cell)] = max(squeeze(ETH(cell, :)));
+end
+
+seqAnalysisOutput.T = peakTimeBin;
 %seqAnalysisOutput.timeCells = timeCells;
-
-
 end
