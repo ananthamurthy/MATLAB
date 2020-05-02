@@ -8,7 +8,7 @@ THINGS TO DO:
 Use some 'tcellThreshold' to determine time cells.
 %}
 
-[ETH, trialAUCs, ~] = getETH(DATA, delta, skipFrames);
+[ETH, trialAUCs, nBins] = getETH(DATA, delta, skipFrames);
 
 nCells = size(DATA, 1);
 nTrials = size(DATA, 2);
@@ -19,8 +19,11 @@ Q1 = nan(nCells, 1);
 Q2 = nan(nCells, 1);
 peakTimeBin = nan(nCells, 1);
 timeCells = nan(nCells, 1);
-k = nan(nCells, 1);
+ksstat = nan(nCells, 1);
 peakTrialTimeBin = nan(nCells, nTrials);
+
+%Develop CDF for a uniform distribution
+test_cdf = [1:nBins; cdf('Uniform', 1:nBins, 1, nBins)];
 
 for cell = 1:nCells
     % Time Vector
@@ -43,10 +46,10 @@ for cell = 1:nCells
         clear threshold
     end
     
-    k(cell) = kurtosis(peakTrialTimeBin(cell, :));
+    [~, ~ , ksstat(cell), ~] = kstest(peakTrialTimeBin(cell, :), 'CDF', test_cdf');
     
     %Develop Q1
-    Q1(cell) = (sum(squeeze(hitTrial(cell, :)))/nTrials) * k(cell); %Q1 = hit trial ratio * kurtosis
+    Q1(cell) = (sum(squeeze(hitTrial(cell, :)))/nTrials) * ksstat(cell); %Q1 = hit trial ratio * ksstat
     
     % Develop Q2
     meanTimedPeak = mean(trialAUCs(cell, :, peakTimeBin(cell)));

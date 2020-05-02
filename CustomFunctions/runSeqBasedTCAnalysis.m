@@ -28,10 +28,31 @@ end
 X = DATA_2D';
 
 % PCA
-%[coeff, score, latent, tsquared, explained, mu] = pca(X);
-[coeff, score, ~, ~, explained, mu] = pca(X);
+%[coeff, score, ~, ~, explained, mu] = pca(X); %reconstructedDATA = (score * coeff') + mu;
 
-%RecreatedDATA = (score * coeff') + mu;
+% Offset PCA
+%Develop the centered and standardized matrix from the 2D Data.
+mu = mean(X); %column means as a row vector
+Z = X - repmat(mu, nTrials*nFrames, 1); %centered and standardized matrix
+
+%Covariance matrix - alternative estimator
+% First set up the two (n-1) x p "versions" of Z
+% Removing first row
+Zr1 = Z;
+Zr1(1,:) = [];
+
+%Removing last row
+Zrend = Z;
+Zrend(size(Z, 1), :) = [];
+
+%Now, the covariance matrix is
+Ccap = (1/(2*(size(Z, 1)-1))) * ((Zrend'*Zr1) + (Zr1'*Zrend));
+
+%Finally, we perform the PCA on this new covariance matrix
+[coeff, latent, explained] = pcacov(Ccap);
+
+score = Z * coeff;
+
 if seqAnalysisInput.automatic
     %Add condition to exclude tsquared values >1? Skipping
     %Add condition to only include eigenvalues >1? Skipping
@@ -44,10 +65,11 @@ else %Manual mode
     selectedIndex = 1;
     finish = 'n';
     while strcmpi(finish, 'n')
+        reconstructedDATA = (score(:, selectedIndex) * coeff(:, selectedIndex)' + mu);
         figure
         set(gcf,'Visible','on')
         clf
-        imagesc(((score(:, selectedIndex) * coeff(:, selectedIndex)') + mu)'*100)
+        imagesc(reconstructedDATA'*100)
         title(sprintf('Data | PC: %i', selectedIndex), ...
             'FontSize', 15, ...
             'FontWeight','bold')

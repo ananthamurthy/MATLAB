@@ -1,9 +1,9 @@
-function [X, X0, Y] = createDataMatrix4Bayes(DATA, input)
+function [X, X0, Y, Yfit_actual, trainingTrials, testingTrials] = createDataMatrix4Bayes(DATA, input)
 
-nCells = size(DATA, 1);
+%nCells = size(DATA, 1);
 nTrials = size(DATA, 2);
 nFrames = size(DATA, 3); %per trial
-nTotalFrames = nTrials*nFrames; %total frames in dataset.
+%nTotalFrames = nTrials*nFrames; %total frames in dataset.
 
 if strcmpi(input.whichTrials, 'first')
     trainingTrials = 1:floor(nTrials/2);
@@ -19,47 +19,45 @@ elseif strcmpi(input.whichTrials, 'random')
     testingTrials = allTrials;
     testingTrials(trainingTrials) = [];
     clear allTrials
-
+    
 elseif strcmpi(input.whichTrials, 'all')
     trainingTrials = 1:nTrials;
     testingTrials = 1:nTrials;
-
+    
 else
     error('Unable to select test trials')
 end
 
 Xprime = [];
+X0prime = [];
 %Y = zeros(nTotalFrames, 1);
 count = 0;
-for frame = 1:size(DATA, 3)
+
+fprintf('Label Shuffle Control: %s\n', input.labelShuffle)
+if strcmpi(input.labelShuffle, 'on')
+    randomFrames = randperm(nFrames);
+end
+
+for frame = 1:nFrames
     %disp(frame)
     
     %Training Trials
     trainingData_ = squeeze(DATA(:, trainingTrials, frame));
-    if input.shuffle == 1
-        trialOrder = randperm(size(trainingData_,2));
-        trainingData = trainingData_(:, trialOrder);
-        Xprime = [Xprime; trainingData]; %reshaped data
-        %clear trainingData
+    Xprime = [Xprime trainingData_]; %reshaped data
+    %Training Trial Labels
+    if strcmpi(input.labelShuffle, 'on')
+        Y(((length(trainingTrials)*(count)) + 1): ((length(trainingTrials)*(count)) + length(trainingTrials)), 1) = randomFrames(frame);
+    elseif strcmpi(input.labelShuffle, 'off')
+        Y(((length(trainingTrials)*(count)) + 1): ((length(trainingTrials)*(count)) + length(trainingTrials)), 1) = frame;
     else
-        Xprime = [Xprime; trainingData_]; %reshaped data
-        %clear trainingData_
+        error('Unable to determine if label shuffle is On/Off')
     end
     
     %Testing Trials
     testingData_ = squeeze(DATA(:, testingTrials, frame));
-    if input.shuffle == 1
-        trialOrder = randperm(size(testingData_,2));
-        testingData = testingData_(:, trialOrder);
-        X0prime = [X0prime; testingData];
-        %clear testingData
-    else
-        X0prime = [X0prime; testingData_];
-        %clear testingData_
-    end
-    
-    %Labels
-    Y(((nTrials*(count)) + 1): ((nTrials*(count)) + nTrials)) = frame;
+    X0prime = [X0prime testingData_];
+    %Testing Trial Labels
+    Yfit_actual(((length(testingTrials)*(count)) + 1): ((length(testingTrials)*(count)) + length(testingTrials)), 1) = frame;
     count = count +1;
 end
 %Rows are now the calcium activity and columns are cells
@@ -67,4 +65,3 @@ X = Xprime'; %Training
 X0 = X0prime'; %Testing
 
 end
-
