@@ -26,8 +26,8 @@ rng('seed', 'generator')  %See help rng for details; Typically: 'default' or 'sh
 i = 0;
 %% Synthetic Data Parameters
 i = i + 1;
-sdcp(i).timeCellPercent = 100; %in %
-sdcp(i).cellOrder = 'basic'; %basic or random (not useful if)
+sdcp(i).timeCellPercent = 50; %in %
+sdcp(i).cellOrder = 'basic'; %basic or random
 sdcp(i).maxHitTrialPercent = 100; %in %
 sdcp(i).hitTrialPercentAssignment = 'fixed'; %fixed or random (maxHitTrialPercent/2 to maxHitTrialPercent)
 sdcp(i).trialOrder = 'random'; %basic or random

@@ -58,7 +58,7 @@ for frame = 1:nFrames
     X0prime = [X0prime testingData_];
     %Testing Trial Labels
     Yfit_actual(((length(testingTrials)*(count)) + 1): ((length(testingTrials)*(count)) + length(testingTrials)), 1) = frame;
-    count = count +1;
+    count = count + 1;
 end
 %Rows are now the calcium activity and columns are cells
 X = Xprime'; %Training
