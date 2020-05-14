@@ -13,14 +13,14 @@ lagOC = nan(nCells, nTrials, nTrials);
 %Loop for time cells
 for celli = 1:length(sdo.ptcList)
     for tx = 1:nTrials
-        options = find(allTrials~=tx);
-        for ty = 1:length(options)
+        %options = find(allTrials~=tx);
+        for ty = (tx+1):nTrials
             x = squeeze(DATA(sdo.ptcList(celli), tx, :));
-            y = squeeze(DATA(sdo.ptcList(celli), options(ty), :));
-            [r, lags] = xcorr(x, y);
+            y = squeeze(DATA(sdo.ptcList(celli), ty, :));
+            [r, lags] = xcorr(x, y, length(x), 'coeff');
             [val, ind] = max(r);
             rTC(celli, tx, ty) = val;
-            lagTC(celli, tx, options(ty)) = lags(ind);
+            lagTC(celli, tx, ty) = lags(ind);
         end
     end
 end
@@ -28,14 +28,14 @@ end
 %Loop for other cells
 for celli = 1:length(sdo.ocList)
     for tx = 1:nTrials
-        options = find(allTrials~=tx);
-        for ty = 1:length(options)
+        %options = find(allTrials~=tx);
+        for ty = (tx+1):nTrials
             x = squeeze(DATA(sdo.ocList(celli), tx, :));
-            y = squeeze(DATA(sdo.ocList(celli), options(ty), :));
-            [r, lags] = xcorr(x, y);
+            y = squeeze(DATA(sdo.ocList(celli), ty, :));
+            [r, lags] = xcorr(x, y, length(x), 'coeff');
             [val, ind] = max(r);
             rOC(celli, tx, ty) = val;
-            lagOC(celli, tx, options(ty)) = lags(ind);
+            lagOC(celli, tx, ty) = lags(ind);
         end
     end
 end
