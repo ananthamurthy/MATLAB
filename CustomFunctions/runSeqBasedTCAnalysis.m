@@ -24,7 +24,7 @@ for cell = 1:nCells
     end
 end
 
-%Remember to transpose the 2D data to rows - allFrames (observations), and columns - Cells (variables)
+%Remember to transpose the 2D data to: rows - allFrames (observations), and columns - Cells (variables)
 X = DATA_2D';
 
 % PCA
@@ -95,6 +95,7 @@ else %Manual mode
     set(gcf,'Visible','off')
 end
 
+%Not necessary; commenting out
 % seqAnalysisOutput.coeff = coeff;
 % seqAnalysisOutput.score = score;
 % seqAnalysisOutput.explained = explained;
