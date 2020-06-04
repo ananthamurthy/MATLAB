@@ -1,12 +1,13 @@
-% "Synthetic Data Generator" by Kambadur Ananthamurthy
+% Function call: "Synthetic Data Generator" by Kambadur Ananthamurthy
 % This code uses real dfbf data, eventLibrary_2D, and control parameters to
 % generate synthetic datasets.
 % Currently uses one session of real data, but can generate synthetic
 % datasets in batch.
 
+function sdo_batch = generateSyntheticDataInBatch
+
 tic
 close all
-clear
 
 addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions')) % my custom functions
 addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis')) % Additional functions
@@ -14,13 +15,12 @@ addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth')
 
 %ops0.fig             = 1;
 ops0.saveData        = 1;
-ops0.comment         = 'EffectOfNoisePercent'; %No spaces; capitalization is handled
 
-figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+%figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %ops0.onlyProbeTrials = 0
 
 %% Load real dataset details
-make_db
+make_db %Currently only for one session at a time
 
 fprintf('Reference Dataset - %s_%i_%i | Date: %s\n', db.mouseName, ...
     db.sessionType, ...
@@ -37,8 +37,9 @@ nTrials = size(realProcessedData.dfbf, 2);
 nFrames = size(realProcessedData.dfbf, 3);
 fprintf('Total cells: %i\n', nCells)
 
-%% Setup synthetic dataset control parameters
-setupSyntheticDataParameters_batch
+%% Load synthetic dataset control parameters
+setupSyntheticDataParameters_batch %Loads all options
+nDatasets = length(sdcp);
 
 %% Organize Library of Calcium Events
 %Cell specific curation of the calcium event library
@@ -87,9 +88,10 @@ end
 %Preallocation
 s.syntheticDATA = zeros(nCells, nTrials, nFrames);
 s.syntheticDATA_2D = zeros(nCells, nTrials * nFrames);
+s.maxSignal = zeros(nCells, 1);
 s.ptcList = [];
 s.ocList = [];
-s.nTotalCells = nCells;
+s.nCells = nCells;
 s.actualEventWidth = zeros(nCells, 2);
 s.hitTrialPercent = zeros(nCells, 1);
 s.hitTrials = zeros(nCells, nTrials);
@@ -100,11 +102,12 @@ s.scurr = {};
 s.endTime = '';
 s.Q = zeros(nCells, 1);
 s.T = zeros(nCells, 1);
-sdo_batch = repmat(s, 1, length(sdcp));
+%sdo_batch = repmat(s, 1, length(sdcp));
+sdo_batch = repmat(s, 1, nDatasets);
 clear s
 
-for runi = 1: 1: length(sdcp)
-    fprintf('Currently running control parameter set: %i\n', runi)
+for runi = 1:1:nDatasets
+    fprintf('Currently generating dataset: %i\n', runi)
     sdo = syntheticDataMaker(db, realProcessedData.dfbf_2D, eventLibrary_2D, sdcp(runi));
     
     %Run specifics
@@ -113,25 +116,25 @@ for runi = 1: 1: length(sdcp)
     sdo.endTime = datestr(now,'mm-dd-yyyy_HH-MM');
     
     % Develop Quality (Q)
-    params4Q.nTotalCells = sdo.nTotalCells;
+    params4Q.nCells = nCells;
     params4Q.hitTrialPercent = sdo.hitTrialPercent;
-    params4Q.noisePercent = sdcp(i).noisePercent;
-    params4Q.eventAmplificationFactor = sdcp(i).eventAmplificationFactor;
+    params4Q.noisePercent = sdcp(runi).noisePercent;
+    params4Q.eventAmplificationFactor = sdcp(runi).eventAmplificationFactor;
     params4Q.maxSignal = sdo.maxSignal;
     params4Q.actualEventWidth = sdo.actualEventWidth;
-    params4Q.imprecisionFWHM = sdcp(i).imprecisionFWHM;
+    params4Q.imprecisionFWHM = sdcp(runi).imprecisionFWHM;
     params4Q.nTotalFrames = size(sdo.syntheticDATA, 3);
     
     sdo.Q = developQ(params4Q);
     
-    % Derived Time
-    delta = 3;
-    skipFrames = [];
-    [ETH, ETH_3D, nbins] = getETH(sdo.syntheticDATA, delta, skipFrames);
-    %[~, derivedT] = max(ETH(sdo.ptcList,:), [], 2); % Actual Time Vector
-    [~, derivedT] = max(ETH(:,:), [], 2); % Actual Time Vector
-    sdo.T = derivedT;
-    
+%     % Derived Time
+%     delta = 3;
+%     skipFrames = [];
+%     [ETH, ETH_3D, nbins] = getETH(sdo.syntheticDATA, delta, skipFrames);
+%     %[~, derivedT] = max(ETH(sdo.ptcList,:), [], 2); % Actual Time Vector
+%     [~, derivedT] = max(ETH(:,:), [], 2); % Actual Time Vector
+%     sdo.T = derivedT;
+    sdo.T = zeros(nCells, 1);
     sdo_batch(runi) = sdo;
 end
 
@@ -140,9 +143,10 @@ if ops0.saveData == 1
     save([saveFolder ...
         'synthDATA' ...
         '_batch_', ...
-        lower(ops0.comment), ...
+        num2str(nDatasets), ...
         '.mat'], ...
-        'sdcp', 'sdo_batch')
+        'sdcp', 'sdo_batch', ...
+        '-v7.3')
 end
 
 toc

@@ -129,5 +129,5 @@ for cell = 1:nCells
 end
 
 seqAnalysisOutput.T = peakTimeBin;
-%seqAnalysisOutput.timeCells = timeCells;
+seqAnalysisOutput.timeCells = [];
 end

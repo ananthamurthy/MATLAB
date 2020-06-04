@@ -14,8 +14,8 @@ addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis')) % Additional 
 addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth'))
 addpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies')
 
-%% Dataset
-make_db
+%% Main Real Dataset
+make_db %Currently only one session at a time
 fprintf('Analyzing %s_%i_%i - Date: %s\n', db.mouseName, ...
     db.sessionType, ...
     db.session, ...
@@ -28,19 +28,34 @@ ops0.saveData                  = 1;
 ops0.onlyProbeTrials           = 0;
 ops0.loadSyntheticData         = 1;
 ops0.doSigOnly                 = 0;
-ops0.comment                   = 'EffectOfNoisePercent'; %No spaces or "-"; capitalization is handled
+ops0.comment                   = ''; %No spaces or "-"; capitalization is handled
 
 if ops0.loadSyntheticData
     setupSyntheticDataParameters_batch
 end
 
 %% Preallocation
-%Method A and B
+%Method A
 s.Q = [];
 s.T = [];
 s.timeCells = [];
 s.normQ = [];
 mAOutput_batch = repmat(s, 1, length(sdcp));
+clear s
+
+%Method B
+s.Mdl = [];
+s.Yfit = [];
+s.Q = [];
+s.trainingTrials = [];
+s.testingTrials = [];
+s.Yfit_actual = [];
+s.YfitDiff = [];
+s.Yfit_2D = [];
+s.Yfit_actual_2D = [];
+s.YfitDiff_2D = [];
+s.timeCells = [];
+s.normQ = [];
 mBOutput_batch = repmat(s, 1, length(sdcp));
 clear s
 
@@ -62,6 +77,7 @@ s.dt = [];
 s.Q = [];
 s.T = [];
 s.normQ = [];
+s.timeCells = [];
 mDOutput_batch = repmat(s, 1, length(sdcp));
 clear s
 
@@ -78,12 +94,13 @@ s.Yfit_actual_2D = [];
 s.YfitDiff_2D = [];
 s.Q_2D = [];
 s.T = [];
+s.timeCells = [];
 mEOutput_batch = repmat(s, 1, length(sdcp));
 clear s
 
 %% Main script
 for runi = 1: 1: length(sdcp)
-    fprintf('Currently running control parameter set: %i\n', runi)
+    fprintf('Currently running parameter set: %i\n', runi)
     
     if ops0.loadSyntheticData
         load([saveFolder ...

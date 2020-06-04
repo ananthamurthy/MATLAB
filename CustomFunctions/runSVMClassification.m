@@ -6,11 +6,11 @@ nFrames = size(DATA, 3);
 
 %Gaussian Smoothing
 if svmInput.gaussianSmoothing
-    [smoothedData, ~] = doGaussianSmoothing(DATA, svmInput.nSamples);
+    [DATA, ~] = doGaussianSmoothing(DATA, svmInput.nSamples);
     %[smoothedDATA, gaussianKernel] = doGaussianSmoothing2D(DATA_2D, nSamples);
 end
 
-[X, X0, Y, Yfit_actual, trainingTrials, testingTrials] = createDataMatrix4Classification(DATA, svmInput);
+[X, X0, Y, Yfit_actual, ~, testingTrials] = createDataMatrix4Classification(DATA, svmInput);
 
 mustBeNonnegative(X)
 mustBeNonnegative(X0)
@@ -28,7 +28,12 @@ svmOutput.SVMModel = fitcsvm(X, Y, ...
 %Test model
 [svmOutput.Yfit, score] = predict(svmOutput.SVMModel, X0);
 svmOutput.YfitDiff = svmOutput.Yfit - Yfit_actual;
-svmOutput.Q = score(:, 2); %Only looking at the "positive class" scores (to classify as "time cell")
+try
+    svmOutput.Q = score(:, 2); %Only looking at the "positive class" scores (to classify as "time cell")
+catch
+    %Usually only if all cells are classified the same
+    svmOutput.Q = score(:, 1);
+end
 
 %Reshape Yfit and Yfit_actual to a 2D matrix - trials vs frames
 svmOutput.Yfit_2D = reshape(svmOutput.Yfit, [length(testingTrials), nCells]);
@@ -45,5 +50,5 @@ for cell = 1:nCells
     [~, peakTimeBin(cell)] = max(squeeze(ETH(cell, :)));
 end
 svmOutput.T = peakTimeBin;
-
+svmOutput.timeCells = [];
 end

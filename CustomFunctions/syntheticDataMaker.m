@@ -17,15 +17,20 @@ maxSignal = zeros(nCells, 1);
 %Which cells to select?
 nPutativeTimeCells = floor((control.timeCellPercent/100) * nCells);
 fprintf('... Number of Putative Time Cells: %i\n', nPutativeTimeCells)
-if strcmpi(control.cellOrder, 'basic')
-    ptcList = 1:nPutativeTimeCells;
-    ocList = (nPutativeTimeCells+1):nCells;
-elseif strcmpi(control.cellOrder, 'random')
-    ptcList = randperm(nCells, nPutativeTimeCells);
-    ocList = 1:nCells;
-    ocList(ptcList) = [];
+if nPutativeTimeCells ~= 0
+    if strcmpi(control.cellOrder, 'basic')
+        ptcList = 1:nPutativeTimeCells;
+        ocList = (nPutativeTimeCells+1):nCells;
+    elseif strcmpi(control.cellOrder, 'random')
+        ptcList = randperm(nCells, nPutativeTimeCells);
+        ocList = 1:nCells;
+        ocList(ptcList) = [];
+    else
+        error('Unknown Cell Order')
+    end
 else
-    error('Unknown Cell Order')
+    ptcList = [];
+    ocList = 1:nCells;
 end
 
 actualEventWidthRange = zeros(nCells, 2);
@@ -93,7 +98,7 @@ for cell = 1:nCells
                 eventIndices = find((eventLibrary_2D(cell).eventWidths >= actualEventWidthRange(cell, 1)) & ...
                     (eventLibrary_2D(cell).eventWidths <= actualEventWidthRange(cell, 2)));
                 if isempty(eventIndices)
-                    warning('No suitable events found for cell: %i. Continuing to next cell ...', num2str(cell));
+                    warning('No suitable events found for cell: %i. Continuing to next cell ...\n', num2str(cell));
                     break
                 end
                 eventStartIndex = randomlyPickEvent(eventIndices, eventLibrary_2D, cell);

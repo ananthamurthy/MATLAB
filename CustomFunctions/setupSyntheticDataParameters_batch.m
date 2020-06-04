@@ -23,100 +23,493 @@ Random Seed
 rng('seed', 'generator')  %See help rng for details; Typically: 'default' or 'shuffle'
 %}
 %%
-i = 0;
+count = 0;
 %% Synthetic Data Parameters - Batch
-%i = 1
-i = i + 1;
-sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 100;
-sdcp(i).hitTrialPercentAssignment = 'fixed';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {100, 'same'};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 100;
-sdcp(i).endFrame = 200;
-sdcp(i).imprecisionFWHM = 8;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'gaussian';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = '0% gaussian noise';
-rng(sdcp(i).randomseed)
-%i = 2
-i = i + 1;
-sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 100;
-sdcp(i).hitTrialPercentAssignment = 'fixed';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {100, 'same'};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 100;
-sdcp(i).endFrame = 200;
-sdcp(i).imprecisionFWHM = 8;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'gaussian';
-sdcp(i).noisePercent = 25;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = '25% gaussian noise';
-rng(sdcp(i).randomseed)
-%i = 3
-i = i + 1;
-sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 100;
-sdcp(i).hitTrialPercentAssignment = 'fixed';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {100, 'same'};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 100;
-sdcp(i).endFrame = 200;
-sdcp(i).imprecisionFWHM = 8;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'gaussian';
-sdcp(i).noisePercent = 50;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = '50% gaussian noise';
-rng(sdcp(i).randomseed)
-%i = 4
-i = i + 1;
-sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 100;
-sdcp(i).hitTrialPercentAssignment = 'fixed';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {100, 'same'};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 100;
-sdcp(i).endFrame = 200;
-sdcp(i).imprecisionFWHM = 8;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'gaussian';
-sdcp(i).noisePercent = 75;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = '75% gaussian noise';
-rng(sdcp(i).randomseed)
-%i = 5
-i = i + 1;
-sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 100;
-sdcp(i).hitTrialPercentAssignment = 'fixed';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {100, 'same'};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 100;
-sdcp(i).endFrame = 200;
-sdcp(i).imprecisionFWHM = 8;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'gaussian';
-sdcp(i).noisePercent = 100;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = '100% gaussian noise';
-rng(sdcp(i).randomseed)
+
+%Sequential Timing
+%Time cell percents with 'basic' order
+for value = 10:10:100
+    count = count + 1;
+    sdcp(count).timeCellPercent = value;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = 100;
+    sdcp(count).hitTrialPercentAssignment = 'fixed';
+    sdcp(count).trialOrder = 'basic';
+    sdcp(count).eventWidth = {100, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'sequential';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = 0;
+    sdcp(count).imprecisionType = 'none';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Percent Time Cells: %i; Cell Order: %s; Event Timing: %s', count, value, sdcp(count).cellOrder, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Time cell percents with 'random' order
+for value = 10:10:100
+    count = count + 1;
+    sdcp(count).timeCellPercent = value;
+    sdcp(count).cellOrder = 'random';
+    sdcp(count).maxHitTrialPercent = 100;
+    sdcp(count).hitTrialPercentAssignment = 'fixed';
+    sdcp(count).trialOrder = 'basic';
+    sdcp(count).eventWidth = {100, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'sequential';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = 0;
+    sdcp(count).imprecisionType = 'none';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Percent Time Cells: %i; Cell Order: %s; Event Timing: %s', count, value, sdcp(count).cellOrder, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Max Hit Trial Percents with 'fixed' assignment
+for value = 10:10:100
+    count = count + 1;
+    sdcp(count).timeCellPercent = 50;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = value;
+    sdcp(count).hitTrialPercentAssignment = 'fixed';
+    sdcp(count).trialOrder = 'basic';
+    sdcp(count).eventWidth = {100, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'sequential';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = 0;
+    sdcp(count).imprecisionType = 'none';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Max Hit Trial Percents with 'random' assignment
+for value = 10:10:100
+    count = count + 1;
+    sdcp(count).timeCellPercent = 50;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = value;
+    sdcp(count).hitTrialPercentAssignment = 'random';
+    sdcp(count).trialOrder = 'basic';
+    sdcp(count).eventWidth = {100, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'sequential';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = 0;
+    sdcp(count).imprecisionType = 'none';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+% %Max Hit Trial Percents with 'fixed' assignment, 'random' trial order
+for value = 10:10:100
+    count = count + 1;
+    sdcp(count).timeCellPercent = 50;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = value;
+    sdcp(count).hitTrialPercentAssignment = 'fixed';
+    sdcp(count).trialOrder = 'random';
+    sdcp(count).eventWidth = {100, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'sequential';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = 0;
+    sdcp(count).imprecisionType = 'none';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Max Hit Trial Percents with 'random' assignment, 'random' trial order
+for value = 10:10:100
+    count = count + 1;
+    sdcp(count).timeCellPercent = 50;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = value;
+    sdcp(count).hitTrialPercentAssignment = 'random';
+    sdcp(count).trialOrder = 'random';
+    sdcp(count).eventWidth = {100, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'sequential';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = 0;
+    sdcp(count).imprecisionType = 'none';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Event Widths (percentiles)
+for value = 10:10:100
+    count = count + 1;
+    sdcp(count).timeCellPercent = 50;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = 50;
+    sdcp(count).hitTrialPercentAssignment = 'fixed';
+    sdcp(count).trialOrder = 'random';
+    sdcp(count).eventWidth = {value, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'sequential';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = 0;
+    sdcp(count).imprecisionType = 'none';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Event Width (percentile): %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Event Widths (percentiles) with standard deviations
+for value = 10:10:100
+    count = count + 1;
+    sdcp(count).timeCellPercent = 50;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = 50;
+    sdcp(count).hitTrialPercentAssignment = 'fixed';
+    sdcp(count).trialOrder = 'random';
+    sdcp(count).eventWidth = {value, 'stddev'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'sequential';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = 0;
+    sdcp(count).imprecisionType = 'none';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Event Width (percentile): %i (with stddev); Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Uniform Imprecisions
+for value = 1:2:20
+    count = count + 1;
+    sdcp(count).timeCellPercent = 50;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = 50;
+    sdcp(count).hitTrialPercentAssignment = 'fixed';
+    sdcp(count).trialOrder = 'random';
+    sdcp(count).eventWidth = {100, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'sequential';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = value;
+    sdcp(count).imprecisionType = 'uniform';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Uniform ImprecisionFWHM: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Normal Imprecisions
+for value = 1:2:20
+    count = count + 1;
+    sdcp(count).timeCellPercent = 50;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = 50;
+    sdcp(count).hitTrialPercentAssignment = 'fixed';
+    sdcp(count).trialOrder = 'random';
+    sdcp(count).eventWidth = {100, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'sequential';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = value;
+    sdcp(count).imprecisionType = 'normal';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Normal ImprecisionFWHM: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Noise (only Gaussian type)
+for value = 10:10:100
+    count = count + 1;
+    sdcp(count).timeCellPercent = 50;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = 50;
+    sdcp(count).hitTrialPercentAssignment = 'fixed';
+    sdcp(count).trialOrder = 'random';
+    sdcp(count).eventWidth = {100, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'sequential';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = 0;
+    sdcp(count).imprecisionType = 'none';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = value;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Noise Percent: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%--- Repeat everything with random timing
+
+%Random Timing
+%Time cell percents with 'basic' order
+for value = 10:10:100
+    count = count + 1;
+    sdcp(count).timeCellPercent = value;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = 100;
+    sdcp(count).hitTrialPercentAssignment = 'fixed';
+    sdcp(count).trialOrder = 'basic';
+    sdcp(count).eventWidth = {100, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'random';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = 0;
+    sdcp(count).imprecisionType = 'none';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Percent Time Cells: %i; Cell Order: %s; Event Timing: %s', count, value, sdcp(count).cellOrder, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Time cell percents with 'random' order
+for value = 10:10:100
+    count = count + 1;
+    sdcp(count).timeCellPercent = value;
+    sdcp(count).cellOrder = 'random';
+    sdcp(count).maxHitTrialPercent = 100;
+    sdcp(count).hitTrialPercentAssignment = 'fixed';
+    sdcp(count).trialOrder = 'basic';
+    sdcp(count).eventWidth = {100, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'random';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = 0;
+    sdcp(count).imprecisionType = 'none';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Percent Time Cells: %i; Cell Order: %s; Event Timing: %s', count, value, sdcp(count).cellOrder, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Max Hit Trial Percents with 'fixed' assignment
+for value = 10:10:100
+    count = count + 1;
+    sdcp(count).timeCellPercent = 50;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = value;
+    sdcp(count).hitTrialPercentAssignment = 'fixed';
+    sdcp(count).trialOrder = 'basic';
+    sdcp(count).eventWidth = {100, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'random';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = 0;
+    sdcp(count).imprecisionType = 'none';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Max Hit Trial Percents with 'random' assignment
+for value = 10:10:100
+    count = count + 1;
+    sdcp(count).timeCellPercent = 50;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = value;
+    sdcp(count).hitTrialPercentAssignment = 'random';
+    sdcp(count).trialOrder = 'basic';
+    sdcp(count).eventWidth = {100, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'random';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = 0;
+    sdcp(count).imprecisionType = 'none';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Max Hit Trial Percents with 'fixed' assignment, 'random' trial order
+for value = 10:10:100
+    count = count + 1;
+    sdcp(count).timeCellPercent = 50;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = value;
+    sdcp(count).hitTrialPercentAssignment = 'fixed';
+    sdcp(count).trialOrder = 'random';
+    sdcp(count).eventWidth = {100, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'random';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = 0;
+    sdcp(count).imprecisionType = 'none';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Max Hit Trial Percents with 'random' assignment, 'random' trial order
+for value = 10:10:100
+    count = count + 1;
+    sdcp(count).timeCellPercent = 50;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = value;
+    sdcp(count).hitTrialPercentAssignment = 'random';
+    sdcp(count).trialOrder = 'random';
+    sdcp(count).eventWidth = {100, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'random';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = 0;
+    sdcp(count).imprecisionType = 'none';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Event Widths (percentiles)
+for value = 10:10:100
+    count = count + 1;
+    sdcp(count).timeCellPercent = 50;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = 50;
+    sdcp(count).hitTrialPercentAssignment = 'fixed';
+    sdcp(count).trialOrder = 'random';
+    sdcp(count).eventWidth = {value, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'random';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = 0;
+    sdcp(count).imprecisionType = 'none';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Event Width (percentile): %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Event Widths (percentiles) with standard deviations
+for value = 10:10:100
+    count = count + 1;
+    sdcp(count).timeCellPercent = 50;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = 50;
+    sdcp(count).hitTrialPercentAssignment = 'fixed';
+    sdcp(count).trialOrder = 'random';
+    sdcp(count).eventWidth = {value, 'stddev'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'random';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = 0;
+    sdcp(count).imprecisionType = 'none';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Event Width (percentile): %i (with stddev); Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Uniform Imprecisions
+for value = 1:2:20
+    count = count + 1;
+    sdcp(count).timeCellPercent = 50;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = 50;
+    sdcp(count).hitTrialPercentAssignment = 'fixed';
+    sdcp(count).trialOrder = 'random';
+    sdcp(count).eventWidth = {100, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'random';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = value;
+    sdcp(count).imprecisionType = 'uniform';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Uniform ImprecisionFWHM: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Normal Imprecisions
+for value = 1:2:20
+    count = count + 1;
+    sdcp(count).timeCellPercent = 50;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = 50;
+    sdcp(count).hitTrialPercentAssignment = 'fixed';
+    sdcp(count).trialOrder = 'random';
+    sdcp(count).eventWidth = {100, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'random';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = value;
+    sdcp(count).imprecisionType = 'normal';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = 0;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Normal ImprecisionFWHM: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
+
+%Noise (only Gaussian type)
+for value = 10:10:100
+    count = count + 1;
+    sdcp(count).timeCellPercent = 50;
+    sdcp(count).cellOrder = 'basic';
+    sdcp(count).maxHitTrialPercent = 50;
+    sdcp(count).hitTrialPercentAssignment = 'fixed';
+    sdcp(count).trialOrder = 'random';
+    sdcp(count).eventWidth = {100, 'same'};
+    sdcp(count).eventAmplificationFactor = 1;
+    sdcp(count).eventTiming = 'random';
+    sdcp(count).startFrame = 75;
+    sdcp(count).endFrame = 150;
+    sdcp(count).imprecisionFWHM = 0;
+    sdcp(count).imprecisionType = 'none';
+    sdcp(count).noise = 'gaussian';
+    sdcp(count).noisePercent = value;
+    sdcp(count).randomseed = 'default';
+    sdcp(count).comment = sprintf('%i | Noise Percent: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+    rng(sdcp(count).randomseed)
+end
