@@ -111,14 +111,7 @@ for cell = 1:nCells
                 
                 [eventMax(cell, trial), I] = max(event);
                 %Prune trial lengths, if necessary
-                try
-                    tailClip = (frameIndex(cell, trial) + pad(cell, trial)) + length(event) - 1 - nFrames;
-                catch
-                    disp('Unable to clip tail')
-                    sprintf('Frame Index: %i\n', frameIndex(cell, trial))
-                    sprintf('Pad: %d\n', pad)
-                    sprintf('Event Length: %i\n', length(event))
-                end
+                tailClip = (frameIndex(cell, trial) + pad(cell, trial)) + length(event) - 1 - nFrames;
                 
                 if tailClip > 0
                     %fprintf('tail-clip: %i\n', tailClip)
@@ -126,8 +119,15 @@ for cell = 1:nCells
                     %event before insertion (by replacement)
                     syntheticDATA(cell, trial, ((frameIndex(cell, trial) + pad(cell, trial)) - I :((frameIndex(cell, trial) + (pad(cell, trial)) - I + length(event)) - 1 - tailClip))) = event(1:(length(event) - tailClip)) * control.eventAmplificationFactor;
                 else
-                    %directly insert the event (by replacement)
-                    syntheticDATA(cell, trial, ((frameIndex(cell, trial)+ pad(cell, trial)) - I :(frameIndex(cell, trial) + (pad(cell, trial)) - I + length(event) - 1))) = event * control.eventAmplificationFactor;
+                    try
+                        %directly insert the event (by replacement)
+                        syntheticDATA(cell, trial, ((frameIndex(cell, trial)+ pad(cell, trial)) - I :(frameIndex(cell, trial) + (pad(cell, trial)) - I + length(event) - 1))) = event * control.eventAmplificationFactor;
+                    catch
+                        disp('Unable to directly insert event')
+                        sprintf('Frame Index: %i\n', frameIndex(cell, trial))
+                        sprintf('Pad: %d\n', pad)
+                        sprintf('Event Length: %i\n', length(event))
+                    end
                 end
                 %fprintf('syntheticDATA trial length: %i\n', length(syntheticDATA(cell, trial, :)))
                 %fprintf('Event added to cell:%i, trial:%i at frame:%i\n', cell, trial, (frameIndex(cell, trial)+ pad (cell, trial)))
