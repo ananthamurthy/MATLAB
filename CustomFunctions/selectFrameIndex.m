@@ -18,8 +18,10 @@ if strcmpi(imprecisionType, 'uniform')
 elseif strcmpi(imprecisionType, 'normal')
     stddev = imprecisionFWHM/(2*sqrt(2*log(2))); %NOTE: In MATLAB, log() performs a natural log
     pad = round(normrnd(0, stddev)); %Setting mean = 0
-    if pad < 1
-        pad = 0; %assert
+    if pad < 0 & pad > -1
+        pad = -1;
+    elseif pad > 0 & pad < 1
+        pad = 1;
     end
 elseif strcmpi(imprecisionType, 'none')
     pad = 0; %No imprecision

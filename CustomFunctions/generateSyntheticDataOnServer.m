@@ -10,7 +10,7 @@ tic
 close all
 
 HOME_DIR = '/home/bhalla/ananthamurthy/';
-%HOME_DIR = '/Users/ananth/Documents/';
+HOME_DIR = '/Users/ananth/Documents/';
 addpath(genpath(strcat(HOME_DIR, 'MATLAB/CustomFunctions'))) % my custom functions
 addpath(genpath(strcat(HOME_DIR,'MATLAB/ImagingAnalysis'))) % Additional functions
 addpath(genpath(strcat(HOME_DIR, 'MATLAB/ImagingAnalysis/Suite2P-ananth')))
@@ -30,7 +30,7 @@ fprintf('Reference Dataset - %s_%i_%i | Date: %s\n', db.mouseName, ...
     db.date)
 
 saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
-%saveDirec = strcat('/Users/ananth/Desktop/', 'Work/Analysis/Imaging/');
+saveDirec = strcat('/Users/ananth/Desktop/', 'Work/Analysis/Imaging/');
 saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
 
 %% Load processed dF/F data for dataset
