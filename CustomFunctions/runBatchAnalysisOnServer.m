@@ -35,6 +35,13 @@ if ops0.loadSyntheticData
     nDatasets = length(sdcp);
 end
 
+%%Add 5 newline characters
+newline
+newline
+newline
+newline
+newline
+
 %% Preallocation
 if runA
     disp('Plan: Implementing Method A')
