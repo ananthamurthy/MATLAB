@@ -32,7 +32,7 @@ saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
 saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
 
 %% Load processed dF/F data for dataset
-realProcessedData = load([saveFolder db.mouseName '_' db.date '.mat']);
+realProcessedData = load(strcat(saveFolder db.mouseName '_' db.date '.mat'));
 nCells = size(realProcessedData.dfbf, 1);
 nTrials = size(realProcessedData.dfbf, 2);
 nFrames = size(realProcessedData.dfbf, 3);
@@ -45,9 +45,9 @@ nDatasets = length(sdcp);
 %% Organize Library of Calcium Events
 %Cell specific curation of the calcium event library
 %Check to see if the library exits
-if isfile([saveFolder db.mouseName '_' db.date '_eventLibrary_2D.mat'])
+if isfile(strcat(saveFolder, db.mouseName, '_', db.date, '_eventLibrary_2D.mat'))
     disp('Loading existing event library ...')
-    load([saveFolder db.mouseName '_' db.date '_eventLibrary_2D.mat'])
+    load(strcat(saveFolder, db.mouseName, '_', db.date, '_eventLibrary_2D.mat'))
     disp('... done!')
 else
     %Use real 2D data
@@ -81,7 +81,7 @@ else
         clear StartIndices
         clear Lengths
     end
-    save([saveFolder db.mouseName '_' db.date '_eventLibrary_2D.mat'], 'eventLibrary_2D')
+    save(strcat(saveFolder, db.mouseName, '_', db.date, '_eventLibrary_2D.mat'), 'eventLibrary_2D')
     disp('... library curated and saved!')
 end
 
