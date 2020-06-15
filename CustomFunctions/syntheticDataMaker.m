@@ -120,6 +120,11 @@ for cell = 1:nCells
                     syntheticDATA(cell, trial, ((frameIndex(cell, trial) + pad(cell, trial)) - I :((frameIndex(cell, trial) + (pad(cell, trial)) - I + length(event)) - 1 - tailClip))) = event(1:(length(event) - tailClip)) * control.eventAmplificationFactor;
                 else
                     if isinteger(pad(cell, trial))
+                        if pad(cell, trial) < 0 & pad(cell, trial) > -1
+                            pad(cell, trial) = 0;
+                        elseif pad(cell, trial) > 0 & pad(cell, trial) <1
+                            pad(cell, trial) = 0;
+                        end 
                     elseif pad == 0
                     else
                         error('Pad: %d', pad(cell, trial))
