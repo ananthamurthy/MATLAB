@@ -4,16 +4,16 @@
 % Currently uses one session of real data, but can analyze synthetic
 % datasets in batch.
 
-function analyzeSyntheticDataInBatch(sdcpStart, sdcpEnd, runA, runB, runC, runD, runE)
+function runBatchAnalysisOnServer(sdcpStart, sdcpEnd, runA, runB, runC, runD, runE)
 
 tic
 close all
 
-%% Addpaths
-addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions')) % my custom functions
-addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis')) % Additional functions
-addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth'))
-addpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies')
+HOME_DIR = "/home/bhalla/ananthamurthy/";
+addpath(genpath([HOME_DIR 'MATLAB/CustomFunctions'])) % my custom functions
+addpath(genpath([HOME_DIR 'MATLAB/ImagingAnalysis'])) % Additional functions
+addpath(genpath([HOME_DIR 'MATLAB/ImagingAnalysis/Suite2P-ananth']))
+addpath([HOME_DIR 'MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies'])
 
 %% Dataset
 make_db %Currently only for one session at a time
@@ -22,7 +22,7 @@ fprintf('Analyzing %s_%i_%i - Date: %s\n', db.mouseName, ...
     db.session, ...
     db.date)
 
-saveDirec = '/Users/ananth/Desktop/Work/Analysis/Imaging/';
+saveDirec = [HOME_DIR 'Work/Analysis/Imaging/'];
 saveFolder = [saveDirec db.mouseName '/' db.date '/'];
 
 ops0.saveData                  = 1;

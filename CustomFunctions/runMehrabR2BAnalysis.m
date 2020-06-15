@@ -108,7 +108,7 @@ for cell_noi = 1:length(cell_list)
     end
     rrb_ratio_vec_final(1, cell_noi) = nanmean(rrb_ratio_vec);
     
-    if (mod(cell_noi, 10) == 0) && cell_noi ~= size(dff_data_mat,1)
+    if (mod(cell_noi, 50) == 0) && cell_noi ~= size(dff_data_mat,1)
         fprintf('... %i cells examined ...\n', cell_noi)
     end
     

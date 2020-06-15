@@ -49,7 +49,7 @@ Zrend(size(Z, 1), :) = [];
 Ccap = (1/(2*(size(Z, 1)-1))) * ((Zrend'*Zr1) + (Zr1'*Zrend));
 
 %Finally, we perform the PCA on this new covariance matrix
-[coeff, latent, explained] = pcacov(Ccap);
+[coeff, ~, explained] = pcacov(Ccap);
 
 score = Z * coeff;
 
@@ -112,7 +112,6 @@ seqAnalysisOutput.d1 = dx ./ dt;
 
 seqAnalysisOutput.dx = dx;
 seqAnalysisOutput.dt = dt;
-
 
 [ETH, ~, ~] = getETH(DATA, seqAnalysisInput.delta, seqAnalysisInput.skipFrames);
 

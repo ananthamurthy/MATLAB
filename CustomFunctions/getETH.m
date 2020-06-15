@@ -44,7 +44,7 @@ for cell = 1:size(DATA,1)
     end
     ETH = squeeze(sum(trialAUCs,2));
     
-    if (mod(cell, 10) == 0) && cell ~= size(DATA,1)
+    if (mod(cell, 50) == 0) && cell ~= size(DATA,1)
         fprintf('... %i cells analysed ...\n', cell)
     end
     
