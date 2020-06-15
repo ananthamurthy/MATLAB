@@ -9,7 +9,7 @@ function runBatchAnalysisOnServer(sdcpStart, sdcpEnd, runA, runB, runC, runD, ru
 tic
 close all
 
-HOME_DIR = "/home/bhalla/ananthamurthy/";
+HOME_DIR = '/home/bhalla/ananthamurthy/';
 addpath(genpath([HOME_DIR 'MATLAB/CustomFunctions'])) % my custom functions
 addpath(genpath([HOME_DIR 'MATLAB/ImagingAnalysis'])) % Additional functions
 addpath(genpath([HOME_DIR 'MATLAB/ImagingAnalysis/Suite2P-ananth']))
