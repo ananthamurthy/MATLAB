@@ -120,11 +120,16 @@ for cell = 1:nCells
                     syntheticDATA(cell, trial, ((frameIndex(cell, trial) + pad(cell, trial)) - I :((frameIndex(cell, trial) + (pad(cell, trial)) - I + length(event)) - 1 - tailClip))) = event(1:(length(event) - tailClip)) * control.eventAmplificationFactor;
                 else
                     if isinteger(pad(cell, trial))
+                    elseif pad == 0
                     else
                         error('Pad: %d', pad(cell, trial))
                     end
-                    %directly insert the event (by replacement)
-                    syntheticDATA(cell, trial, ((frameIndex(cell, trial)+ pad(cell, trial)) - I :(frameIndex(cell, trial) + (pad(cell, trial)) - I + length(event) - 1))) = event * control.eventAmplificationFactor;
+                    try
+                        %directly insert the event (by replacement)
+                        syntheticDATA(cell, trial, ((frameIndex(cell, trial)+ pad(cell, trial)) - I :(frameIndex(cell, trial) + (pad(cell, trial)) - I + length(event) - 1))) = event * control.eventAmplificationFactor;
+                    catch
+                        error('Cannot insert event as Pad: %d', pad(cell, trial))
+                    end
                 end
                 %fprintf('syntheticDATA trial length: %i\n', length(syntheticDATA(cell, trial, :)))
                 %fprintf('Event added to cell:%i, trial:%i at frame:%i\n', cell, trial, (frameIndex(cell, trial)+ pad (cell, trial)))
