@@ -119,15 +119,12 @@ for cell = 1:nCells
                     %event before insertion (by replacement)
                     syntheticDATA(cell, trial, ((frameIndex(cell, trial) + pad(cell, trial)) - I :((frameIndex(cell, trial) + (pad(cell, trial)) - I + length(event)) - 1 - tailClip))) = event(1:(length(event) - tailClip)) * control.eventAmplificationFactor;
                 else
-                    try
-                        %directly insert the event (by replacement)
-                        syntheticDATA(cell, trial, ((frameIndex(cell, trial)+ pad(cell, trial)) - I :(frameIndex(cell, trial) + (pad(cell, trial)) - I + length(event) - 1))) = event * control.eventAmplificationFactor;
-                    catch
-                        disp('Unable to directly insert event')
-                        sprintf('Frame Index: %i\n', frameIndex(cell, trial))
-                        sprintf('Pad: %d\n', pad)
-                        sprintf('Event Length: %i\n', length(event))
+                    if isinteger(pad(cell, trial))
+                    else
+                        error('Pad: %d', pad(cell, trial))
                     end
+                    %directly insert the event (by replacement)
+                    syntheticDATA(cell, trial, ((frameIndex(cell, trial)+ pad(cell, trial)) - I :(frameIndex(cell, trial) + (pad(cell, trial)) - I + length(event) - 1))) = event * control.eventAmplificationFactor;
                 end
                 %fprintf('syntheticDATA trial length: %i\n', length(syntheticDATA(cell, trial, :)))
                 %fprintf('Event added to cell:%i, trial:%i at frame:%i\n', cell, trial, (frameIndex(cell, trial)+ pad (cell, trial)))
