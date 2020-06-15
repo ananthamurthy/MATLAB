@@ -111,7 +111,14 @@ for cell = 1:nCells
                 
                 [eventMax(cell, trial), I] = max(event);
                 %Prune trial lengths, if necessary
-                tailClip = (frameIndex(cell, trial) + pad(cell, trial)) + length(event) - 1 - nFrames;
+                try
+                    tailClip = (frameIndex(cell, trial) + pad(cell, trial)) + length(event) - 1 - nFrames;
+                catch
+                    disp('Unable to clip tail')
+                    sprintf('Frame Index: %i\n', frameIndex(cell, trial))
+                    sprintf('Pad: %d\n', pad)
+                    sprintf('Event Length: %i\n', length(event))
+                end
                 
                 if tailClip > 0
                     %fprintf('tail-clip: %i\n', tailClip)
