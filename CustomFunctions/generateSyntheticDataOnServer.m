@@ -32,7 +32,7 @@ saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
 saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
 
 %% Load processed dF/F data for dataset
-realProcessedData = load(strcat(saveFolder db.mouseName '_' db.date '.mat'));
+realProcessedData = load(strcat(saveFolder, db.mouseName, '_', db.date, '.mat'));
 nCells = size(realProcessedData.dfbf, 1);
 nTrials = size(realProcessedData.dfbf, 2);
 nFrames = size(realProcessedData.dfbf, 3);
