@@ -41,7 +41,7 @@ nFrames = size(realProcessedData.dfbf, 3);
 fprintf('Total cells: %i\n', nCells)
 
 %% Load synthetic dataset control parameters
-setupSyntheticDataParameters_batch %Loads all options
+setupSyntheticDataParametersOnServer %Loads all options
 nDatasets = length(sdcp);
 
 %% Organize Library of Calcium Events

@@ -9,11 +9,18 @@ function runBatchAnalysisOnServer(sdcpStart, sdcpEnd, runA, runB, runC, runD, ru
 tic
 close all
 
-HOME_DIR = '/home/bhalla/ananthamurthy/';
+%HOME_DIR = '/home/bhalla/ananthamurthy/';
+HOME_DIR = '/Users/ananth/Documents/';
 addpath(genpath(strcat(HOME_DIR, 'MATLAB/CustomFunctions'))) % my custom functions
 addpath(genpath(strcat(HOME_DIR,'MATLAB/ImagingAnalysis'))) % Additional functions
 addpath(genpath(strcat(HOME_DIR, 'MATLAB/ImagingAnalysis/Suite2P-ananth')))
 addpath(strcat(HOME_DIR, 'MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies'))
+
+% Print 6 lines of space - Prevents any messages from being missed
+for space = 1:6
+    fprintf(1, '\n');
+end
+clear space
 
 %% Dataset
 make_db %Currently only for one session at a time
@@ -22,7 +29,8 @@ fprintf('Analyzing %s_%i_%i - Date: %s\n', db.mouseName, ...
     db.session, ...
     db.date)
 
-saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
+%saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
+saveDirec = strcat('/Users/ananth/Desktop/', 'Work/Analysis/Imaging/');
 saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
 
 ops0.saveData                  = 1;
@@ -31,16 +39,9 @@ ops0.loadSyntheticData         = 1;
 ops0.doSigOnly                 = 0;
 
 if ops0.loadSyntheticData
-    setupSyntheticDataParameters_batch %Loads all options, not just [sdcpStart, sdcpEnd]
+    setupSyntheticDataParametersOnServer %Loads all options, not just [sdcpStart, sdcpEnd]
     nDatasets = length(sdcp);
 end
-
-%%Add 5 newline characters
-newline
-newline
-newline
-newline
-newline
 
 %% Preallocation
 if runA
