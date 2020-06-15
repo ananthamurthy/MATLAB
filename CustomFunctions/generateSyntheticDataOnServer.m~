@@ -10,9 +10,9 @@ tic
 close all
 
 HOME_DIR = "/home/bhalla/ananthamurthy/";
-addpath(genpath(strcat(HOME_DIR, 'MATLAB/CustomFunctions'))) % my custom functions
-addpath(genpath(strcat(HOME_DIR,'MATLAB/ImagingAnalysis'))) % Additional functions
-addpath(genpath(strcat(HOME_DIR, 'MATLAB/ImagingAnalysis/Suite2P-ananth')))
+addpath(genpath([HOME_DIR 'MATLAB/CustomFunctions'])) % my custom functions
+addpath(genpath([HOME_DIR 'MATLAB/ImagingAnalysis'])) % Additional functions
+addpath(genpath([HOME_DIR 'MATLAB/ImagingAnalysis/Suite2P-ananth']))
 
 %ops0.fig             = 1;
 ops0.saveData        = 1;
@@ -142,11 +142,12 @@ end
 %% Save Everything
 if ops0.saveData == 1
     save(strcat(saveFolder, ...
-        'synthDATA_batch_', ...
+        'synthDATA' ...
+        '_batch_', ...
         num2str(nDatasets), ...
         '.mat'), ...
         'sdcp', 'sdo_batch', ...
-        '-v7.3')
+        '-v7.3');
 end
 
 toc

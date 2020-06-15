@@ -10,10 +10,10 @@ tic
 close all
 
 HOME_DIR = '/home/bhalla/ananthamurthy/';
-addpath(genpath([HOME_DIR 'MATLAB/CustomFunctions'])) % my custom functions
-addpath(genpath([HOME_DIR 'MATLAB/ImagingAnalysis'])) % Additional functions
-addpath(genpath([HOME_DIR 'MATLAB/ImagingAnalysis/Suite2P-ananth']))
-addpath([HOME_DIR 'MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies'])
+addpath(genpath(strcat(HOME_DIR, 'MATLAB/CustomFunctions'))) % my custom functions
+addpath(genpath(strcat(HOME_DIR,'MATLAB/ImagingAnalysis'))) % Additional functions
+addpath(genpath(strcat(HOME_DIR, 'MATLAB/ImagingAnalysis/Suite2P-ananth')))
+addpath(strcat(HOME_DIR, 'MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies'))
 
 %% Dataset
 make_db %Currently only for one session at a time
@@ -22,8 +22,8 @@ fprintf('Analyzing %s_%i_%i - Date: %s\n', db.mouseName, ...
     db.session, ...
     db.date)
 
-saveDirec = [HOME_DIR 'Work/Analysis/Imaging/'];
-saveFolder = [saveDirec db.mouseName '/' db.date '/'];
+saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
+saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
 
 ops0.saveData                  = 1;
 ops0.onlyProbeTrials           = 0;
