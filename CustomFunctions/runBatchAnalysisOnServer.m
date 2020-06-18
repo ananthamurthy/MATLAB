@@ -16,7 +16,7 @@ addpath(genpath(strcat(HOME_DIR,'MATLAB/ImagingAnalysis'))) % Additional functio
 addpath(genpath(strcat(HOME_DIR, 'MATLAB/ImagingAnalysis/Suite2P-ananth')))
 addpath(strcat(HOME_DIR, 'MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies'))
 
-% Print 6 lines of space - Prevents any messages from being missed
+% Print 6 lines of whitespace - Prevents any messages from being missed
 for space = 1:6
     fprintf(1, '\n');
 end
