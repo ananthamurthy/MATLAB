@@ -21,6 +21,9 @@ ops0.saveData        = 1;
 %figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %ops0.onlyProbeTrials = 0
 
+diary (strcat(HOME_DIR, '/logs/dataGenDiary'))
+diary on
+
 %% Load real dataset details
 make_db %Currently only for one session at a time
 
@@ -49,7 +52,8 @@ nDatasets = length(sdcp);
 %Check to see if the library exits
 if isfile(strcat(saveFolder, db.mouseName, '_', db.date, '_eventLibrary_2D.mat'))
     disp('Loading existing event library ...')
-    load(strcat(saveFolder, db.mouseName, '_', db.date, '_eventLibrary_2D.mat'))
+    filepath = strcat(saveFolder, db.mouseName, '_', db.date, '_eventLibrary_2D.mat');
+    load(filepath)
     disp('... done!')
 else
     %Use real 2D data
@@ -150,6 +154,7 @@ if ops0.saveData == 1
         'sdcp', 'sdo_batch', ...
         '-v7.3')
 end
-
-toc
+elapsedTime = toc;
 disp('All done!')
+disp(elapsedTime)
+diary off

@@ -22,6 +22,8 @@ for space = 1:6
 end
 clear space
 
+diary (strcat(HOME_DIR, '/logs/analysisDiary'))
+diary on
 %% Dataset
 make_db %Currently only for one session at a time
 fprintf('Analyzing %s_%i_%i - Date: %s\n', db.mouseName, ...
@@ -289,5 +291,7 @@ if ops0.saveData
         end
     end
 end
-elaspsedTime = toc;
+elapsedTime = toc;
+disp(elapsedTime)
+diary off
 end
