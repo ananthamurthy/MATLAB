@@ -24,6 +24,7 @@ for space = 1:6
 end
 clear space
 
+fprintf("Job: Analyzing datasets %i-%i by Method(s) %\n", sdcpStart, sdcpEnd)
 diary (strcat(HOME_DIR, '/logs/analysisDiary'))
 diary on
 %% Dataset
@@ -279,7 +280,7 @@ if ops0.saveData
         end
     end
 end
-toc
-disp('All done!')
+elapsedTime = toc;
+disp(elapsedTime)
 diary off
 end
