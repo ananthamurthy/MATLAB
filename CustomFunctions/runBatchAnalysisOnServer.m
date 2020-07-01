@@ -280,6 +280,6 @@ if ops0.saveData
     end
 end
 toc
-disp('All done!')
+fprintf('Complete: %i to %i by %s', sdcpStart, sdcpEnd, methodList);
 diary off
 end
