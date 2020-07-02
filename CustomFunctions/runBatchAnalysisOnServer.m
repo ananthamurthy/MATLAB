@@ -24,11 +24,12 @@ for space = 1:6
 end
 clear space
 
-diary (strcat(HOME_DIR, '/logs/analysisDiary'))
-diary on
+%diary (strcat(HOME_DIR, '/logs/analysisDiary'))
+%diary on
 %% Dataset
 make_db %Currently only for one session at a time
-fprintf('Analyzing %s_%i_%i - Date: %s\n', db.mouseName, ...
+fprintf('Analyzing %s_%i_%i - Date: %s\n', ...
+    db.mouseName, ...
     db.sessionType, ...
     db.session, ...
     db.date)
@@ -281,5 +282,5 @@ if ops0.saveData
 end
 toc
 fprintf('Complete: %i to %i by %s', sdcpStart, sdcpEnd, methodList);
-diary off
+%diary off
 end
