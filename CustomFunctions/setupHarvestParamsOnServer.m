@@ -1,11 +1,3 @@
-HOME_DIR = '/home/bhalla/ananthamurthy/';
-ANALYSIS_DIR = '/home/bhalla/ananthamurthy/Work/Analysis/';
-addpath(strcat(HOME_DIR, 'MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies'))
-addpath(genpath(strcat(HOME_DIR, 'MATLAB/CustomFunctions'))) % my custom functions
-make_db
-%saveDirec = strcat(ANALYSIS_DIR, 'Imaging/');
-saveFolder = strcat(ANALYSIS_DIR, 'Imaging/', db.mouseName, '/', db.date, '/');
-
 %% SETUP HARVEST PARAMETERS - Method A
 job = 0;
 %1

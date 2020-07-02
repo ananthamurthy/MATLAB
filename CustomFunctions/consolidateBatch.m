@@ -5,13 +5,19 @@
 
 function consolidateBatch(date)
 
-setupHarvestParamsOnServer
-saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
-%saveDirec = strcat('/Users/ananth/Desktop/', 'Work/Analysis/Imaging/');
-saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
+HOME_DIR = '/home/bhalla/ananthamurthy/';
+ANALYSIS_DIR = '/home/bhalla/ananthamurthy/Work/Analysis/';
+addpath(strcat(HOME_DIR, 'MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies'))
+addpath(genpath(strcat(HOME_DIR, 'MATLAB/CustomFunctions'))) % my custom functions
 
+make_db
+
+saveFolder = strcat(ANALYSIS_DIR, 'Imaging/', db.mouseName, '/', db.date, '/');
+
+setupHarvestParamsOnServer
 
 for job = 1:length(params)
+    fprintf('Currently parsing output from job: %i\n', job)
     cData = harvestAnalyzedData(db, params(exp));
 end
 
