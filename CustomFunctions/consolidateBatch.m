@@ -10,14 +10,18 @@ ANALYSIS_DIR = '/home/bhalla/ananthamurthy/Work/Analysis/';
 addpath(strcat(HOME_DIR, 'MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies'))
 addpath(genpath(strcat(HOME_DIR, 'MATLAB/CustomFunctions'))) % my custom functions
 
+disp('Loading main dataset details ...')
 make_db
+disp('... done!')
 
 saveFolder = strcat(ANALYSIS_DIR, 'Imaging/', db.mouseName, '/', db.date, '/');
 
+disp('Setting up parameters for harvest ...')
 setupHarvestParamsOnServer
+disp('... done!')
 
 for job = 1:length(params)
-    fprintf('Currently parsing output from job: %i\n', job)
+    fprintf('Parsing output from job: %i\n', job)
     cData = harvestAnalyzedData(db, params(exp));
 end
 
