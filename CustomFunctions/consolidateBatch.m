@@ -21,7 +21,7 @@ setupHarvestParamsOnServer
 disp('... done!')
 
 for job = 1:length(params)
-    fprintf('Parsing output from job: %i\n', job)
+    %fprintf('Parsing output from job: %i\n', job)
     cData = harvestAnalyzedData(db, params(job)); %Exclusively
 end
 
