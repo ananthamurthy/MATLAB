@@ -14,7 +14,7 @@ disp('Loading main dataset details ...')
 make_db
 disp('... done!')
 
-saveFolder = strcat(ANALYSIS_DIR, 'Imaging/', db.mouseName, '/', db.date, '/');
+saveFolder = strcat(ANALYSIS_DIR, '/Imaging/', db.mouseName, '/', db.date, '/');
 
 disp('Setting up parameters for harvest ...')
 setupHarvestParamsOnServer
