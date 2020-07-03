@@ -87,4 +87,4 @@ job = job + 1;
 params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseName, db.date);
 params(job).methodList = "E";
 params(job).sdcpStart = 1;
-params(job).sdcpEnd = 50;
+params(job).sdcpEnd = 220;
