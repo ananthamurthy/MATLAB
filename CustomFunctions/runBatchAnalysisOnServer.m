@@ -173,7 +173,7 @@ for runi = sdcpStart: 1: sdcpEnd
         mBInput.delta = 3;
         mBInput.whichTrials = 'alternate';
         mBInput.labelShuffle = 'off';
-        mBInput.distribution4Bayes = 'mvmn';
+        mBInput.distribution4Bayes = 'mn';
         [mBOutput] = runWilliamTIAnalysis(DATA, mBInput);
         mBOutput.normQ = (mBOutput.Q)/max(mBOutput.Q);
         mBOutput_batch(runi) = mBOutput;
@@ -240,43 +240,43 @@ if ops0.saveData
     
     if ops0.loadSyntheticData
         if runA
-            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_methodA_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mAInput', 'mAOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_batch_methodA_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mAInput', 'mAOutput_batch', '-v7.3')
         end
         
         if runB
-            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_methodB_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mBInput', 'mBOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_batch_methodB_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mBInput', 'mBOutput_batch', '-v7.3')
         end
         
         if runC
-            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_methodC_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mCInput', 'mCOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_batch_methodC_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mCInput', 'mCOutput_batch', '-v7.3')
         end
         
         if runD
-            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_methodD_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mDInput', 'mDOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_batch_methodD_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mDInput', 'mDOutput_batch', '-v7.3')
         end
         
         if runE
-            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_methodE_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_batch_methodE_batch' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
         end
     else %Real Physiology Data
         if runA
-            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_methodA_batch.mat' ], 'mAInput', 'mAOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_batch_methodA.mat' ], 'mAInput', 'mAOutput_batch', '-v7.3')
         end
         
         if runB
-            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_methodB_batch.mat' ], 'mBInput', 'mBOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_batch_methodB.mat' ], 'mBInput', 'mBOutput_batch', '-v7.3')
         end
         
         if runC
-            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_methodC_batch.mat' ], 'mCInput', 'mCOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_batch_methodC.mat' ], 'mCInput', 'mCOutput_batch', '-v7.3')
         end
         
         if runD
-            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_methodD_batch.mat' ], 'mDInput', 'mDOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_batch_methodD.mat' ], 'mDInput', 'mDOutput_batch', '-v7.3')
         end
         
         if runE
-            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_methodE_batch.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_batch_methodE.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
         end
     end
 end
