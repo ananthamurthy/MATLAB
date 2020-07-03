@@ -5,10 +5,10 @@
 
 function consolidateBatch(date)
 
-HOME_DIR = '/home/bhalla/ananthamurthy/';
-ANALYSIS_DIR = '/home/bhalla/ananthamurthy/Work/Analysis/';
-addpath(strcat(HOME_DIR, 'MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies'))
-addpath(genpath(strcat(HOME_DIR, 'MATLAB/CustomFunctions'))) % my custom functions
+HOME_DIR = '/home/bhalla/ananthamurthy';
+ANALYSIS_DIR = '/home/bhalla/ananthamurthy/Work/Analysis';
+addpath(strcat(HOME_DIR, '/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies'))
+addpath(genpath(strcat(HOME_DIR, '/MATLAB/CustomFunctions'))) % my custom functions
 
 disp('Loading main dataset details ...')
 make_db
