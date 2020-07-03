@@ -15,6 +15,6 @@ else
         varName = strcat('m', methods(choice, 1), 'Output_batch'); %string
     end
 end
-
+fprintf('Harvesting %s ...\n', direc)
 cData(params(job).sdcpStart:params(job).sdcpEnd) = load(direc, varName);
 end
