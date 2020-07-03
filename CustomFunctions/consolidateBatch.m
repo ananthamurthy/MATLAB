@@ -22,7 +22,7 @@ disp('... done!')
 
 for job = 1:length(params)
     fprintf('Parsing output from job: %i\n', job)
-    cData = harvestAnalyzedData(db, params(exp));
+    cData = harvestAnalyzedData(db, params(job)); %Exclusively
 end
 
 save([saveFolder db.mouseName '_' db.date '_batch' num2str(date) '_cData.mat' ], 'cData', '-v7.3')
