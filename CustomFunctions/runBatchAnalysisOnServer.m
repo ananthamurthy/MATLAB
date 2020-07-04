@@ -58,7 +58,7 @@ mAOutput_batch = repmat(s, 1, nDatasets);
 clear s
 
 %Method B
-s.Mdl = [];
+%s.Mdl = [];
 s.Yfit = [];
 s.Q = [];
 s.trainingTrials = [];
@@ -173,7 +173,7 @@ for runi = sdcpStart: 1: sdcpEnd
         mBInput.delta = 3;
         mBInput.whichTrials = 'alternate';
         mBInput.labelShuffle = 'off';
-        mBInput.distribution4Bayes = 'mn';
+        mBInput.distribution4Bayes = 'mvmn';
         [mBOutput] = runWilliamTIAnalysis(DATA, mBInput);
         mBOutput.normQ = (mBOutput.Q)/max(mBOutput.Q);
         mBOutput_batch(runi) = mBOutput;

@@ -24,12 +24,15 @@ mustBeNonnegative(Y)
 
 %Generate the model
 %Mdl = fitcnb(X, Y, 'distributionnames','mn', 'ClassNames', Y);
-williamOutput.Mdl = fitcnb(X, Y, ...
+% williamOutput.Mdl = fitcnb(X, Y, ...
+%     'distributionnames', williamInput.distribution4Bayes, ...
+%     'ClassNames', Y);
+Mdl = fitcnb(X, Y, ...
     'distributionnames', williamInput.distribution4Bayes, ...
     'ClassNames', Y);
 
 %Test model
-williamOutput.Yfit = predict(williamOutput.Mdl, X0);
+williamOutput.Yfit = predict(Mdl, X0);
 
 %williamOutput.Isec = Isec;
 williamOutput.Q = Ispk;
