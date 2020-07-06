@@ -1,1 +1,7 @@
 .DS_Store
+./CustomFunctions/setupHarvestParams.m
+./CustomFunctions/setupHarvestParamsOnServer.m
+./CustomFunctions/setupSyntheticDataParameters.m
+./CustomFunctions/setupSyntheticDataParametersOnServer.m
+./CustomFunctions/setupSyntheticDataParameters_batch.m
+./CustomFucntions/setupSDP_Extras.m
