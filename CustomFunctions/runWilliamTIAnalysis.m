@@ -9,7 +9,7 @@ Isec = nan(nCells,1);
 Ispk = nan(nCells,1);
 Itime = nan(nCells,size(DATA,3),1);
 timeCells = nan(nCells, 1);
-time = nan(nCells, 1);
+%time = nan(nCells, 1);
 
 %Quality (Q) or Temporal Information
 for cell = 1:size(DATA,1)
