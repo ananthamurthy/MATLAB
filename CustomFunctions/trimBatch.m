@@ -16,7 +16,7 @@ disp('... done!')
 
 saveFolder = strcat(ANALYSIS_DIR, '/Imaging/', db.mouseName, '/', db.date, '/');
 
-disp('Setting up parameters for finding datasets ...')
+disp('Setting up parameters for trimming datasets ...')
 setupTrimParamsOnServer
 disp('... done!')
 
