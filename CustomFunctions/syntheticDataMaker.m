@@ -183,6 +183,13 @@ if ~strcmpi(control.noise, 'none')
     end
 end
 
+% %Ceil negative values to 0.
+% disp('Ceiling negative values to 0 ...')
+% syntheticDATA(syntheticDATA<0) = 0;
+% disp('... done!')
+
+mustBeNonnegative(syntheticDATA)
+
 %2D Synthetic Data
 for cell = 1:nCells
     syntheticDATA_2D(cell, :) = reshape(squeeze(syntheticDATA(cell, :, :))', 1, []);

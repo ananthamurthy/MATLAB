@@ -1,4 +1,4 @@
-%% SETUP HARVEST PARAMETERS - Method A
+%% SETUP TRIM PARAMETERS - Method A
 job = 0;
 %1
 % job = job + 1;
@@ -28,7 +28,7 @@ job = 0;
 % params(job).sdcpStart = 151;
 % params(job).sdcpEnd = 220;
 
-%% SETUP HARVEST PARAMETERS - Method B
+%% SETUP TRIM PARAMETERS - Method B
 %5
 job = job + 1;
 params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseName, db.date);
@@ -64,7 +64,7 @@ params(job).methodList = "B";
 params(job).sdcpStart = 151;
 params(job).sdcpEnd = 220;
 
-%% SETUP HARVEST PARAMETERS - Method C
+%% SETUP TRIM PARAMETERS - Method C
 % %9
 % job = job + 1;
 % params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseName, db.date);
@@ -73,7 +73,7 @@ params(job).sdcpEnd = 220;
 % params(job).sdcpEnd = 220;
 % 
 % 
-% %% SETUP HARVEST PARAMETERS - Method D
+% %% SETUP TRIM PARAMETERS - Method D
 % %10
 % job = job + 1;
 % params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseName, db.date);
@@ -81,7 +81,7 @@ params(job).sdcpEnd = 220;
 % params(job).sdcpStart = 1;
 % params(job).sdcpEnd = 220;
 
-%% SETUP HARVEST PARAMETERS - Method E
+%% SETUP TRIM PARAMETERS - Method E
 %11
 job = job + 1;
 params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseName, db.date);

@@ -64,4 +64,6 @@ end
 X = Xprime'; %Training
 X0 = X0prime'; %Testing
 
+mustBeNonnegative(X)
+
 end

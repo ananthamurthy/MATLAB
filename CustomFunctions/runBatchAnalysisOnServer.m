@@ -58,7 +58,7 @@ mAOutput_batch = repmat(s, 1, nDatasets);
 clear s
 
 %Method B
-%s.Mdl = [];
+s.Mdl = [];
 s.Yfit = [];
 s.Q = [];
 s.trainingTrials = [];
@@ -174,6 +174,13 @@ for runi = sdcpStart: 1: sdcpEnd
         mBInput.whichTrials = 'alternate';
         mBInput.labelShuffle = 'off';
         mBInput.distribution4Bayes = 'mvmn';
+        mBInput.saveModel = 0;
+        if ~mBInput.saveModel
+            for dataset = 1:nDatasets
+                mBOutput(dataset) = rmfield(mBOutput(dataset), 'Mdl');
+            end
+        end
+        
         [mBOutput] = runWilliamTIAnalysis(DATA, mBInput);
         mBOutput.normQ = (mBOutput.Q)/max(mBOutput.Q);
         mBOutput_batch(runi) = mBOutput;
@@ -227,6 +234,13 @@ for runi = sdcpStart: 1: sdcpEnd
                 mEInput.ptcList = input('Enter Time Cell List: ');
             elseif strcmpi(mEInput.whichCells, 'otherCells')
                 mEInput.ocList = input('Enter Other Cell List: ');
+            end
+        end
+        
+        mEInput.saveModel = 0;
+        if ~mEInput.saveModel
+            for dataset = 1:nDatasets
+                mEOutput(dataset) = rmfield(mEOutput(dataset), 'SVMModel');
             end
         end
         [mEOutput] = runSVMClassification(DATA, mEInput);

@@ -21,12 +21,23 @@ svmOutput.X0 = X0;
 svmOutput.Y = Y;
 
 %Train Model
-svmOutput.SVMModel = fitcsvm(X, Y, ...
-    'KernelFunction', 'linear', ...
-    'KernelScale', 'auto');
+if svmInput.saveModel
+    svmOutput.SVMModel = fitcsvm(X, Y, ...
+        'KernelFunction', 'linear', ...
+        'KernelScale', 'auto');
+else
+    SVMModel = fitcsvm(X, Y, ...
+        'KernelFunction', 'linear', ...
+        'KernelScale', 'auto');
+end
 
 %Test model
-[svmOutput.Yfit, score] = predict(svmOutput.SVMModel, X0);
+if svmInput.saveModel
+    [svmOutput.Yfit, score] = predict(svmOutput.SVMModel, X0);
+else
+    [svmOutput.Yfit, score] = predict(SVMModel, X0);
+end
+
 svmOutput.YfitDiff = svmOutput.Yfit - Yfit_actual;
 try
     svmOutput.Q = score(:, 2); %Only looking at the "positive class" scores (to classify as "time cell")

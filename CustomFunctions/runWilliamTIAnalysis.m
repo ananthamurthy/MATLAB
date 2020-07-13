@@ -18,21 +18,28 @@ end
 
 [X, X0, Y, Yfit_actual, trainingTrials, testingTrials] = createDataMatrix4Bayes(DATA, williamInput);
 
-mustBeNonnegative(X)
-mustBeNonnegative(X0)
-mustBeNonnegative(Y)
+%mustBeNonnegative(X)
+%mustBeNonnegative(X0)
+%mustBeNonnegative(Y)
 
 %Generate the model
 %Mdl = fitcnb(X, Y, 'distributionnames','mn', 'ClassNames', Y);
-% williamOutput.Mdl = fitcnb(X, Y, ...
-%     'distributionnames', williamInput.distribution4Bayes, ...
-%     'ClassNames', Y);
-Mdl = fitcnb(X, Y, ...
+if williamInput.saveModel
+    williamOutput.Mdl = fitcnb(X, Y, ...
     'distributionnames', williamInput.distribution4Bayes, ...
     'ClassNames', Y);
+else
+    Mdl = fitcnb(X, Y, ...
+        'distributionnames', williamInput.distribution4Bayes, ...
+        'ClassNames', Y);
+end
 
 %Test model
-williamOutput.Yfit = predict(Mdl, X0);
+if williamInput.saveModel
+    williamOutput.Yfit = predict(williamOutput.Mdl, X0);
+else
+    williamOutput.Yfit = predict(Mdl, X0);
+end
 
 %williamOutput.Isec = Isec;
 williamOutput.Q = Ispk;
