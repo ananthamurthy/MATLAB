@@ -21,7 +21,7 @@ holyData(params.sdcpStart:params.sdcpEnd) = load(direc, varName);
 for dataset = 1:length(holyData)
     if strcmpi(params.methodList, 'B')
         try
-            holyData = rmfield(holyData(dataset), 'Mdl');
+            holyData = rmfield(holyData(dataset).mBOutput_batch, 'Mdl');
         catch
             fprintf('Dataset: %i', dataset)
             fieldnames(holyData(dataset).mBOutput_batch)
@@ -29,10 +29,10 @@ for dataset = 1:length(holyData)
         end
     elseif strcmpi(params.methodList, 'E')
         try
-            holyData = rmfield(holyData(dataset), 'SVMModel');
+            holyData = rmfield(holyData(dataset).mEOutput_batch, 'SVMModel');
         catch
             fprintf('Dataset: %i', dataset)
-            fieldnames(holyData(dataset).mBOutput_batch)
+            fieldnames(holyData(dataset).mEOutput_batch)
             error('Field with name "SVMModel" not found')
         end
     end
