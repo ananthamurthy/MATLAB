@@ -1,7 +1,4 @@
 % AUTHOR: Kambadur Ananthamurthy
-% Here, 'date' refers to the date the batch analysis jobs were launched
-% Doubt I'll launch multiple batch analyses on the same day, but this can
-% be remedied by selecting an appropriate string instead of the date.
 
 function trimBatch
 
