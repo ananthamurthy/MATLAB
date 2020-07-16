@@ -20,8 +20,20 @@ holyData(params.sdcpStart:params.sdcpEnd) = load(direc, varName);
 
 for dataset = 1:length(holyData)
     if strcmpi(params.methodList, 'B')
-        holyData = rmfield(holyData(dataset), 'Mdl');
+        try
+            holyData = rmfield(holyData(dataset), 'Mdl');
+        catch
+            disp(dataset)
+            disp(holyData(dataset))
+            error('Field with name "Mdl" not found')
+        end
     elseif strcmpi(params.methodList, 'E')
-        holyData = rmfield(holyData(dataset), 'SVMModel');
+        try
+            holyData = rmfield(holyData(dataset), 'SVMModel');
+        catch
+            disp(dataset)
+            disp(holyData(dataset))
+            error('Field with name "SVMModel" not found')
+        end
     end
 end
