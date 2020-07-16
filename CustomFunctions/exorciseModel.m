@@ -24,7 +24,7 @@ for dataset = 1:length(holyData)
             holyData = rmfield(holyData(dataset), 'Mdl');
         catch
             fprintf('Dataset: %i', dataset)
-            fieldnames(holyData(dataset))
+            fieldnames(holyData(dataset).mBOutput_batch)
             error('Field with name "Mdl" not found')
         end
     elseif strcmpi(params.methodList, 'E')
@@ -32,7 +32,7 @@ for dataset = 1:length(holyData)
             holyData = rmfield(holyData(dataset), 'SVMModel');
         catch
             fprintf('Dataset: %i', dataset)
-            fieldnames(holyData(dataset))
+            fieldnames(holyData(dataset).mBOutput_batch)
             error('Field with name "SVMModel" not found')
         end
     end
