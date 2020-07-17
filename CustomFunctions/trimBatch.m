@@ -20,10 +20,15 @@ disp('... done!')
 for job = 1:length(params)
     fprintf('Parsing output from job: %i ...\n', job)
     holyData = exorciseModel(db, params(job));
-    if isfield(holyData.mBOutput_batch, 'Mdl')
-        error('The Exorcism has failed for job %i', job)
-    elseif isfield(holyData.mEOutput_batch, 'SVMModel')
-        error('The Exorcism has failed')
+    
+    if strcmpi(params(job).methodList, 'B')
+        if isfield(holyData.mBOutput_batch, 'Mdl')
+            error('The Exorcism has failed')
+        end
+    elseif strcmpi(params(job).methodList, 'E')
+        if isfield(holyData.mEOutput_batch, 'SVMModel')
+            error('The Exorcism has failed')
+        end
     else
         disp('Saving trimmed file ...')
         save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_method' params(job).methodList '_' num2str(params(job).sdcpStart) '-' num2str(params(job).sdcpEnd) '_trimmed.mat'], 'holyData', '-v7.3');

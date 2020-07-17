@@ -15,7 +15,7 @@ fprintf('Trimming %s ...\n', filename)
 if strcmpi(params.methodList, 'B')
     if isfield(holyData.mBOutput_batch, 'Mdl')
         try
-            holyData = rmfield(holyData.mBOutput_batch, 'Mdl');
+            holyData.mBOutput_batch = rmfield(holyData.mBOutput_batch, 'Mdl');
         catch
             fprintf('Method: %s\n', params.methodList)
             fprintf('Dataset: %i\n', dataset)
@@ -28,7 +28,7 @@ if strcmpi(params.methodList, 'B')
 elseif strcmpi(params.methodList, 'E')
     if isfield(holyData.mEOutput_batch, 'SVMModel')
         try
-            holyData = rmfield(holyData.mEOutput_batch, 'SVMModel');
+            holyData.mEOutput_batch = rmfield(holyData.mEOutput_batch, 'SVMModel');
         catch
             fprintf('Method: %s\n', params.methodList)
             fprintf('Dataset: %i\n', dataset)
