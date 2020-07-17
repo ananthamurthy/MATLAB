@@ -15,7 +15,9 @@ else
         varName = strcat('m', methods(choice, 1), 'Output_batch'); %string
     end
 end
+fprintf('Loading %s ...\n', filename)
 holyData(params.sdcpStart:params.sdcpEnd) = load(direc, varName);
+disp('... done!')
 fprintf('Trimming %s ...\n', filename)
 
 for dataset = 1:length(holyData)
@@ -24,8 +26,8 @@ for dataset = 1:length(holyData)
             try
                 holyData = rmfield(holyData(dataset).mBOutput_batch, 'Mdl');
             catch
-                fprintf('Method: %s', params.methodList)
-                fprintf('Dataset: %i', dataset)
+                fprintf('Method: %s\n', params.methodList)
+                fprintf('Dataset: %i\n', dataset)
                 fieldnames(holyData(dataset).mBOutput_batch)
                 error('Unable to delete "Mdl"')
             end
@@ -37,8 +39,8 @@ for dataset = 1:length(holyData)
             try
                 holyData = rmfield(holyData(dataset).mEOutput_batch, 'SVMModel');
             catch
-                fprintf('Method: %s', params.methodList)
-                fprintf('Dataset: %i', dataset)
+                fprintf('Method: %s\n', params.methodList)
+                fprintf('Dataset: %i\n', dataset)
                 fieldnames(holyData(dataset).mEOutput_batch)
                 error('Unable to delete "SVMModel"')
             end
@@ -47,3 +49,4 @@ for dataset = 1:length(holyData)
         end
     end
 end
+disp('... done!')
