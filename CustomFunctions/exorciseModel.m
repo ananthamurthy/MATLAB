@@ -15,8 +15,8 @@ else
         varName = strcat('m', methods(choice, 1), 'Output_batch'); %string
     end
 end
-fprintf('Trimming %s ...\n', filename)
 holyData(params.sdcpStart:params.sdcpEnd) = load(direc, varName);
+fprintf('Trimming %s ...\n', filename)
 
 for dataset = 1:length(holyData)
     if strcmpi(params.methodList, 'B')
