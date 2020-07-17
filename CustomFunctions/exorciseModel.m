@@ -8,7 +8,7 @@ filename = sprintf('%s_%s_synthDataAnalysis_method%s_batch_%i-%i.mat', ...
 direc = strcat(params.fileLocation, filename);
 
 fprintf('Loading %s ...\n', filename)
-holyData(params.sdcpStart:params.sdcpEnd) = load(direc);
+holyData = load(direc);
 disp('... done!')
 fprintf('Trimming %s ...\n', filename)
 
