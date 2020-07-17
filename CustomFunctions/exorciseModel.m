@@ -20,20 +20,30 @@ holyData(params.sdcpStart:params.sdcpEnd) = load(direc, varName);
 
 for dataset = 1:length(holyData)
     if strcmpi(params.methodList, 'B')
-        try
-            holyData = rmfield(holyData(dataset).mBOutput_batch, 'Mdl');
-        catch
-            fprintf('Dataset: %i', dataset)
-            fieldnames(holyData(dataset).mBOutput_batch)
-            error('Field with name "Mdl" not found')
+        if isfield(holyData(dataset).mBOutput_batch, 'Mdl')
+            try
+                holyData = rmfield(holyData(dataset).mBOutput_batch, 'Mdl');
+            catch
+                fprintf('Method: %s', params.methodList)
+                fprintf('Dataset: %i', dataset)
+                fieldnames(holyData(dataset).mBOutput_batch)
+                error('Unable to delete "Mdl"')
+            end
+        else
+            disp('Skipping to next dataset ...')
         end
     elseif strcmpi(params.methodList, 'E')
-        try
-            holyData = rmfield(holyData(dataset).mEOutput_batch, 'SVMModel');
-        catch
-            fprintf('Dataset: %i', dataset)
-            fieldnames(holyData(dataset).mEOutput_batch)
-            error('Field with name "SVMModel" not found')
+        if isfield(holyData(dataset).mEOutput_batch, 'SVMModel')
+            try
+                holyData = rmfield(holyData(dataset).mEOutput_batch, 'SVMModel');
+            catch
+                fprintf('Method: %s', params.methodList)
+                fprintf('Dataset: %i', dataset)
+                fieldnames(holyData(dataset).mEOutput_batch)
+                error('Unable to delete "SVMModel"')
+            end
+        else
+            disp('Skipping to next dataset ...')
         end
     end
 end
