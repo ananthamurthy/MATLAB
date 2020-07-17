@@ -7,16 +7,8 @@ filename = sprintf('%s_%s_synthDataAnalysis_method%s_batch_%i-%i.mat', ...
     params.sdcpEnd);
 direc = strcat(params.fileLocation, filename);
 
-if strlength(params.methodList) == 1
-    varName = strcat('m', params.methodList, 'Output_batch'); %string
-else
-    methods = split(params.methodList, '-');
-    for choice = 1:size(methods,1)
-        varName = strcat('m', methods(choice, 1), 'Output_batch'); %string
-    end
-end
 fprintf('Loading %s ...\n', filename)
-holyData(params.sdcpStart:params.sdcpEnd) = load(direc, varName);
+holyData(params.sdcpStart:params.sdcpEnd) = load(direc);
 disp('... done!')
 fprintf('Trimming %s ...\n', filename)
 
