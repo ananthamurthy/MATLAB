@@ -15,11 +15,11 @@ else
         varName = strcat('m', methods(choice, 1), 'Output_batch'); %string
     end
 end
-disp('Loading %s ...\n')
+fprintf('Loading %s ...\n', filename)
 holyData(params.sdcpStart:params.sdcpEnd) = load(direc, varName);
+disp('... done!')
 fprintf('Trimming %s ...\n', filename)
 
-for dataset = 1:length(holyData)
     if strcmpi(params.methodList, 'B')
         if isfield(holyData(dataset).mBOutput_batch, 'Mdl')
             try
@@ -48,3 +48,4 @@ for dataset = 1:length(holyData)
         end
     end
 end
+disp('... done!')
