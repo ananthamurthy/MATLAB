@@ -22,7 +22,19 @@ disp('... done!')
 
 for job = 1:length(params)
     %fprintf('Parsing output from job: %i\n', job)
-    cData = harvestAnalyzedData(db, params(job)); %Exclusively
+    if strcmpi(params(job).methodList, 'A')
+        cData.methodA = harvestAnalyzedData(db, params(job));
+    elseif strcmpi(params(job).methodList, 'B')
+        cData.methodB = harvestAnalyzedData(db, params(job));
+    elseif strcmpi(params(job).methodList, 'C')
+        cData.methodC = harvestAnalyzedData(db, params(job));
+    elseif strcmpi(params(job).methodList, 'D')
+        cData.methodD = harvestAnalyzedData(db, params(job));
+    elseif strcmpi(params(job).methodList, 'E')
+        cData.methodE = harvestAnalyzedData(db, params(job));
+    else
+    end
+        
 end
 
 save([saveFolder db.mouseName '_' db.date '_batch' num2str(date) '_cData.mat' ], 'cData', '-v7.3')
