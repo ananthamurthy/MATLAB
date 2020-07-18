@@ -44,5 +44,5 @@ for job = 1:length(params)
         
 end
 
-save([saveFolder db.mouseName '_' db.date '_batch' num2str(date) '_cData.mat' ], 'cData', '-v7.3')
+save([saveFolder db.mouseName '_' db.date '_batch' num2str(date) '_cData2.mat' ], 'cData', '-v7.3')
 end
