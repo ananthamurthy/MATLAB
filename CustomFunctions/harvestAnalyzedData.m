@@ -18,14 +18,8 @@ end
 
 direc = strcat(params.fileLocation, filename);
 
-if strlength(params.methodList) == 1
-    varName = strcat('m', params.methodList, 'Output_batch'); %string
-else
-    methods = split(params.methodList, '-');
-    for choice = 1:size(methods,1)
-        varName = strcat('m', methods(choice, 1), 'Output_batch'); %string
-    end
-end
 fprintf('Harvesting %s ...\n', filename)
 jobData(params.sdcpStart:params.sdcpEnd) = load(direc);
+disp(' ... done!')
+
 end

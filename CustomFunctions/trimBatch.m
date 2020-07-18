@@ -21,15 +21,12 @@ for job = 1:length(params)
     fprintf('Parsing output from job: %i ...\n', job)
     holyData = exorciseModel(db, params(job));
     
-    if strcmpi(params(job).methodList, 'B')
-        if isfield(holyData.mBOutput_batch, 'Mdl')
-            error('The Exorcism has failed')
-        end
-    elseif strcmpi(params(job).methodList, 'E')
-        if isfield(holyData.mEOutput_batch, 'SVMModel')
-            error('The Exorcism has failed')
-        end
-    else
+    if strcmpi(params(job).methodList, 'B') && isfield(holyData.mBOutput_batch, 'Mdl')
+        error('The Exorcism has failed')
+    end
+    
+    if strcmpi(params(job).methodList, 'E') && isfield(holyData.mEOutput_batch, 'SVMModel')
+        error('The Exorcism has failed')
     end
     
     disp('Saving trimmed file ...')
