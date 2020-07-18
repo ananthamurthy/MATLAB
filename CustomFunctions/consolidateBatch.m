@@ -20,6 +20,13 @@ disp('Setting up parameters for harvest ...')
 setupHarvestParamsOnServer
 disp('... done!')
 
+%Preallocation
+cData.methodA = [];
+cData.methodB = [];
+cData.methodC = [];
+cData.methodD = [];
+cData.methodE = [];
+
 for job = 1:length(params)
     %fprintf('Parsing output from job: %i\n', job)
     if strcmpi(params(job).methodList, 'A')
