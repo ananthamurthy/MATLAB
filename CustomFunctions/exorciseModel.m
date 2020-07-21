@@ -1,3 +1,9 @@
+% AUTHOR: Kambadur Ananthamurthy
+% Use this function to use "rmfield" to remove any field from a data
+% structure
+% db has has variables concerning the original, real dataset
+% params has variables concerning the exorcism
+
 function holyData = exorciseModel(db, params)
 filename = sprintf('%s_%s_synthDataAnalysis_method%s_batch_%i-%i.mat', ...
     db.mouseName, ...
@@ -40,3 +46,4 @@ elseif strcmpi(params.methodList, 'E')
     end
 end
 disp('... done!')
+end

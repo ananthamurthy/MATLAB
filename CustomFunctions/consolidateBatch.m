@@ -2,9 +2,15 @@
 % Here, 'date' refers to the date the batch analysis jobs were launched
 % Doubt I'll launch multiple batch analyses on the same day, but this can
 % be remedied by selecting an appropriate string instead of the date.
+% AUTHOR: Kambadur Ananthamurthy
+% Run this function to collect outputs from independent jobs and
+% consolidate them into one file.
+% date: Job Date
+% run: Harvest Number
 
 function consolidateBatch(date, run)
 
+tic
 HOME_DIR = '/home/bhalla/ananthamurthy';
 ANALYSIS_DIR = '/home/bhalla/ananthamurthy/Work/Analysis';
 addpath(strcat(HOME_DIR, '/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies'))
@@ -44,5 +50,10 @@ for job = 1:length(params)
         
 end
 
+disp('Saving everything ...')
 save([saveFolder db.mouseName '_' db.date '_batch' num2str(date) '_run' num2str(run) '_cData.mat' ], 'cData', '-v7.3')
+disp('... done!')
+toc
+disp('All done!')
+
 end

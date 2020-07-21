@@ -2,6 +2,7 @@
 
 function trimBatch
 
+tic
 HOME_DIR = '/home/bhalla/ananthamurthy';
 ANALYSIS_DIR = '/home/bhalla/ananthamurthy/Work/Analysis';
 addpath(strcat(HOME_DIR, '/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies'))
@@ -33,6 +34,7 @@ for job = 1:length(params)
     save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_method' params(job).methodList '_batch' '_' num2str(params(job).sdcpStart) '-' num2str(params(job).sdcpEnd) '_trimmed.mat'], 'holyData', '-v7.3');
     disp('... done!')
 end
+toc
 disp('All done!')
 
 end
