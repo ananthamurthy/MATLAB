@@ -3,7 +3,7 @@
 % Doubt I'll launch multiple batch analyses on the same day, but this can
 % be remedied by selecting an appropriate string instead of the date.
 
-function consolidateBatch(date)
+function consolidateBatch(date, run)
 
 HOME_DIR = '/home/bhalla/ananthamurthy';
 ANALYSIS_DIR = '/home/bhalla/ananthamurthy/Work/Analysis';
@@ -44,5 +44,5 @@ for job = 1:length(params)
         
 end
 
-save([saveFolder db.mouseName '_' db.date '_batch' num2str(date) '_cData2.mat' ], 'cData', '-v7.3')
+save([saveFolder db.mouseName '_' db.date '_batch' num2str(date) '_run' num2str(run) '_cData.mat' ], 'cData', '-v7.3')
 end

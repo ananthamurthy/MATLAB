@@ -30,7 +30,7 @@ for job = 1:length(params)
     end
     
     disp('Saving trimmed file ...')
-    save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_method' params(job).methodList '_' num2str(params(job).sdcpStart) '-' num2str(params(job).sdcpEnd) '_trimmed.mat'], 'holyData', '-v7.3');
+    save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_method' params(job).methodList '_batch' '_' num2str(params(job).sdcpStart) '-' num2str(params(job).sdcpEnd) '_trimmed.mat'], 'holyData', '-v7.3');
     disp('... done!')
 end
 disp('All done!')
