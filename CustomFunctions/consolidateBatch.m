@@ -51,7 +51,8 @@ for job = 1:length(params)
 end
 
 disp('Saving everything ...')
-save([saveFolder db.mouseName '_' db.date '_batch' num2str(date) '_run' num2str(run) '_cData.mat' ], 'cData', '-v7.3')
+%save([saveFolder db.mouseName '_' db.date '_batch' num2str(date) '_run' num2str(run) '_cData.mat' ], 'cData', '-v7.3')
+save([saveFolder db.mouseName '_' db.date '_batch' num2str(date) '_run' num2str(run) '_cData.mat' ], 'cData', '-v7')
 disp('... done!')
 toc
 disp('All done!')
