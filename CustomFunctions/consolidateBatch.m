@@ -8,7 +8,7 @@
 % date: Job Date
 % cRun: Harvest Number
 
-function consolidateBatch(date, cRun, nDatasets)
+function consolidateBatch(date, cRun, )
 
 tic
 HOME_DIR = '/home/bhalla/ananthamurthy';
@@ -77,6 +77,7 @@ filename = [db.mouseName '_' db.date '_synthDataAnalysis_' num2str(date) '_cRun'
 fullPath4Save = strcat(saveFolder, filename);
 
 disp('Saving everything ...')
+
 %save(fullPath4Save, 'cData', '-v7.3')
 save(fullPath4Save, 'cData')
 disp('... done!')
