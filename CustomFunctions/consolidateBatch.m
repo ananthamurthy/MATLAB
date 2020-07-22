@@ -8,7 +8,7 @@
 % date: Job Date
 % cRun: Harvest Number
 
-function consolidateBatch(date, cRun)
+function consolidateBatch(date, cRun, nDatasets)
 
 tic
 HOME_DIR = '/home/bhalla/ananthamurthy';
