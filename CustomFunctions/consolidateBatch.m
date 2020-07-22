@@ -109,31 +109,19 @@ for job = 1:length(params)
         cData.methodA.mAInput = jobData.mAInput;
         cData.methodA.mAOutput_batch(params(job).sdcpStart:params(job).sdcpEnd) = jobData.mAOutput_batch(params(job).sdcpStart:params(job).sdcpEnd);
     elseif strcmpi(params(job).methodList, 'B')
-        cData.methodB.mBInput = jobData.mAInput;
+        cData.methodB.mBInput = jobData.mBInput;
         cData.methodB.mBOutput_batch(params(job).sdcpStart:params(job).sdcpEnd) = jobData.mBOutput_batch(params(job).sdcpStart:params(job).sdcpEnd);
     elseif strcmpi(params(job).methodList, 'C')
-        cData.methodC.mCInput = jobData.mAInput;
+        cData.methodC.mCInput = jobData.mCInput;
         cData.methodC.mCOutput_batch(params(job).sdcpStart:params(job).sdcpEnd) = jobData.mCOutput_batch(params(job).sdcpStart:params(job).sdcpEnd);
     elseif strcmpi(params(job).methodList, 'D')
-        cData.methodD.mDInput = jobData.mAInput;
+        cData.methodD.mDInput = jobData.mDInput;
         cData.methodD.mDOutput_batch(params(job).sdcpStart:params(job).sdcpEnd) = jobData.mDOutput_batch(params(job).sdcpStart:params(job).sdcpEnd);
     elseif strcmpi(params(job).methodList, 'E')
-        cData.methodE.mEInput = jobData.mAInput;
+        cData.methodE.mEInput = jobData.mEInput;
         cData.methodE.mEOutput_batch(params(job).sdcpStart:params(job).sdcpEnd) = jobData.mEOutput_batch(params(job).sdcpStart:params(job).sdcpEnd);
     else
     end
-    %     if strcmpi(params(job).methodList, 'A')
-    %         cData.methodA = harvestAnalyzedData(db, params(job));
-    %     elseif strcmpi(params(job).methodList, 'B')
-    %         cData.methodB = harvestAnalyzedData(db, params(job));
-    %     elseif strcmpi(params(job).methodList, 'C')
-    %         cData.methodC = harvestAnalyzedData(db, params(job));
-    %     elseif strcmpi(params(job).methodList, 'D')
-    %         cData.methodD = harvestAnalyzedData(db, params(job));
-    %     elseif strcmpi(params(job).methodList, 'E')
-    %         cData.methodE = harvestAnalyzedData(db, params(job));
-    %     else
-    %     end
 end
 
 filename = [db.mouseName '_' db.date '_synthDataAnalysis_' num2str(date) '_cRun' num2str(cRun) '_cData.mat' ];
