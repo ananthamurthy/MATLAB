@@ -31,16 +31,18 @@ for job = 1:length(params)
         error('The Exorcism has failed')
     end
     
-    disp('Saving trimmed file ...')
-    fullPath4Save = [saveFolder db.mouseName '_' db.date '_synthDataAnalysis_method' ...
+    filename = [db.mouseName '_' db.date '_synthDataAnalysis_method' ...
         params(job).methodList '_batch_' num2str(params(job).sdcpStart) '-' ...
         num2str(params(job).sdcpEnd) '_trimRun' num2str(trimRun) '_trimmed.mat'];
+    fullPath4Save = strcat(saveFolder, filename);
+    
+    disp('Saving trimmed file ...')
     save(fullPath4Save, ...
         'holyData', '-v7.3');
     
     %Information about new file
-    h5info(fullPath4Save)
-    h5disp(fullPath4Save)
+    h5info(filename, saveFolder)
+    h5disp(filename, saveFolder)
     
     disp('... done!')
 end
