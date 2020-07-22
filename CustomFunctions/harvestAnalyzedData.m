@@ -17,10 +17,10 @@ else
         params.sdcpEnd);
 end
 
-direc = strcat(params.fileLocation, filename);
+fullDirec4Read = strcat(params.fileLocation, filename);
 
 fprintf('Harvesting %s ...\n', filename)
-jobData(params.sdcpStart:params.sdcpEnd) = load(direc);
+jobData = load(fullDirec4Read);
 disp(' ... done!')
 
 end
