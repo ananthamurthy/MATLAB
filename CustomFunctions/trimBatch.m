@@ -40,9 +40,9 @@ for job = 1:length(params)
     save(fullPath4Save, ...
         'holyData', '-v7.3');
     
-    %Information about new file
-    h5info(filename, saveFolder)
-    h5disp(filename, saveFolder)
+    %     %Information about new file
+    %     h5info(filename, saveFolder)
+    %     h5disp(filename, saveFolder)
     
     disp('... done!')
 end

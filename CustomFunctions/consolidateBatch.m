@@ -69,9 +69,9 @@ save(fullPath4Save, 'cData', '-v7.3')
 %save(fullPath4Save, 'cData', '-v7')
 disp('... done!')
 
-%Information about new file
-h5info(filename, saveFolder)
-h5disp(filename, saveFolder)
+% %Information about new file
+% h5info(filename, saveFolder)
+% h5disp(filename, saveFolder)
 
 toc
 disp('All done!')
