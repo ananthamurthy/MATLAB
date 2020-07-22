@@ -35,30 +35,30 @@ cData.methodE = [];
 
 for job = 1:length(params)
     fprintf('Parsing output from job: %i\n', job)
-    %     if strcmpi(params(job).methodList, 'A')
-    %         cData.methodA(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
-    %     elseif strcmpi(params(job).methodList, 'B')
-    %         cData.methodB(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
-    %     elseif strcmpi(params(job).methodList, 'C')
-    %         cData.methodC(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
-    %     elseif strcmpi(params(job).methodList, 'D')
-    %         cData.methodD(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
-    %     elseif strcmpi(params(job).methodList, 'E')
-    %         cData.methodE(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
-    %     else
-    %     end
     if strcmpi(params(job).methodList, 'A')
-        cData.methodA = harvestAnalyzedData(db, params(job));
+        cData.methodA.mAOutput_batch(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
     elseif strcmpi(params(job).methodList, 'B')
-        cData.methodB = harvestAnalyzedData(db, params(job));
+        cData.methodB.mBOutput_batch(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
     elseif strcmpi(params(job).methodList, 'C')
-        cData.methodC = harvestAnalyzedData(db, params(job));
+        cData.methodC.mCOutput_batch(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
     elseif strcmpi(params(job).methodList, 'D')
-        cData.methodD = harvestAnalyzedData(db, params(job));
+        cData.methodD.mDOutput_batch(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
     elseif strcmpi(params(job).methodList, 'E')
-        cData.methodE = harvestAnalyzedData(db, params(job));
+        cData.methodE.mEOutput_batch(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
     else
     end
+    %     if strcmpi(params(job).methodList, 'A')
+    %         cData.methodA = harvestAnalyzedData(db, params(job));
+    %     elseif strcmpi(params(job).methodList, 'B')
+    %         cData.methodB = harvestAnalyzedData(db, params(job));
+    %     elseif strcmpi(params(job).methodList, 'C')
+    %         cData.methodC = harvestAnalyzedData(db, params(job));
+    %     elseif strcmpi(params(job).methodList, 'D')
+    %         cData.methodD = harvestAnalyzedData(db, params(job));
+    %     elseif strcmpi(params(job).methodList, 'E')
+    %         cData.methodE = harvestAnalyzedData(db, params(job));
+    %     else
+    %     end
 end
 
 filename = [db.mouseName '_' db.date '_synthDataAnalysis_' num2str(date) '_cRun' num2str(cRun) '_cData.mat' ];
