@@ -66,7 +66,7 @@ fullPath4Save = strcat(saveFolder, filename);
 
 disp('Saving everything ...')
 %save(fullPath4Save, 'cData', '-v7.3')
-save(fullPath4Save, 'cData', '-v7')
+save(fullPath4Save, 'cData')
 disp('... done!')
 
 % %Information about new file
