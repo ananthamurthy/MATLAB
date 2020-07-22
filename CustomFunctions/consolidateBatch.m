@@ -36,15 +36,15 @@ cData.methodE = [];
 for job = 1:length(params)
     %fprintf('Parsing output from job: %i\n', job)
     if strcmpi(params(job).methodList, 'A')
-        cData.methodA = harvestAnalyzedData(db, params(job));
+        cData.methodA(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
     elseif strcmpi(params(job).methodList, 'B')
-        cData.methodB = harvestAnalyzedData(db, params(job));
+        cData.methodB(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
     elseif strcmpi(params(job).methodList, 'C')
-        cData.methodC = harvestAnalyzedData(db, params(job));
+        cData.methodC(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
     elseif strcmpi(params(job).methodList, 'D')
-        cData.methodD = harvestAnalyzedData(db, params(job));
+        cData.methodD(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
     elseif strcmpi(params(job).methodList, 'E')
-        cData.methodE = harvestAnalyzedData(db, params(job));
+        cData.methodE(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
     else
     end
         
