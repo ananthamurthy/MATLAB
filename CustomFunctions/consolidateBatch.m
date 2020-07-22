@@ -107,16 +107,16 @@ for job = 1:length(params)
     jobData = harvestAnalyzedData(db, params(job));
     if strcmpi(params(job).methodList, 'A')
         cData.methodA.mAInput = getfield(jobData, 'mAInput');
-        cData.methodA.mAOutput_batch(params(job).sdcpStart:params(job).sdcpEnd) = getfield(jobData, 'mAOutput_batch');
+        cData.methodA.mAOutput_batch(params(job).sdcpStart:params(job).sdcpEnd) = getfield(jobData.holyData, 'mAOutput_batch');
     elseif strcmpi(params(job).methodList, 'B')
         cData.methodB.mBInput = getfield(jobData, 'mBInput');
-        cData.methodB.mBOutput_batch(params(job).sdcpStart:params(job).sdcpEnd) = getfield(jobData, 'mBOutput_batch');
+        cData.methodB.mBOutput_batch(params(job).sdcpStart:params(job).sdcpEnd) = getfield(jobData.holyData, 'mBOutput_batch');
     elseif strcmpi(params(job).methodList, 'C')
         cData.methodC.mCInput = getfield(jobData, 'mCInput');
-        cData.methodC.mCOutput_batch(params(job).sdcpStart:params(job).sdcpEnd) = getfield(jobData, 'mCOutput_batch');
+        cData.methodC.mCOutput_batch(params(job).sdcpStart:params(job).sdcpEnd) = getfield(jobData.holyData, 'mCOutput_batch');
     elseif strcmpi(params(job).methodList, 'D')
         cData.methodD.mDInput = getfield(jobData, 'mDInput');
-        cData.methodD.mDOutput_batch(params(job).sdcpStart:params(job).sdcpEnd) = getfield(jobData, 'mDOutput_batch');
+        cData.methodD.mDOutput_batch(params(job).sdcpStart:params(job).sdcpEnd) = getfield(jobData.holyData, 'mDOutput_batch');
     elseif strcmpi(params(job).methodList, 'E')
         cData.methodE.mEInput = getfield(jobData, 'mEInput');
         cData.methodE.mEOutput_batch(params(job).sdcpStart:params(job).sdcpEnd) = getfield(jobData, 'mEOutput_batch');
