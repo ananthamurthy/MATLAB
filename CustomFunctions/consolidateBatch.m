@@ -6,9 +6,9 @@
 % Run this function to collect outputs from independent jobs and
 % consolidate them into one file.
 % date: Job Date
-% run: Harvest Number
+% cRun: Harvest Number
 
-function consolidateBatch(date, run)
+function consolidateBatch(date, cRun)
 
 tic
 HOME_DIR = '/home/bhalla/ananthamurthy';
@@ -51,8 +51,8 @@ for job = 1:length(params)
 end
 
 disp('Saving everything ...')
-%save([saveFolder db.mouseName '_' db.date '_batch' num2str(date) '_run' num2str(run) '_cData.mat' ], 'cData', '-v7.3')
-save([saveFolder db.mouseName '_' db.date '_batch' num2str(date) '_run' num2str(run) '_cData.mat' ], 'cData', '-v7')
+save([saveFolder db.mouseName '_' db.date '_batch' num2str(date) '_run' num2str(cRun) '_cData.mat' ], 'cData', '-v7.3')
+%save([saveFolder db.mouseName '_' db.date '_batch' num2str(date) '_run' num2str(run) '_cData.mat' ], 'cData', '-v7')
 disp('... done!')
 toc
 disp('All done!')

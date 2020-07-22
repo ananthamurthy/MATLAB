@@ -1,6 +1,7 @@
 % AUTHOR: Kambadur Ananthamurthy
+% trimRun: Trim run number
 
-function trimBatch(run)
+function trimBatch(trimRun)
 
 tic
 HOME_DIR = '/home/bhalla/ananthamurthy';
@@ -31,7 +32,10 @@ for job = 1:length(params)
     end
     
     disp('Saving trimmed file ...')
-    save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_method' params(job).methodList '_batch_' num2str(params(job).sdcpStart) '-' num2str(params(job).sdcpEnd) '_run' num2str(run) '_trimmed.mat'], 'holyData', '-v7.3');
+    save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_method' ...
+        params(job).methodList '_batch_' num2str(params(job).sdcpStart) '-' ...
+        num2str(params(job).sdcpEnd) '_run' num2str(trimRun) '_trimmed.mat'], ...
+        'holyData', '-v7.3');
     disp('... done!')
 end
 toc
