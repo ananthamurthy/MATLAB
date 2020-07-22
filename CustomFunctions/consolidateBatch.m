@@ -35,16 +35,22 @@ cData.methodE = [];
 
 for job = 1:length(params)
     fprintf('Parsing output from job: %i\n', job)
+    jobData = harvestAnalyzedData(db, params(job));
     if strcmpi(params(job).methodList, 'A')
-        cData.methodA.mAOutput_batch(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
+        cData.methodA.mAInput(params(job).sdcpStart:params(job).sdcpEnd) = getfield(jobData, 'mAInput');
+        cData.methodA.mAOutput_batch(params(job).sdcpStart: params(job).sdcpEnd) = getfield(jobData, 'mAOutput_batch');
     elseif strcmpi(params(job).methodList, 'B')
-        cData.methodB.mBOutput_batch(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
+        cData.methodB.mBInput(params(job).sdcpStart:params(job).sdcpEnd) = getfield(jobData, 'mBInput');
+        cData.methodB.mBOutput_batch(params(job).sdcpStart: params(job).sdcpEnd) = getfield(jobData, 'mBOutput_batch');
     elseif strcmpi(params(job).methodList, 'C')
-        cData.methodC.mCOutput_batch(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
+        cData.methodC.mCInput(params(job).sdcpStart:params(job).sdcpEnd) = getfield(jobData, 'mCInput');
+        cData.methodC.mCOutput_batch(params(job).sdcpStart: params(job).sdcpEnd) = getfield(jobData, 'mCOutput_batch');
     elseif strcmpi(params(job).methodList, 'D')
-        cData.methodD.mDOutput_batch(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
+        cData.methodD.mDInput(params(job).sdcpStart:params(job).sdcpEnd) = getfield(jobData, 'mDInput');
+        cData.methodD.mDOutput_batch(params(job).sdcpStart: params(job).sdcpEnd) = getfield(jobData, 'mDOutput_batch');
     elseif strcmpi(params(job).methodList, 'E')
-        cData.methodE.mEOutput_batch(params(job).sdcpStart: params(job).sdcpEnd) = harvestAnalyzedData(db, params(job));
+        cData.methodE.mEInput(params(job).sdcpStart:params(job).sdcpEnd) = getfield(jobData, 'mEInput');
+        cData.methodE.mEOutput_batch(params(job).sdcpStart: params(job).sdcpEnd) = getfield(jobData, 'mEOutput_batch');
     else
     end
     %     if strcmpi(params(job).methodList, 'A')
