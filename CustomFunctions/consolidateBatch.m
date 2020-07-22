@@ -61,15 +61,18 @@ for job = 1:length(params)
     end
 end
 
-fullPath4Save = [saveFolder db.mouseName '_' db.date '_synthDataAnalysis_' num2str(date) '_cRun' num2str(cRun) '_cData.mat' ];
-%Information about new file
-h5info(fullPath4Save)
-h5disp(fullPath4Save)
+filename = [db.mouseName '_' db.date '_synthDataAnalysis_' num2str(date) '_cRun' num2str(cRun) '_cData.mat' ];
+fullPath4Save = strcat(saveFolder, filename);
 
 disp('Saving everything ...')
 save(fullPath4Save, 'cData', '-v7.3')
 %save(fullPath4Save, 'cData', '-v7')
 disp('... done!')
+
+%Information about new file
+h5info(filename, saveFolder)
+h5disp(filename, saveFolder)
+
 toc
 disp('All done!')
 
