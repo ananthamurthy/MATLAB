@@ -11,10 +11,10 @@ filename = sprintf('%s_%s_synthDataAnalysis_method%s_batch_%i-%i.mat', ...
     params.methodList, ...
     params.sdcpStart, ...
     params.sdcpEnd);
-direc = strcat(params.fileLocation, filename);
+fullDirec4Read = strcat(params.fileLocation, filename);
 
 fprintf('Loading %s ...\n', filename)
-holyData = load(direc);
+holyData = load(fullDirec4Read);
 disp('... done!')
 fprintf('Trimming %s ...\n', filename)
 
