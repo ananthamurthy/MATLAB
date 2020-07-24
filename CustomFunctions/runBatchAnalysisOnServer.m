@@ -176,7 +176,7 @@ for runi = sdcpStart: 1: sdcpEnd
         mBInput.distribution4Bayes = 'mvmn';
         mBInput.saveModel = 0;
         if ~mBInput.saveModel
-            mBOutput = rmfield(mBOutput, 'Mdl');
+            mBOutput_batch = rmfield(mBOutput_batch, 'Mdl');
         end
         
         [mBOutput] = runWilliamTIAnalysis(DATA, mBInput);
@@ -237,7 +237,7 @@ for runi = sdcpStart: 1: sdcpEnd
         
         mEInput.saveModel = 0;
         if ~mEInput.saveModel
-            mEOutput = rmfield(mEOutput, 'SVMModel');
+            mEOutput_batch = rmfield(mEOutput_batch, 'SVMModel');
         end
         [mEOutput] = runSVMClassification(DATA, mEInput);
         mEOutput_batch(runi) = mEOutput;
