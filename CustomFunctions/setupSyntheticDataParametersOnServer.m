@@ -48,6 +48,7 @@ for value = 10:10:100
     sdcp(count).comment = sprintf('%i | Percent Time Cells: %i; Cell Order: %s; Event Timing: %s', count, value, sdcp(count).cellOrder, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%1-10
 
 %Time cell percents with 'random' order
 for value = 10:10:100
@@ -70,6 +71,7 @@ for value = 10:10:100
     sdcp(count).comment = sprintf('%i | Percent Time Cells: %i; Cell Order: %s; Event Timing: %s', count, value, sdcp(count).cellOrder, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%11-20
 
 %Max Hit Trial Percents with 'fixed' assignment
 for value = 10:10:100
@@ -92,6 +94,7 @@ for value = 10:10:100
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%21-30
 
 %Max Hit Trial Percents with 'random' assignment
 for value = 10:10:100
@@ -114,6 +117,7 @@ for value = 10:10:100
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%31-40
 
 % %Max Hit Trial Percents with 'fixed' assignment, 'random' trial order
 for value = 10:10:100
@@ -136,6 +140,7 @@ for value = 10:10:100
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%41-50
 
 %Max Hit Trial Percents with 'random' assignment, 'random' trial order
 for value = 10:10:100
@@ -158,6 +163,7 @@ for value = 10:10:100
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%51-60
 
 %Event Widths (percentiles)
 for value = 10:10:100
@@ -180,6 +186,7 @@ for value = 10:10:100
     sdcp(count).comment = sprintf('%i | Event Width (percentile): %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%61-70
 
 %Event Widths (percentiles) with standard deviations
 for value = 10:10:100
@@ -202,6 +209,7 @@ for value = 10:10:100
     sdcp(count).comment = sprintf('%i | Event Width (percentile): %i (with stddev); Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%71-80
 
 %Uniform Imprecisions
 for value = 1:2:20
@@ -224,6 +232,7 @@ for value = 1:2:20
     sdcp(count).comment = sprintf('%i | Uniform ImprecisionFWHM: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%81-90
 
 %Normal Imprecisions
 for value = 1:2:20
@@ -246,6 +255,7 @@ for value = 1:2:20
     sdcp(count).comment = sprintf('%i | Normal ImprecisionFWHM: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%91-100
 
 %Noise (only Gaussian type)
 for value = 10:10:100
@@ -268,6 +278,7 @@ for value = 10:10:100
     sdcp(count).comment = sprintf('%i | Noise Percent: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%101-110
 
 %--- Repeat everything with random timing
 
@@ -293,6 +304,7 @@ for value = 10:10:100
     sdcp(count).comment = sprintf('%i | Percent Time Cells: %i; Cell Order: %s; Event Timing: %s', count, value, sdcp(count).cellOrder, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%111-120
 
 %Time cell percents with 'random' order
 for value = 10:10:100
@@ -315,6 +327,7 @@ for value = 10:10:100
     sdcp(count).comment = sprintf('%i | Percent Time Cells: %i; Cell Order: %s; Event Timing: %s', count, value, sdcp(count).cellOrder, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%121-130
 
 %Max Hit Trial Percents with 'fixed' assignment
 for value = 10:10:100
@@ -337,6 +350,7 @@ for value = 10:10:100
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%131-140
 
 %Max Hit Trial Percents with 'random' assignment
 for value = 10:10:100
@@ -359,6 +373,7 @@ for value = 10:10:100
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%141-150
 
 %Max Hit Trial Percents with 'fixed' assignment, 'random' trial order
 for value = 10:10:100
@@ -381,6 +396,7 @@ for value = 10:10:100
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%151-160
 
 %Max Hit Trial Percents with 'random' assignment, 'random' trial order
 for value = 10:10:100
@@ -403,6 +419,7 @@ for value = 10:10:100
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%161-170
 
 %Event Widths (percentiles)
 for value = 10:10:100
@@ -425,6 +442,7 @@ for value = 10:10:100
     sdcp(count).comment = sprintf('%i | Event Width (percentile): %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%171-180
 
 %Event Widths (percentiles) with standard deviations
 for value = 10:10:100
@@ -447,6 +465,7 @@ for value = 10:10:100
     sdcp(count).comment = sprintf('%i | Event Width (percentile): %i (with stddev); Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%181-190
 
 %Uniform Imprecisions
 for value = 1:2:20
@@ -469,6 +488,7 @@ for value = 1:2:20
     sdcp(count).comment = sprintf('%i | Uniform ImprecisionFWHM: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%191-200
 
 %Normal Imprecisions
 for value = 1:2:20
@@ -491,6 +511,7 @@ for value = 1:2:20
     sdcp(count).comment = sprintf('%i | Normal ImprecisionFWHM: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%201-210
 
 %Noise (only Gaussian type)
 for value = 10:10:100
@@ -513,3 +534,4 @@ for value = 10:10:100
     sdcp(count).comment = sprintf('%i | Noise Percent: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
+%211-220

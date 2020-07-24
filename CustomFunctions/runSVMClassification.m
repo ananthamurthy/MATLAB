@@ -42,8 +42,9 @@ svmOutput.YfitDiff = svmOutput.Yfit - Yfit_actual;
 try
     svmOutput.Q = score(:, 2); %Only looking at the "positive class" scores (to classify as "time cell")
 catch
-    %Usually only if all cells are classified the same
-    svmOutput.Q = score(:, 1);
+    %Usually only if all cells are classified the same (often - no time
+    %cells). Here, negative scores are considered.
+    svmOutput.Q = -1 * score(:, 1);
 end
 
 %Reshape Yfit and Yfit_actual to a 2D matrix - trials vs frames
