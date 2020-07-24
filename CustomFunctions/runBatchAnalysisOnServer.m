@@ -18,11 +18,11 @@ addpath(strcat(HOME_DIR, '/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies'))
 
 methodList = determineMethod(runA, runB, runC, runD, runE);
 
-% Print 6 lines of whitespace - Prevents any messages from being missed
-for space = 1:6
-    fprintf(1, '\n');
-end
-clear space
+% % Print 6 lines of whitespace - Prevents any messages from being missed
+% for space = 1:6
+%     fprintf(1, '\n');
+% end
+% clear space
 
 %diary (strcat(HOME_DIR, '/logs/analysisDiary'))
 %diary on
@@ -238,7 +238,9 @@ for runi = sdcpStart: 1: sdcpEnd
         end
         
         mEInput.saveModel = 0;
-        
+        if ~mEInput.saveModel
+            mEOutput(dataset) = rmfield(mEOutput(dataset), 'SVMModel');
+        end
         [mEOutput] = runSVMClassification(DATA, mEInput);
         mEOutput_batch(runi) = mEOutput;
         %save([saveFolder db.mouseName '_' db.date '_methodE.mat' ], 'mEInput', 'mEOutput')
