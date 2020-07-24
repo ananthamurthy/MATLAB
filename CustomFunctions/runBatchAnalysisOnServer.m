@@ -238,11 +238,7 @@ for runi = sdcpStart: 1: sdcpEnd
         end
         
         mEInput.saveModel = 0;
-        if ~mEInput.saveModel
-            for dataset = 1:nDatasets
-                mEOutput(dataset) = rmfield(mEOutput(dataset), 'SVMModel');
-            end
-        end
+        
         [mEOutput] = runSVMClassification(DATA, mEInput);
         mEOutput_batch(runi) = mEOutput;
         %save([saveFolder db.mouseName '_' db.date '_methodE.mat' ], 'mEInput', 'mEOutput')
