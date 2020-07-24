@@ -109,5 +109,5 @@ params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseNa
 params(job).methodList = 'E';
 params(job).sdcpStart = 1;
 params(job).sdcpEnd = 220;
-params(job).trim = 1;
-params(job).trimRun = 3;
+params(job).trim = 0;
+params(job).trimRun = 0;

@@ -253,7 +253,7 @@ end
 
 %% Save Data
 if ops0.saveData
-    
+    disp('Saving everything ...')
     if ops0.loadSyntheticData
         if runA
             save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_batch_methodA_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mAInput', 'mAOutput_batch', '-v7.3')
@@ -295,6 +295,7 @@ if ops0.saveData
             save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_batch_methodE.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
         end
     end
+    disp('... done!')
 end
 toc
 fprintf('Complete: %i to %i by %s', sdcpStart, sdcpEnd, methodList);
