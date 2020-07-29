@@ -82,8 +82,8 @@ else %Manual mode
         z = colorbar;
         colormap('jet')
         ylabel(z,'dF/F (%)', ...
-        'FontSize', 15, ...
-        'FontWeight', 'bold')
+            'FontSize', 15, ...
+            'FontWeight', 'bold')
         set(gca, 'FontSize', 15)
         
         finish = input('Finish? y/n: ', 's');
@@ -112,19 +112,23 @@ seqAnalysisOutput.d1 = dx ./ dt;
 
 seqAnalysisOutput.dx = dx;
 seqAnalysisOutput.dt = dt;
-
-[ETH, ~, ~] = getETH(DATA, seqAnalysisInput.delta, seqAnalysisInput.skipFrames);
+if seqAnalysisInput.getT
+    [ETH, ~, ~] = getETH(DATA, seqAnalysisInput.delta, seqAnalysisInput.skipFrames);
+end
 
 % Quality (Q) and Time Vector (T)
 peakTimeBin = zeros(nCells, 1);
+
 for cell = 1:nCells
     %disp(cell)
     %Cross-correlate with the activity of each cell to get Quality (Q)
     corrCoeffMatrix2b2 = corrcoef(seqAnalysisOutput.d1, DATA_2D(cell, 2:end)'); %pads smaller vector with 0s
     seqAnalysisOutput.Q(cell, 1) = corrCoeffMatrix2b2(1,2);
     
-    %Time Vector
-    [~, peakTimeBin(cell)] = max(squeeze(ETH(cell, :)));
+    if seqAnalysisInput.getT
+        %Time Vector
+        [~, peakTimeBin(cell)] = max(squeeze(ETH(cell, :)));
+    end
 end
 
 seqAnalysisOutput.T = peakTimeBin;

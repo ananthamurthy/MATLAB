@@ -9,8 +9,7 @@ function runBatchAnalysisOnServer(sdcpStart, sdcpEnd, runA, runB, runC, runD, ru
 tic
 close all
 
-HOME_DIR = '/home/bhalla/ananthamurthy';
-%HOME_DIR = '/Users/ananth/Documents/';
+HOME_DIR = '/Users/ananth/Documents/'; % '/home/bhalla/ananthamurthy' or '/Users/ananth/Documents/'
 addpath(genpath(strcat(HOME_DIR, '/MATLAB/CustomFunctions'))) % my custom functions
 addpath(genpath(strcat(HOME_DIR,'/MATLAB/ImagingAnalysis'))) % Additional functions
 addpath(genpath(strcat(HOME_DIR, '/MATLAB/ImagingAnalysis/Suite2P-ananth')))
@@ -34,8 +33,7 @@ fprintf('Analyzing %s_%i_%i - Date: %s\n', ...
     db.session, ...
     db.date)
 
-saveDirec = strcat(HOME_DIR, '/Work/Analysis/Imaging/');
-%saveDirec = strcat('/Users/ananth/Desktop/', 'Work/Analysis/Imaging/');
+saveDirec = strcat('/Users/ananth/Desktop', '/Work/Analysis/Imaging/'); % HOME_DIR or '/Users/ananth/Desktop'
 saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
 
 ops0.saveData                  = 1;
@@ -194,6 +192,7 @@ for runi = sdcpStart: 1: sdcpEnd
         mCInput.delta = 3;
         mCInput.skipFrames = [];
         mCInput.trialThreshold = 25; % in %
+        mCInput.getT = 0;
         [mCOutput] = runSimpleTCAnalysis(DATA, mCInput);
         mCOutput.normQ1 = (mCOutput.Q1)/max(mCOutput.Q1);
         mCOutput.normQ2 = (mCOutput.Q2)/max(mCOutput.Q2);
@@ -211,6 +210,7 @@ for runi = sdcpStart: 1: sdcpEnd
         mDInput.nSamples = 5; %for Gaussian Kernel
         mDInput.automatic = 1; %for selecting P; logical
         mDInput.timeVector = (1:db.nFrames*size(DATA,2)) * (1/db.samplingRate); %in seconds; %For derivative
+        mDInput.getT = 0;
         [mDOutput] = runSeqBasedTCAnalysis(DATA, mDInput);
         mDOutput.normQ = (mDOutput.Q) ./max(mDOutput.Q);
         mDOutput_batch(runi) = mDOutput;
@@ -227,6 +227,7 @@ for runi = sdcpStart: 1: sdcpEnd
         mEInput.nSamples = 5; %for Gaussian Kernel; relevant only if gaussian smoothing is on
         mEInput.whichTrials = 'alternate';
         mEInput.labelShuffle = 'off';
+        mEInput.getT = 0;
         if ops0.loadSyntheticData
             mEInput.ptcList = sdo_batch(runi).ptcList;
             mEInput.ocList = sdo_batch(runi).ocList;
@@ -256,23 +257,23 @@ if ops0.saveData
     disp('Saving everything ...')
     if ops0.loadSyntheticData
         if runA
-            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_batch_methodA_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mAInput', 'mAOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_batch_methodA_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mAInput', 'mAOutput_batch', '-v7.3')
         end
         
         if runB
-            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_batch_methodB_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mBInput', 'mBOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_batch_methodB_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mBInput', 'mBOutput_batch', '-v7.3')
         end
         
         if runC
-            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_batch_methodC_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mCInput', 'mCOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_batch_methodC_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mCInput', 'mCOutput_batch', '-v7.3')
         end
         
         if runD
-            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_batch_methodD_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mDInput', 'mDOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_batch_methodD_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mDInput', 'mDOutput_batch', '-v7.3')
         end
         
         if runE
-            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_batch_methodE_batch' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_batch_methodE_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
         end
     else %Real Physiology Data
         if runA
@@ -298,6 +299,6 @@ if ops0.saveData
     disp('... done!')
 end
 toc
-fprintf('Complete: %i to %i by %s', sdcpStart, sdcpEnd, methodList);
+fprintf('Complete: %i to %i by %s\n', sdcpStart, sdcpEnd, methodList);
 %diary off
 end

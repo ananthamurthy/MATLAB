@@ -5,7 +5,7 @@ close all
 load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/synthDATA_batch_220.mat')
 
 % Analysed Data
-load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/M26_20180514_synthDataAnalysis_20200615_cRun4_cData.mat')
+load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/M26_20180514_synthDataAnalysis_20200724_cRun2_cData.mat')
 
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 
@@ -615,16 +615,16 @@ ocList = sdo_batch(101).ocList;
 fig13 = figure(13);
 set(fig13,'Position',[300,300,1000,500])
 subplot(1,2,1)
-y1 = cData.methodE.holyData.mEOutput_batch(101).Q(ptcList);
-y2 = cData.methodE.holyData.mEOutput_batch(102).Q(ptcList);
-y3 = cData.methodE.holyData.mEOutput_batch(103).Q(ptcList);
-y4 = cData.methodE.holyData.mEOutput_batch(104).Q(ptcList);
-y5 = cData.methodE.holyData.mEOutput_batch(105).Q(ptcList);
-y6 = cData.methodE.holyData.mEOutput_batch(106).Q(ptcList);
-y7 = cData.methodE.holyData.mEOutput_batch(107).Q(ptcList);
-y8 = cData.methodE.holyData.mEOutput_batch(108).Q(ptcList);
-y9 = cData.methodE.holyData.mEOutput_batch(109).Q(ptcList);
-y10 = cData.methodE.holyData.mEOutput_batch(110).Q(ptcList);
+y1 = cData.methodE.mEOutput_batch(101).Q(ptcList);
+y2 = cData.methodE.mEOutput_batch(102).Q(ptcList);
+y3 = cData.methodE.mEOutput_batch(103).Q(ptcList);
+y4 = cData.methodE.mEOutput_batch(104).Q(ptcList);
+y5 = cData.methodE.mEOutput_batch(105).Q(ptcList);
+y6 = cData.methodE.mEOutput_batch(106).Q(ptcList);
+y7 = cData.methodE.mEOutput_batch(107).Q(ptcList);
+y8 = cData.methodE.mEOutput_batch(108).Q(ptcList);
+y9 = cData.methodE.mEOutput_batch(109).Q(ptcList);
+y10 = cData.methodE.mEOutput_batch(110).Q(ptcList);
 
 boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
     'Notch','on', ...
@@ -636,16 +636,16 @@ ylabel('QE')
 set(gca, 'FontSize', figureDetails.fontSize-2)
 
 subplot(1,2,2)
-y1 = cData.methodE.holyData.mEOutput_batch(101).Q(ocList);
-y2 = cData.methodE.holyData.mEOutput_batch(102).Q(ocList);
-y3 = cData.methodE.holyData.mEOutput_batch(103).Q(ocList);
-y4 = cData.methodE.holyData.mEOutput_batch(104).Q(ocList);
-y5 = cData.methodE.holyData.mEOutput_batch(105).Q(ocList);
-y6 = cData.methodE.holyData.mEOutput_batch(106).Q(ocList);
-y7 = cData.methodE.holyData.mEOutput_batch(107).Q(ocList);
-y8 = cData.methodE.holyData.mEOutput_batch(108).Q(ocList);
-y9 = cData.methodE.holyData.mEOutput_batch(109).Q(ocList);
-y10 = cData.methodE.holyData.mEOutput_batch(110).Q(ocList);
+y1 = cData.methodE.mEOutput_batch(101).Q(ocList);
+y2 = cData.methodE.mEOutput_batch(102).Q(ocList);
+y3 = cData.methodE.mEOutput_batch(103).Q(ocList);
+y4 = cData.methodE.mEOutput_batch(104).Q(ocList);
+y5 = cData.methodE.mEOutput_batch(105).Q(ocList);
+y6 = cData.methodE.mEOutput_batch(106).Q(ocList);
+y7 = cData.methodE.mEOutput_batch(107).Q(ocList);
+y8 = cData.methodE.mEOutput_batch(108).Q(ocList);
+y9 = cData.methodE.mEOutput_batch(109).Q(ocList);
+y10 = cData.methodE.mEOutput_batch(110).Q(ocList);
 
 boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
     'Notch','on', ...
@@ -661,16 +661,16 @@ print('/Users/ananth/Desktop/figs/tcAnalysisPaper/QEvsNoisePercent_seq', '-dpng'
 fig14 = figure(14);
 set(fig14,'Position',[300,300,1000,500])
 subplot(1,2,1)
-y1 = cData.methodE.holyData.mEOutput_batch(211).Q(ptcList);
-y2 = cData.methodE.holyData.mEOutput_batch(212).Q(ptcList);
-y3 = cData.methodE.holyData.mEOutput_batch(213).Q(ptcList);
-y4 = cData.methodE.holyData.mEOutput_batch(214).Q(ptcList);
-y5 = cData.methodE.holyData.mEOutput_batch(215).Q(ptcList);
-y6 = cData.methodE.holyData.mEOutput_batch(216).Q(ptcList);
-y7 = cData.methodE.holyData.mEOutput_batch(217).Q(ptcList);
-y8 = cData.methodE.holyData.mEOutput_batch(218).Q(ptcList);
-y9 = cData.methodE.holyData.mEOutput_batch(219).Q(ptcList);
-y10 = cData.methodE.holyData.mEOutput_batch(220).Q(ptcList);
+y1 = cData.methodE.mEOutput_batch(211).Q(ptcList);
+y2 = cData.methodE.mEOutput_batch(212).Q(ptcList);
+y3 = cData.methodE.mEOutput_batch(213).Q(ptcList);
+y4 = cData.methodE.mEOutput_batch(214).Q(ptcList);
+y5 = cData.methodE.mEOutput_batch(215).Q(ptcList);
+y6 = cData.methodE.mEOutput_batch(216).Q(ptcList);
+y7 = cData.methodE.mEOutput_batch(217).Q(ptcList);
+y8 = cData.methodE.mEOutput_batch(218).Q(ptcList);
+y9 = cData.methodE.mEOutput_batch(219).Q(ptcList);
+y10 = cData.methodE.mEOutput_batch(220).Q(ptcList);
 
 boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
     'Notch','on', ...
@@ -682,16 +682,16 @@ ylabel('QE')
 set(gca, 'FontSize', figureDetails.fontSize-2)
 
 subplot(1,2,2)
-y1 = cData.methodE.holyData.mEOutput_batch(211).Q(ocList);
-y2 = cData.methodE.holyData.mEOutput_batch(212).Q(ocList);
-y3 = cData.methodE.holyData.mEOutput_batch(213).Q(ocList);
-y4 = cData.methodE.holyData.mEOutput_batch(214).Q(ocList);
-y5 = cData.methodE.holyData.mEOutput_batch(215).Q(ocList);
-y6 = cData.methodE.holyData.mEOutput_batch(216).Q(ocList);
-y7 = cData.methodE.holyData.mEOutput_batch(217).Q(ocList);
-y8 = cData.methodE.holyData.mEOutput_batch(218).Q(ocList);
-y9 = cData.methodE.holyData.mEOutput_batch(219).Q(ocList);
-y10 = cData.methodE.holyData.mEOutput_batch(220).Q(ocList);
+y1 = cData.methodE.mEOutput_batch(211).Q(ocList);
+y2 = cData.methodE.mEOutput_batch(212).Q(ocList);
+y3 = cData.methodE.mEOutput_batch(213).Q(ocList);
+y4 = cData.methodE.mEOutput_batch(214).Q(ocList);
+y5 = cData.methodE.mEOutput_batch(215).Q(ocList);
+y6 = cData.methodE.mEOutput_batch(216).Q(ocList);
+y7 = cData.methodE.mEOutput_batch(217).Q(ocList);
+y8 = cData.methodE.mEOutput_batch(218).Q(ocList);
+y9 = cData.methodE.mEOutput_batch(219).Q(ocList);
+y10 = cData.methodE.mEOutput_batch(220).Q(ocList);
 
 boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
     'Notch','on', ...

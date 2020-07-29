@@ -44,7 +44,8 @@ try
 catch
     %Usually only if all cells are classified the same (often - no time
     %cells). Here, negative scores are considered.
-    svmOutput.Q = -1 * score(:, 1);
+    disp('**** Caught a dataset with only 1 column ****')
+    svmOutput.Q = score(:, 1);
 end
 
 %Reshape Yfit and Yfit_actual to a 2D matrix - trials vs frames
@@ -56,10 +57,12 @@ svmOutput.Q_2D = reshape(svmOutput.Q, [length(testingTrials), nCells]);
 
 % Time Vector (T)
 peakTimeBin = zeros(nCells, 1);
-[ETH, ~, ~] = getETH(DATA, svmInput.delta, svmInput.skipFrames);
-for cell = 1:nCells
-    %disp(cell)
-    [~, peakTimeBin(cell)] = max(squeeze(ETH(cell, :)));
+if svmInput.getT
+    [ETH, ~, ~] = getETH(DATA, svmInput.delta, svmInput.skipFrames);
+    for cell = 1:nCells
+        %disp(cell)
+        [~, peakTimeBin(cell)] = max(squeeze(ETH(cell, :)));
+    end
 end
 svmOutput.T = peakTimeBin;
 svmOutput.timeCells = [];

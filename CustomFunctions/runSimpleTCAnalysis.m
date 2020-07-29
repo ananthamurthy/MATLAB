@@ -7,9 +7,9 @@ skipFrames = simpleInput.skipFrames;
 THINGS TO DO:
 Use some 'tcellThreshold' to determine time cells.
 %}
-
-[ETH, trialAUCs, nBins] = getETH(DATA, delta, skipFrames);
-
+if simpleInput.getT
+    [ETH, trialAUCs, nBins] = getETH(DATA, delta, skipFrames);
+end
 nCells = size(DATA, 1);
 nTrials = size(DATA, 2);
 
@@ -26,8 +26,10 @@ peakTrialTimeBin = nan(nCells, nTrials);
 test_cdf = [1:nBins; cdf('Uniform', 1:nBins, 1, nBins)];
 
 for cell = 1:nCells
-    % Time Vector
-    [~, peakTimeBin(cell)] = max(squeeze(ETH(cell, :)));
+    if simpleInput.getT
+        % Time Vector
+        [~, peakTimeBin(cell)] = max(squeeze(ETH(cell, :)));
+    end
     
     for trial = 1:nTrials
         m = mean(squeeze(trialAUCs(cell, trial, :)));
