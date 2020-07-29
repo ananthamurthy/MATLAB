@@ -9,7 +9,7 @@ function runBatchAnalysisOnServer(sdcpStart, sdcpEnd, runA, runB, runC, runD, ru
 tic
 close all
 
-HOME_DIR = '/Users/ananth/Documents/'; % '/home/bhalla/ananthamurthy' or '/Users/ananth/Documents/'
+HOME_DIR = '/home/bhalla/ananthamurthy'; % '/home/bhalla/ananthamurthy' or '/Users/ananth/Documents/'
 addpath(genpath(strcat(HOME_DIR, '/MATLAB/CustomFunctions'))) % my custom functions
 addpath(genpath(strcat(HOME_DIR,'/MATLAB/ImagingAnalysis'))) % Additional functions
 addpath(genpath(strcat(HOME_DIR, '/MATLAB/ImagingAnalysis/Suite2P-ananth')))
@@ -33,7 +33,7 @@ fprintf('Analyzing %s_%i_%i - Date: %s\n', ...
     db.session, ...
     db.date)
 
-saveDirec = strcat('/Users/ananth/Desktop', '/Work/Analysis/Imaging/'); % HOME_DIR or '/Users/ananth/Desktop'
+saveDirec = strcat(HOME_DIR, '/Work/Analysis/Imaging/'); % HOME_DIR or '/Users/ananth/Desktop'
 saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
 
 ops0.saveData                  = 1;
