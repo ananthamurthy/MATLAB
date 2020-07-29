@@ -6,7 +6,7 @@ load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/synthDATA_batch_2
 
 % Analysed Data
 %load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/M26_20180514_synthDataAnalysis_20200729_cRun1_cData.mat')
-load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/M26_20180514_synthDataAnalysis_20200729_gRun1_methodE_batch_1-220.mat')
+load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/M26_20180514_synthDataAnalysis_20200729_gRun2_methodE_batch_1-220.mat')
 
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 
