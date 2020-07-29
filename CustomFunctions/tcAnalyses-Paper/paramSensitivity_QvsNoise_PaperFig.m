@@ -5,11 +5,12 @@ close all
 load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/synthDATA_batch_220.mat')
 
 % Analysed Data
-load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/M26_20180514_synthDataAnalysis_20200729_cRun1_cData.mat')
+%load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/M26_20180514_synthDataAnalysis_20200729_cRun2_cData.mat')
+load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/M26_20180514_synthDataAnalysis_20200729_gRun2_methodE_batch_1-220.mat')
 
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 
-% %% ORIGINAL METHOD
+%% ORIGINAL METHOD
 % % Sequential Timing
 % % Parameter Sensitivity - Q vs Max Percent Noise
 % 
@@ -604,11 +605,11 @@ figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWid
 % set(gca, 'FontSize', figureDetails.fontSize-2)
 % print('/Users/ananth/Desktop/figs/tcAnalysisPaper/QDvsNoisePercent_rnd', '-dpng')
 
-% METHOD E
-Sequential Timing
-Parameter Sensitivity - Q vs Max Percent Noise
-
-Since the ptcList does not change over the course of this
+%% METHOD E
+% Sequential Timing
+% Parameter Sensitivity - Q vs Max Percent Noise
+ 
+% Since the ptcList does not change over the course of this
 ptcList = sdo_batch(101).ptcList
 ocList = sdo_batch(101).ocList
 
