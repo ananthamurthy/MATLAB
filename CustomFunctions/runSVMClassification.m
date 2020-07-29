@@ -54,7 +54,7 @@ svmOutput.Yfit_actual_2D = reshape(Yfit_actual, [length(testingTrials), nCells])
 svmOutput.YfitDiff_2D = reshape(svmOutput.YfitDiff, [length(testingTrials), nCells]);
 
 svmOutput.Q_2D = reshape(allQ, [length(testingTrials), nCells]);
-svmOutput.Q = squeeze(mean(svmOutput.Q_2D, 1)); % Try either mean or median
+svmOutput.Q = squeeze(median(svmOutput.Q_2D, 1)); % Try either mean or median
 
 % Time Vector (T)
 peakTimeBin = zeros(nCells, 1);
