@@ -40,12 +40,12 @@ end
 
 svmOutput.YfitDiff = svmOutput.Yfit - Yfit_actual;
 try
-    svmOutput.Q = score(:, 2); %Only looking at the "positive class" scores (to classify as "time cell")
+    allQ = score(:, 2); %Only looking at the "positive class" scores (to classify as "time cell")
 catch
     %Usually only if all cells are classified the same (often - no time
     %cells). Here, negative scores are considered.
     disp('**** Caught a dataset with only 1 column ****')
-    svmOutput.Q = score(:, 1);
+    allQ = score(:, 1);
 end
 
 %Reshape Yfit and Yfit_actual to a 2D matrix - trials vs frames
@@ -53,7 +53,8 @@ svmOutput.Yfit_2D = reshape(svmOutput.Yfit, [length(testingTrials), nCells]);
 svmOutput.Yfit_actual_2D = reshape(Yfit_actual, [length(testingTrials), nCells]);
 svmOutput.YfitDiff_2D = reshape(svmOutput.YfitDiff, [length(testingTrials), nCells]);
 
-svmOutput.Q_2D = reshape(svmOutput.Q, [length(testingTrials), nCells]);
+svmOutput.Q_2D = reshape(allQ, [length(testingTrials), nCells]);
+svmOutput.Q = squeeze(mean(svmOutput.Q_2D, 1)); % Try either mean or median
 
 % Time Vector (T)
 peakTimeBin = zeros(nCells, 1);
