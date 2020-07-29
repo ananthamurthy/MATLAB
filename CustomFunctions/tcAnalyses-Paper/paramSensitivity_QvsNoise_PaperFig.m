@@ -604,11 +604,11 @@ figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWid
 % set(gca, 'FontSize', figureDetails.fontSize-2)
 % print('/Users/ananth/Desktop/figs/tcAnalysisPaper/QDvsNoisePercent_rnd', '-dpng')
 
-%% METHOD E
-% Sequential Timing
-% Parameter Sensitivity - Q vs Max Percent Noise
+% METHOD E
+Sequential Timing
+Parameter Sensitivity - Q vs Max Percent Noise
 
-%Since the ptcList does not change over the course of this
+Since the ptcList does not change over the course of this
 ptcList = sdo_batch(101).ptcList
 ocList = sdo_batch(101).ocList
 
@@ -657,7 +657,7 @@ ylabel('QE')
 set(gca, 'FontSize', figureDetails.fontSize-2)
 print('/Users/ananth/Desktop/figs/tcAnalysisPaper/QEvsNoisePercent_seq', '-dpng')
 
-% Random Timing
+Random Timing
 fig14 = figure(14);
 set(fig14,'Position',[300,300,1000,500])
 subplot(1,2,1)
