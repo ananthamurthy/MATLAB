@@ -11,193 +11,193 @@ load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/M26_20180514_synt
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 
 %% ORIGINAL METHOD
-% % Sequential Timing
-% % Parameter Sensitivity - Q vs Hit Trial Ratio - fixed hit trial ratio assignemnt
-% 
-% %Since the ptcList does not change over the course of this
-% ptcList = sdo_batch(81).ptcList;
-% ocList = sdo_batch(81).ocList;
-% 
-% fig1 = figure(1);
-% set(fig1,'Position',[300,300,1000,1000])
-% subplot(2,2,1)
-% y1 = sdo_batch(81).Q(ptcList);
-% y2 = sdo_batch(82).Q(ptcList);
-% y3 = sdo_batch(83).Q(ptcList);
-% y4 = sdo_batch(84).Q(ptcList);
-% y5 = sdo_batch(85).Q(ptcList);
-% y6 = sdo_batch(86).Q(ptcList);
-% y7 = sdo_batch(87).Q(ptcList);
-% y8 = sdo_batch(88).Q(ptcList);
-% y9 = sdo_batch(89).Q(ptcList);
-% y10 = sdo_batch(90).Q(ptcList);
-% 
-% boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
-%     'Notch','on', ...
-%     'Labels',{'1', '3', '5', '7', '9', '11', '13', '15', '17', '19'})
-% title('Putative Time Cells - Uniform Imprecision | Seq')
-% xlabel('Imprecision FWHM (frames)')
-% ylabel('Q')
-% ylim([-0.5 1])
-% set(gca, 'FontSize', figureDetails.fontSize-2)
-% 
-% subplot(2,2,2)
-% y1 = sdo_batch(81).Q(ocList);
-% y2 = sdo_batch(82).Q(ocList);
-% y3 = sdo_batch(83).Q(ocList);
-% y4 = sdo_batch(84).Q(ocList);
-% y5 = sdo_batch(85).Q(ocList);
-% y6 = sdo_batch(86).Q(ocList);
-% y7 = sdo_batch(87).Q(ocList);
-% y8 = sdo_batch(88).Q(ocList);
-% y9 = sdo_batch(89).Q(ocList);
-% y10 = sdo_batch(90).Q(ocList);
-% 
-% boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
-%     'Notch','on', ...
-%     'Labels',{'1', '3', '5', '7', '9', '11', '13', '15', '17', '19'})
-% title('Other Cells - Uniform Imprecision | Seq')
-% xlabel('Imprecision FWHM (frames)')
-% ylabel('Q')
-% ylim([-0.5 1])
-% set(gca, 'FontSize', figureDetails.fontSize-2)
-% 
-% subplot(2,2,3)
-% y1 = sdo_batch(91).Q(ptcList);
-% y2 = sdo_batch(92).Q(ptcList);
-% y3 = sdo_batch(93).Q(ptcList);
-% y4 = sdo_batch(94).Q(ptcList);
-% y5 = sdo_batch(95).Q(ptcList);
-% y6 = sdo_batch(96).Q(ptcList);
-% y7 = sdo_batch(97).Q(ptcList);
-% y8 = sdo_batch(98).Q(ptcList);
-% y9 = sdo_batch(99).Q(ptcList);
-% y10 = sdo_batch(100).Q(ptcList);
-% 
-% boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
-%     'Notch','on', ...
-%     'Labels',{'1', '3', '5', '7', '9', '11', '13', '15', '17', '19'})
-% title('Putative Time Cells - Normal Imprecision | Seq')
-% xlabel('Imprecision FWHM (frames)')
-% ylabel('Q')
-% ylim([-0.5 1])
-% set(gca, 'FontSize', figureDetails.fontSize-2)
-% 
-% subplot(2,2,4)
-% y1 = sdo_batch(91).Q(ocList);
-% y2 = sdo_batch(92).Q(ocList);
-% y3 = sdo_batch(93).Q(ocList);
-% y4 = sdo_batch(94).Q(ocList);
-% y5 = sdo_batch(95).Q(ocList);
-% y6 = sdo_batch(96).Q(ocList);
-% y7 = sdo_batch(97).Q(ocList);
-% y8 = sdo_batch(98).Q(ocList);
-% y9 = sdo_batch(99).Q(ocList);
-% y10 = sdo_batch(100).Q(ocList);
-% 
-% boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
-%     'Notch','on', ...
-%     'Labels',{'1', '3', '5', '7', '9', '11', '13', '15', '17', '19'})
-% title('Other Cells - Normal Imprecision | Seq')
-% xlabel('Imprecision FWHM (frames)')
-% ylabel('Q')
-% ylim([-0.5 1])
-% set(gca, 'FontSize', figureDetails.fontSize-2)
-% 
-% print('/Users/ananth/Desktop/figs/tcAnalysisPaper/QvsImprecision_seq', '-dpng')
-% 
-% % Random Timing
-% % Parameter Sensitivity - Q vs Hit Trial Ratio - fixed hit trial ratio assignemnt
-% 
-% %Since the ptcList does not change over the course of this
-% ptcList = sdo_batch(81).ptcList;
-% ocList = sdo_batch(81).ocList;
-% 
-% fig2 = figure(2);
-% set(fig2,'Position',[300,300,1000,1000])
-% subplot(2,2,1)
-% y1 = sdo_batch(191).Q(ptcList);
-% y2 = sdo_batch(192).Q(ptcList);
-% y3 = sdo_batch(193).Q(ptcList);
-% y4 = sdo_batch(194).Q(ptcList);
-% y5 = sdo_batch(195).Q(ptcList);
-% y6 = sdo_batch(196).Q(ptcList);
-% y7 = sdo_batch(197).Q(ptcList);
-% y8 = sdo_batch(198).Q(ptcList);
-% y9 = sdo_batch(199).Q(ptcList);
-% y10 = sdo_batch(200).Q(ptcList);
-% 
-% boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
-%     'Notch','on', ...
-%     'Labels',{'1', '3', '5', '7', '9', '11', '13', '15', '17', '19'})
-% title('Putative Time Cells - Uniform Imprecision | Rnd')
-% xlabel('Imprecision FWHM (frames)')
-% ylabel('Q')
-% ylim([-0.5 1])
-% set(gca, 'FontSize', figureDetails.fontSize-2)
-% 
-% subplot(2,2,2)
-% y1 = sdo_batch(191).Q(ocList);
-% y2 = sdo_batch(192).Q(ocList);
-% y3 = sdo_batch(193).Q(ocList);
-% y4 = sdo_batch(194).Q(ocList);
-% y5 = sdo_batch(195).Q(ocList);
-% y6 = sdo_batch(196).Q(ocList);
-% y7 = sdo_batch(197).Q(ocList);
-% y8 = sdo_batch(198).Q(ocList);
-% y9 = sdo_batch(199).Q(ocList);
-% y10 = sdo_batch(200).Q(ocList);
-% 
-% boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
-%     'Notch','on', ...
-%     'Labels',{'1', '3', '5', '7', '9', '11', '13', '15', '17', '19'})
-% title('Other Cells - Uniform Imprecision | Rnd')
-% xlabel('Imprecision FWHM (frames)')
-% ylabel('Q')
-% ylim([-0.5 1])
-% set(gca, 'FontSize', figureDetails.fontSize-2)
-% 
-% subplot(2,2,3)
-% y1 = sdo_batch(201).Q(ptcList);
-% y2 = sdo_batch(202).Q(ptcList);
-% y3 = sdo_batch(203).Q(ptcList);
-% y4 = sdo_batch(204).Q(ptcList);
-% y5 = sdo_batch(205).Q(ptcList);
-% y6 = sdo_batch(206).Q(ptcList);
-% y7 = sdo_batch(207).Q(ptcList);
-% y8 = sdo_batch(208).Q(ptcList);
-% y9 = sdo_batch(209).Q(ptcList);
-% y10 = sdo_batch(210).Q(ptcList);
-% 
-% boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
-%     'Notch','on', ...
-%     'Labels',{'1', '3', '5', '7', '9', '11', '13', '15', '17', '19'})
-% title('Putative Time Cells - Normal Imprecision | Rnd')
-% xlabel('Imprecision FWHM (frames)')
-% ylabel('Q')
-% ylim([-0.5 1])
-% set(gca, 'FontSize', figureDetails.fontSize-2)
-% 
-% subplot(2,2,4)
-% y1 = sdo_batch(201).Q(ocList);
-% y2 = sdo_batch(202).Q(ocList);
-% y3 = sdo_batch(203).Q(ocList);
-% y4 = sdo_batch(204).Q(ocList);
-% y5 = sdo_batch(205).Q(ocList);
-% y6 = sdo_batch(206).Q(ocList);
-% y7 = sdo_batch(207).Q(ocList);
-% y8 = sdo_batch(208).Q(ocList);
-% y9 = sdo_batch(209).Q(ocList);
-% y10 = sdo_batch(210).Q(ocList);
-% 
-% boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
-%     'Notch','on', ...
-%     'Labels',{'1', '3', '5', '7', '9', '11', '13', '15', '17', '19'})
-% title('Other Cells - Normal Imprecision | Rnd')
-% xlabel('Imprecision FWHM (frames)')
-% ylabel('Q')
-% ylim([-0.5 1])
-% set(gca, 'FontSize', figureDetails.fontSize-2)
+% Sequential Timing
+% Parameter Sensitivity - Q vs Hit Trial Ratio - fixed hit trial ratio assignemnt
+
+%Since the ptcList does not change over the course of this
+ptcList = sdo_batch(81).ptcList;
+ocList = sdo_batch(81).ocList;
+
+fig1 = figure(1);
+set(fig1,'Position',[300,300,1000,1000])
+subplot(2,2,1)
+y1 = sdo_batch(81).Q(ptcList);
+y2 = sdo_batch(82).Q(ptcList);
+y3 = sdo_batch(83).Q(ptcList);
+y4 = sdo_batch(84).Q(ptcList);
+y5 = sdo_batch(85).Q(ptcList);
+y6 = sdo_batch(86).Q(ptcList);
+y7 = sdo_batch(87).Q(ptcList);
+y8 = sdo_batch(88).Q(ptcList);
+y9 = sdo_batch(89).Q(ptcList);
+y10 = sdo_batch(90).Q(ptcList);
+
+boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
+    'Notch','on', ...
+    'Labels',{'1', '3', '5', '7', '9', '11', '13', '15', '17', '19'})
+title('Putative Time Cells - Uniform Imprecision | Seq')
+xlabel('Imprecision FWHM (frames)')
+ylabel('Q')
+ylim([-0.5 1])
+set(gca, 'FontSize', figureDetails.fontSize-2)
+
+subplot(2,2,2)
+y1 = sdo_batch(81).Q(ocList);
+y2 = sdo_batch(82).Q(ocList);
+y3 = sdo_batch(83).Q(ocList);
+y4 = sdo_batch(84).Q(ocList);
+y5 = sdo_batch(85).Q(ocList);
+y6 = sdo_batch(86).Q(ocList);
+y7 = sdo_batch(87).Q(ocList);
+y8 = sdo_batch(88).Q(ocList);
+y9 = sdo_batch(89).Q(ocList);
+y10 = sdo_batch(90).Q(ocList);
+
+boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
+    'Notch','on', ...
+    'Labels',{'1', '3', '5', '7', '9', '11', '13', '15', '17', '19'})
+title('Other Cells - Uniform Imprecision | Seq')
+xlabel('Imprecision FWHM (frames)')
+ylabel('Q')
+ylim([-0.5 1])
+set(gca, 'FontSize', figureDetails.fontSize-2)
+
+subplot(2,2,3)
+y1 = sdo_batch(91).Q(ptcList);
+y2 = sdo_batch(92).Q(ptcList);
+y3 = sdo_batch(93).Q(ptcList);
+y4 = sdo_batch(94).Q(ptcList);
+y5 = sdo_batch(95).Q(ptcList);
+y6 = sdo_batch(96).Q(ptcList);
+y7 = sdo_batch(97).Q(ptcList);
+y8 = sdo_batch(98).Q(ptcList);
+y9 = sdo_batch(99).Q(ptcList);
+y10 = sdo_batch(100).Q(ptcList);
+
+boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
+    'Notch','on', ...
+    'Labels',{'1', '3', '5', '7', '9', '11', '13', '15', '17', '19'})
+title('Putative Time Cells - Normal Imprecision | Seq')
+xlabel('Imprecision FWHM (frames)')
+ylabel('Q')
+ylim([-0.5 1])
+set(gca, 'FontSize', figureDetails.fontSize-2)
+
+subplot(2,2,4)
+y1 = sdo_batch(91).Q(ocList);
+y2 = sdo_batch(92).Q(ocList);
+y3 = sdo_batch(93).Q(ocList);
+y4 = sdo_batch(94).Q(ocList);
+y5 = sdo_batch(95).Q(ocList);
+y6 = sdo_batch(96).Q(ocList);
+y7 = sdo_batch(97).Q(ocList);
+y8 = sdo_batch(98).Q(ocList);
+y9 = sdo_batch(99).Q(ocList);
+y10 = sdo_batch(100).Q(ocList);
+
+boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
+    'Notch','on', ...
+    'Labels',{'1', '3', '5', '7', '9', '11', '13', '15', '17', '19'})
+title('Other Cells - Normal Imprecision | Seq')
+xlabel('Imprecision FWHM (frames)')
+ylabel('Q')
+ylim([-0.5 1])
+set(gca, 'FontSize', figureDetails.fontSize-2)
+
+print('/Users/ananth/Desktop/figs/tcAnalysisPaper/QvsImprecision_seq', '-dpng')
+
+% Random Timing
+% Parameter Sensitivity - Q vs Hit Trial Ratio - fixed hit trial ratio assignemnt
+
+%Since the ptcList does not change over the course of this
+ptcList = sdo_batch(81).ptcList;
+ocList = sdo_batch(81).ocList;
+
+fig2 = figure(2);
+set(fig2,'Position',[300,300,1000,1000])
+subplot(2,2,1)
+y1 = sdo_batch(191).Q(ptcList);
+y2 = sdo_batch(192).Q(ptcList);
+y3 = sdo_batch(193).Q(ptcList);
+y4 = sdo_batch(194).Q(ptcList);
+y5 = sdo_batch(195).Q(ptcList);
+y6 = sdo_batch(196).Q(ptcList);
+y7 = sdo_batch(197).Q(ptcList);
+y8 = sdo_batch(198).Q(ptcList);
+y9 = sdo_batch(199).Q(ptcList);
+y10 = sdo_batch(200).Q(ptcList);
+
+boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
+    'Notch','on', ...
+    'Labels',{'1', '3', '5', '7', '9', '11', '13', '15', '17', '19'})
+title('Putative Time Cells - Uniform Imprecision | Rnd')
+xlabel('Imprecision FWHM (frames)')
+ylabel('Q')
+ylim([-0.5 1])
+set(gca, 'FontSize', figureDetails.fontSize-2)
+
+subplot(2,2,2)
+y1 = sdo_batch(191).Q(ocList);
+y2 = sdo_batch(192).Q(ocList);
+y3 = sdo_batch(193).Q(ocList);
+y4 = sdo_batch(194).Q(ocList);
+y5 = sdo_batch(195).Q(ocList);
+y6 = sdo_batch(196).Q(ocList);
+y7 = sdo_batch(197).Q(ocList);
+y8 = sdo_batch(198).Q(ocList);
+y9 = sdo_batch(199).Q(ocList);
+y10 = sdo_batch(200).Q(ocList);
+
+boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
+    'Notch','on', ...
+    'Labels',{'1', '3', '5', '7', '9', '11', '13', '15', '17', '19'})
+title('Other Cells - Uniform Imprecision | Rnd')
+xlabel('Imprecision FWHM (frames)')
+ylabel('Q')
+ylim([-0.5 1])
+set(gca, 'FontSize', figureDetails.fontSize-2)
+
+subplot(2,2,3)
+y1 = sdo_batch(201).Q(ptcList);
+y2 = sdo_batch(202).Q(ptcList);
+y3 = sdo_batch(203).Q(ptcList);
+y4 = sdo_batch(204).Q(ptcList);
+y5 = sdo_batch(205).Q(ptcList);
+y6 = sdo_batch(206).Q(ptcList);
+y7 = sdo_batch(207).Q(ptcList);
+y8 = sdo_batch(208).Q(ptcList);
+y9 = sdo_batch(209).Q(ptcList);
+y10 = sdo_batch(210).Q(ptcList);
+
+boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
+    'Notch','on', ...
+    'Labels',{'1', '3', '5', '7', '9', '11', '13', '15', '17', '19'})
+title('Putative Time Cells - Normal Imprecision | Rnd')
+xlabel('Imprecision FWHM (frames)')
+ylabel('Q')
+ylim([-0.5 1])
+set(gca, 'FontSize', figureDetails.fontSize-2)
+
+subplot(2,2,4)
+y1 = sdo_batch(201).Q(ocList);
+y2 = sdo_batch(202).Q(ocList);
+y3 = sdo_batch(203).Q(ocList);
+y4 = sdo_batch(204).Q(ocList);
+y5 = sdo_batch(205).Q(ocList);
+y6 = sdo_batch(206).Q(ocList);
+y7 = sdo_batch(207).Q(ocList);
+y8 = sdo_batch(208).Q(ocList);
+y9 = sdo_batch(209).Q(ocList);
+y10 = sdo_batch(210).Q(ocList);
+
+boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
+    'Notch','on', ...
+    'Labels',{'1', '3', '5', '7', '9', '11', '13', '15', '17', '19'})
+title('Other Cells - Normal Imprecision | Rnd')
+xlabel('Imprecision FWHM (frames)')
+ylabel('Q')
+ylim([-0.5 1])
+set(gca, 'FontSize', figureDetails.fontSize-2)
 % 
 % print('/Users/ananth/Desktop/figs/tcAnalysisPaper/QvsImprecision_rnd', '-dpng')
 % 

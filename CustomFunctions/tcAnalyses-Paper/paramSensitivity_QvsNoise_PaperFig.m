@@ -11,102 +11,102 @@ load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/M26_20180514_synt
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 
 %% ORIGINAL METHOD
-% % Sequential Timing
-% % Parameter Sensitivity - Q vs Max Percent Noise
-% 
-% %Since the ptcList does not change over the course of this
-% ptcList = sdo_batch(101).ptcList;
-% ocList = sdo_batch(101).ocList;
-% 
-% fig1 = figure(1);
-% set(fig1,'Position',[300,300,1000,500])
-% subplot(1,2,1)
-% y1 = sdo_batch(101).Q(ptcList);
-% y2 = sdo_batch(102).Q(ptcList);
-% y3 = sdo_batch(103).Q(ptcList);
-% y4 = sdo_batch(104).Q(ptcList);
-% y5 = sdo_batch(105).Q(ptcList);
-% y6 = sdo_batch(106).Q(ptcList);
-% y7 = sdo_batch(107).Q(ptcList);
-% y8 = sdo_batch(108).Q(ptcList);
-% y9 = sdo_batch(109).Q(ptcList);
-% y10 = sdo_batch(110).Q(ptcList);
-% 
-% boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
-%     'Notch','on', ...
-%     'Labels',{'10', '20', '30', '40', '50', '60', '70', '80', '90', '100'})
-% title('Putative Time Cells - Sequential Timing')
-% xlabel('Gaussian Noise (%)')
-% ylabel('Q')
-% ylim([-0.5 1])
-% set(gca, 'FontSize', figureDetails.fontSize-2)
-% 
-% subplot(1,2,2)
-% y1 = sdo_batch(101).Q(ocList);
-% y2 = sdo_batch(102).Q(ocList);
-% y3 = sdo_batch(103).Q(ocList);
-% y4 = sdo_batch(104).Q(ocList);
-% y5 = sdo_batch(105).Q(ocList);
-% y6 = sdo_batch(106).Q(ocList);
-% y7 = sdo_batch(107).Q(ocList);
-% y8 = sdo_batch(108).Q(ocList);
-% y9 = sdo_batch(109).Q(ocList);
-% y10 = sdo_batch(110).Q(ocList);
-% 
-% boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
-%     'Notch','on', ...
-%     'Labels',{'10', '20', '30', '40', '50', '60', '70', '80', '90', '100'})
-% title('Other Cells - Sequential Timing')
-% xlabel('Gaussian Noise (%)')
-% ylabel('Q')
-% ylim([-0.5 1])
-% set(gca, 'FontSize', figureDetails.fontSize-2)
-% print('/Users/ananth/Desktop/figs/tcAnalysisPaper/QvsNoisePercent_seq', '-dpng')
-% 
-% % Random Timing
-% fig2 = figure(2);
-% set(fig2,'Position',[300,300,1000,500])
-% subplot(1,2,1)
-% y1 = sdo_batch(211).Q(ptcList);
-% y2 = sdo_batch(212).Q(ptcList);
-% y3 = sdo_batch(213).Q(ptcList);
-% y4 = sdo_batch(214).Q(ptcList);
-% y5 = sdo_batch(215).Q(ptcList);
-% y6 = sdo_batch(216).Q(ptcList);
-% y7 = sdo_batch(217).Q(ptcList);
-% y8 = sdo_batch(218).Q(ptcList);
-% y9 = sdo_batch(219).Q(ptcList);
-% y10 = sdo_batch(220).Q(ptcList);
-% 
-% boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
-%     'Notch','on', ...
-%     'Labels',{'10', '20', '30', '40', '50', '60', '70', '80', '90', '100'})
-% title('Putative Time Cells - Random Timing')
-% xlabel('Gaussian Noise (%)')
-% ylabel('Q')
-% ylim([-0.5 1])
-% set(gca, 'FontSize', figureDetails.fontSize-2)
-% 
-% subplot(1,2,2)
-% y1 = sdo_batch(211).Q(ocList);
-% y2 = sdo_batch(212).Q(ocList);
-% y3 = sdo_batch(213).Q(ocList);
-% y4 = sdo_batch(214).Q(ocList);
-% y5 = sdo_batch(215).Q(ocList);
-% y6 = sdo_batch(216).Q(ocList);
-% y7 = sdo_batch(217).Q(ocList);
-% y8 = sdo_batch(218).Q(ocList);
-% y9 = sdo_batch(219).Q(ocList);
-% y10 = sdo_batch(220).Q(ocList);
-% 
-% boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
-%     'Notch','on', ...
-%     'Labels',{'10', '20', '30', '40', '50', '60', '70', '80', '90', '100'})
-% title('Other Cells - Random Timing')
-% xlabel('Gaussian Noise (%)')
-% ylabel('Q')
-% ylim([-0.5 1])
-% set(gca, 'FontSize', figureDetails.fontSize-2)
+% Sequential Timing
+% Parameter Sensitivity - Q vs Max Percent Noise
+
+%Since the ptcList does not change over the course of this
+ptcList = sdo_batch(101).ptcList;
+ocList = sdo_batch(101).ocList;
+
+fig1 = figure(1);
+set(fig1,'Position',[300,300,1000,500])
+subplot(1,2,1)
+y1 = sdo_batch(101).Q(ptcList);
+y2 = sdo_batch(102).Q(ptcList);
+y3 = sdo_batch(103).Q(ptcList);
+y4 = sdo_batch(104).Q(ptcList);
+y5 = sdo_batch(105).Q(ptcList);
+y6 = sdo_batch(106).Q(ptcList);
+y7 = sdo_batch(107).Q(ptcList);
+y8 = sdo_batch(108).Q(ptcList);
+y9 = sdo_batch(109).Q(ptcList);
+y10 = sdo_batch(110).Q(ptcList);
+
+boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
+    'Notch','on', ...
+    'Labels',{'10', '20', '30', '40', '50', '60', '70', '80', '90', '100'})
+title('Putative Time Cells - Sequential Timing')
+xlabel('Gaussian Noise (%)')
+ylabel('Q')
+ylim([-0.5 1])
+set(gca, 'FontSize', figureDetails.fontSize-2)
+
+subplot(1,2,2)
+y1 = sdo_batch(101).Q(ocList);
+y2 = sdo_batch(102).Q(ocList);
+y3 = sdo_batch(103).Q(ocList);
+y4 = sdo_batch(104).Q(ocList);
+y5 = sdo_batch(105).Q(ocList);
+y6 = sdo_batch(106).Q(ocList);
+y7 = sdo_batch(107).Q(ocList);
+y8 = sdo_batch(108).Q(ocList);
+y9 = sdo_batch(109).Q(ocList);
+y10 = sdo_batch(110).Q(ocList);
+
+boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
+    'Notch','on', ...
+    'Labels',{'10', '20', '30', '40', '50', '60', '70', '80', '90', '100'})
+title('Other Cells - Sequential Timing')
+xlabel('Gaussian Noise (%)')
+ylabel('Q')
+ylim([-0.5 1])
+set(gca, 'FontSize', figureDetails.fontSize-2)
+print('/Users/ananth/Desktop/figs/tcAnalysisPaper/QvsNoisePercent_seq', '-dpng')
+
+% Random Timing
+fig2 = figure(2);
+set(fig2,'Position',[300,300,1000,500])
+subplot(1,2,1)
+y1 = sdo_batch(211).Q(ptcList);
+y2 = sdo_batch(212).Q(ptcList);
+y3 = sdo_batch(213).Q(ptcList);
+y4 = sdo_batch(214).Q(ptcList);
+y5 = sdo_batch(215).Q(ptcList);
+y6 = sdo_batch(216).Q(ptcList);
+y7 = sdo_batch(217).Q(ptcList);
+y8 = sdo_batch(218).Q(ptcList);
+y9 = sdo_batch(219).Q(ptcList);
+y10 = sdo_batch(220).Q(ptcList);
+
+boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
+    'Notch','on', ...
+    'Labels',{'10', '20', '30', '40', '50', '60', '70', '80', '90', '100'})
+title('Putative Time Cells - Random Timing')
+xlabel('Gaussian Noise (%)')
+ylabel('Q')
+ylim([-0.5 1])
+set(gca, 'FontSize', figureDetails.fontSize-2)
+
+subplot(1,2,2)
+y1 = sdo_batch(211).Q(ocList);
+y2 = sdo_batch(212).Q(ocList);
+y3 = sdo_batch(213).Q(ocList);
+y4 = sdo_batch(214).Q(ocList);
+y5 = sdo_batch(215).Q(ocList);
+y6 = sdo_batch(216).Q(ocList);
+y7 = sdo_batch(217).Q(ocList);
+y8 = sdo_batch(218).Q(ocList);
+y9 = sdo_batch(219).Q(ocList);
+y10 = sdo_batch(220).Q(ocList);
+
+boxplot([y1, y2, y3, y4, y5, y6, y7, y8, y9, y10], ...
+    'Notch','on', ...
+    'Labels',{'10', '20', '30', '40', '50', '60', '70', '80', '90', '100'})
+title('Other Cells - Random Timing')
+xlabel('Gaussian Noise (%)')
+ylabel('Q')
+ylim([-0.5 1])
+set(gca, 'FontSize', figureDetails.fontSize-2)
 % print('/Users/ananth/Desktop/figs/tcAnalysisPaper/QvsNoisePercent_rnd', '-dpng')
 % 
 % %% METHOD A

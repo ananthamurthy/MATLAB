@@ -34,6 +34,7 @@ else
 end
 
 actualEventWidthRange = zeros(nCells, 2);
+allEventWidths = zeros(nCells, nTrials);
 requiredEventWidth = zeros(nCells, 1);
 hitTrials = zeros(nCells, nTrials);
 hitTrialPercent = zeros(nCells, 1);
@@ -103,7 +104,9 @@ for cell = 1:nCells
                 end
                 eventStartIndex = randomlyPickEvent(eventIndices, eventLibrary_2D, cell);
                 %Now, we pick out exactly one event per trial
-                event = DATA_2D(cell, eventStartIndex:1:eventStartIndex+actualEventWidthRange(cell)-1);
+                event = DATA_2D(cell, eventStartIndex:1:eventStartIndex+actualEventWidthRange(cell, 2) - 1);
+                
+                allEventWidths(cell, trial) = findEventWidth(event);
                 
                 %disp('Selecting the Frame Index ...')
                 [frameIndex(cell, trial), pad(cell, trial)] = selectFrameIndex(control.eventTiming, control.startFrame, control.endFrame, control.imprecisionFWHM, control.imprecisionType, frameGroup);
@@ -203,6 +206,7 @@ output.ptcList = ptcList;
 output.ocList = ocList;
 output.nCells = nCells;
 output.actualEventWidth = actualEventWidthRange;
+output.allEventWidths = allEventWidths;
 output.hitTrialPercent = hitTrialPercent;
 output.hitTrials = hitTrials;
 output.frameIndex = frameIndex;

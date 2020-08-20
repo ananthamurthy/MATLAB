@@ -100,6 +100,7 @@ s.ptcList = [];
 s.ocList = [];
 s.nCells = nCells;
 s.actualEventWidth = zeros(nCells, 2);
+s.allEventWidths = zeros(nCells, nTrials);
 s.hitTrialPercent = zeros(nCells, 1);
 s.hitTrials = zeros(nCells, nTrials);
 s.frameIndex = zeros(nCells, nTrials);
@@ -128,7 +129,8 @@ for runi = 1:1:nDatasets
     params4Q.noisePercent = sdcp(runi).noisePercent;
     params4Q.eventAmplificationFactor = sdcp(runi).eventAmplificationFactor;
     params4Q.maxSignal = sdo.maxSignal;
-    params4Q.actualEventWidth = sdo.actualEventWidth;
+    %params4Q.actualEventWidth = sdo.actualEventWidth;
+    params4Q.allEventWidths = sdo.allEventWidths;
     params4Q.imprecisionFWHM = sdcp(runi).imprecisionFWHM;
     params4Q.nTotalFrames = size(sdo.syntheticDATA, 3);
     
