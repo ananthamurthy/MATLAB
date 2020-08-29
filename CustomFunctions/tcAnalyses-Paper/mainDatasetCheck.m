@@ -1,7 +1,8 @@
 addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions'))
 
 % Generated Synthetic Data
-load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/synthDATA_batch_220.mat')
+%load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/synthDATA_batch_220.mat')
+load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/synthDATA_20200820_gRun1_batch_220.mat')
 
 normalize = 1;
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet');

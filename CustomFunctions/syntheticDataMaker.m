@@ -72,8 +72,8 @@ for cell = 1:nCells
             actualEventWidthRange(cell, 1) = floor(max(eventLibrary_2D(cell).eventWidths) - requiredEventWidth(cell)); % Min
             actualEventWidthRange(cell, 2) = ceil(max(eventLibrary_2D(cell).eventWidths) + requiredEventWidth(cell)); % Max
         elseif strcmpi(control.eventWidth(2), 'same') %same option every time
-            actualEventWidthRange(cell, 1) = prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1});
-            actualEventWidthRange(cell, 2) = prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1}); %NOTE: keeping max and min the same.
+            actualEventWidthRange(cell, 1) = floor(prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1}));
+            actualEventWidthRange(cell, 2) = floor(prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1})); %NOTE: keeping max and min the same.
         else
             requiredEventWidth(cell) = control.eventWidth{2};
             actualEventWidthRange(cell, 1) = floor(prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1})) - requiredEventWidth(cell); % Min
@@ -191,7 +191,7 @@ end
 % syntheticDATA(syntheticDATA<0) = 0;
 % disp('... done!')
 
-mustBeNonnegative(syntheticDATA)
+%mustBeNonnegative(syntheticDATA)
 
 %2D Synthetic Data
 for cell = 1:nCells

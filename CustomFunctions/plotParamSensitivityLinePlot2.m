@@ -1,10 +1,10 @@
-function plotParamSensitivityLinePlot(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch)
+function plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch, nMethods)
 
 ptcList = sdo_batch(dIndices(1)).ptcList;
 ocList = sdo_batch(dIndices(1)).ocList;
 
 for parami = 1:10
-    for method = 1:7
+    for method = 1:nMethods
         if method == 1 %orginal method
             yPTC(parami, method, :) = sdo_batch(dIndices(parami)).Q(ptcList);
             yOC(parami, method, :) = sdo_batch(dIndices(parami)).Q(ocList);
@@ -41,7 +41,7 @@ x = 1:10;
 %Normalize
 if normalize
     %     disp('Normalizing ...')
-    for method = 1:7
+    for method = 1:nMethods
         normValPTC = nanmax(nanmax(yPTC(:, method, :)));
         yPTC_norm(:, method, :) = yPTC(:, method, :)/normValPTC;
         
@@ -50,7 +50,7 @@ if normalize
     end
     
     for parami = 1:10
-        for method = 1:7
+        for method = 1:nMethods
             yPTC_norm_median(parami, method) = nanmedian(squeeze(yPTC_norm(parami, method, :)));
             yOC_norm_median(parami, method) = nanmedian(squeeze(yOC_norm(parami, method, :)));
             
@@ -59,11 +59,10 @@ if normalize
         end
     end
     
-    %fig1 = figure(1);
-    figure
-    %set(fig1,'Position',[300,300,2000,500])
-    clf
-    for method = 1:7
+    fig1 = figure(1);
+    set(fig1,'Position',[300, 300, 1000, 500])
+    subplot(1, 2, 1)
+    for method = 1:nMethods
         if method == 1
             errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'blue', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
@@ -89,21 +88,16 @@ if normalize
     end
     xticks([1 2 3 4 5 6 7 8 9 10])
     xticklabels(labels.xtickscell)
-    title(labels.titlePTC)
+    completeTitle = strcat(labels.titleMain, ' - ', labels.titlePTC);
+    title(completeTitle)
     xlabel(labels.xtitle)
     ylabel(labels.ytitle)
     legend('Ref', 'A', 'B', 'C1', 'C2', 'D', 'E')
     set(gca, 'FontSize', figureDetails.fontSize-2)
-    print(strcat('/Users/ananth/Desktop/figs/tcAnalysisPaper/norm_linePlots_Qvs', ...
-        labels.xtitle(~isspace(labels.xtitle)), ...
-        labels.titlePTC(~isspace(labels.titlePTC))), ...
-        '-dpng')
+    hold off
     
-    %fig2 = figure(2);
-    figure
-    %set(fig2,'Position',[300,300,2000,500])
-    clf
-    for method = 1:7
+    subplot(1, 2, 2)
+    for method = 1:nMethods
         if method == 1
             errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'blue', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
@@ -129,22 +123,25 @@ if normalize
     end
     xticks([1 2 3 4 5 6 7 8 9 10])
     xticklabels(labels.xtickscell)
-    title(labels.titleOC)
+    completeTitle = strcat(labels.titleMain, ' - ', labels.titleOC);
+    title(completeTitle)
     xlabel(labels.xtitle)
     ylabel(labels.ytitle)
     legend('Ref', 'A', 'B', 'C1', 'C2', 'D', 'E')
     set(gca, 'FontSize', figureDetails.fontSize-2)
+    hold off
+    
     print(strcat('/Users/ananth/Desktop/figs/tcAnalysisPaper/norm_linePlots_Qvs', ...
         labels.xtitle(~isspace(labels.xtitle)), ...
-        labels.titleOC(~isspace(labels.titleOC))), ...
+        '-', ...
+        labels.titleMain(~isspace(labels.titleMain))), ...
         '-dpng')
     
 else
-    %fig1 = figure(1);
-    figure
-    %set(fig1,'Position',[300,300,2000,500])
-    clf
-    for method = 1:7
+    fig1 = figure(1);
+    set(fig1,'Position',[300, 300, 1000, 500])
+    subplot(1, 2, 1)
+    for method = 1:nMethods
         if method == 1
             errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'blue', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
@@ -170,21 +167,16 @@ else
     end
     xticks([1 2 3 4 5 6 7 8 9 10])
     xticklabels(labels.xtickscell)
-    title(labels.titlePTC)
+    completeTitle = strcat(labels.titleMain, ' - ', labels.titlePTC);
+    title(completeTitle)
     xlabel(labels.xtitle)
     ylabel(labels.ytitle)
     legend('Org', 'A', 'B', 'C1', 'C2', 'D', 'E')
     set(gca, 'FontSize', figureDetails.fontSize-2)
-    print(strcat('/Users/ananth/Desktop/figs/tcAnalysisPaper/linePlots_Qvs', ...
-        labels.xtitle(~isspace(labels.xtitle)), ...
-        labels.titlePTC(~isspace(labels.titlePTC))), ...
-        '-dpng')
+    hold off
     
-    %fig2 = figure(2);
-    figure
-    %set(fig2,'Position',[300,300,2000,500])
-    clf
-    for method = 1:7
+    subplot(1, 2, 2)
+    for method = 1:nMethods
         if method == 1
             errorbar(yOC_median(:, method), yOC_stddev(:, method), 'blue', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
@@ -210,14 +202,17 @@ else
     end
     xticks([1 2 3 4 5 6 7 8 9 10])
     xticklabels(labels.xtickscell)
-    title(labels.titleOC)
+    completeTitle = strcat(labels.titleMain, ' - ', labels.titleOC);
+    title(completeTitle)
     xlabel(labels.xtitle)
     ylabel(labels.ytitle)
     legend('Org', 'A', 'B', 'C1', 'C2', 'D', 'E')
     set(gca, 'FontSize', figureDetails.fontSize-2)
+    hold off
     print(strcat('/Users/ananth/Desktop/figs/tcAnalysisPaper/linePlots_Qvs', ...
         labels.xtitle(~isspace(labels.xtitle)), ...
-        labels.titleOC(~isspace(labels.titleOC))), ...
+        '-', ...
+        labels.titleMain(~isspace(labels.titleMain))), ...
         '-dpng')
 end
 end

@@ -4,13 +4,17 @@
 % Currently uses one session of real data, but can generate synthetic
 % datasets in batch.
 
-function sdo_batch = generateSyntheticDataOnServer(date, gRun)
+function sdo_batch = generateSyntheticDataOnServer(date, gRun, workingOnServer)
 
 tic
 close all
 
-HOME_DIR = '/home/bhalla/ananthamurthy/';
-%HOME_DIR = '/Users/ananth/Documents/';
+if workingOnServer == 1
+    HOME_DIR = '/home/bhalla/ananthamurthy/';
+else
+    HOME_DIR = '/Users/ananth/Documents/';
+    HOME_DIR2 = '/Users/ananth/Desktop/';
+end
 addpath(genpath(strcat(HOME_DIR, 'MATLAB/CustomFunctions'))) % my custom functions
 addpath(genpath(strcat(HOME_DIR,'MATLAB/ImagingAnalysis'))) % Additional functions
 addpath(genpath(strcat(HOME_DIR, 'MATLAB/ImagingAnalysis/Suite2P-ananth')))
@@ -21,19 +25,24 @@ ops0.saveData        = 1;
 %figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %ops0.onlyProbeTrials = 0
 
-diary (strcat(HOME_DIR, '/logs/dataGenDiary'))
-diary on
+%diary (strcat(HOME_DIR2, '/logs/dataGenDiary'))
+%diary on
 
 %% Load real dataset details
 make_db %Currently only for one session at a time
 
-fprintf('Reference Dataset - %s_%i_%i | Date: %s\n', db.mouseName, ...
+fprintf('Reference Dataset - %s_%i_%i | Date: %s\n', ...
+    db.mouseName, ...
     db.sessionType, ...
     db.session, ...
     db.date)
 
-saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
-%saveDirec = strcat('/Users/ananth/Desktop/', 'Work/Analysis/Imaging/');
+if workingOnServer
+    saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
+else
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
+end
+
 saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
 
 %% Load processed dF/F data for dataset
@@ -45,6 +54,7 @@ fprintf('Total cells: %i\n', nCells)
 
 %% Load synthetic dataset control parameters
 setupSyntheticDataParametersOnServer %Loads all options
+%setupSyntheticDataParameters_batch
 nDatasets = length(sdcp);
 
 %% Organize Library of Calcium Events
@@ -109,6 +119,9 @@ s.noiseComponent = zeros(nCells, nTrials, nFrames);
 s.scurr = {};
 s.endTime = '';
 s.Q = zeros(nCells, 1);
+s.ex1 = [];
+s.ex2 = [];
+s.ex3 = [];
 s.T = zeros(nCells, 1);
 %sdo_batch = repmat(s, 1, length(sdcp));
 sdo_batch = repmat(s, 1, nDatasets);
@@ -133,16 +146,19 @@ for runi = 1:1:nDatasets
     params4Q.allEventWidths = sdo.allEventWidths;
     params4Q.imprecisionFWHM = sdcp(runi).imprecisionFWHM;
     params4Q.nTotalFrames = size(sdo.syntheticDATA, 3);
+    params4Q.alpha = 1;
+    params4Q.beta = 1;
+    params4Q.gamma = 0.1;
     
-    sdo.Q = developQ(params4Q);
+    [sdo.Q, sdo.ex1, sdo.ex2, sdo.ex3] = developQ(params4Q);
     
-%     % Derived Time
-%     delta = 3;
-%     skipFrames = [];
-%     [ETH, ETH_3D, nbins] = getETH(sdo.syntheticDATA, delta, skipFrames);
-%     %[~, derivedT] = max(ETH(sdo.ptcList,:), [], 2); % Actual Time Vector
-%     [~, derivedT] = max(ETH(:,:), [], 2); % Actual Time Vector
-%     sdo.T = derivedT;
+    %     % Derived Time
+    %     delta = 3;
+    %     skipFrames = [];
+    %     [ETH, ETH_3D, nbins] = getETH(sdo.syntheticDATA, delta, skipFrames);
+    %     %[~, derivedT] = max(ETH(sdo.ptcList,:), [], 2); % Actual Time Vector
+    %     [~, derivedT] = max(ETH(:,:), [], 2); % Actual Time Vector
+    %     sdo.T = derivedT;
     sdo.T = zeros(nCells, 1);
     sdo_batch(runi) = sdo;
 end
@@ -162,4 +178,4 @@ end
 elapsedTime = toc;
 disp('All done!')
 disp(elapsedTime)
-diary off
+%diary off
