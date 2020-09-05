@@ -4,7 +4,7 @@
 % Currently uses one session of real data, but can generate synthetic
 % datasets in batch.
 
-function sdo_batch = generateSyntheticDataOnServer(date, gRun, workingOnServer)
+function [sdo_batch, eventLibrary_2D] = generateSyntheticDataOnServer(date, gRun, workingOnServer)
 
 tic
 close all
@@ -122,6 +122,7 @@ s.Q = zeros(nCells, 1);
 s.ex1 = [];
 s.ex2 = [];
 s.ex3 = [];
+s.ex4 = [];
 s.T = zeros(nCells, 1);
 %sdo_batch = repmat(s, 1, length(sdcp));
 sdo_batch = repmat(s, 1, nDatasets);
@@ -144,13 +145,15 @@ for runi = 1:1:nDatasets
     params4Q.maxSignal = sdo.maxSignal;
     %params4Q.actualEventWidth = sdo.actualEventWidth;
     params4Q.allEventWidths = sdo.allEventWidths;
-    params4Q.imprecisionFWHM = sdcp(runi).imprecisionFWHM;
-    params4Q.nTotalFrames = size(sdo.syntheticDATA, 3);
+    %params4Q.imprecisionFWHM = sdcp(runi).imprecisionFWHM;
+    params4Q.pad = sdo.pad;
+    params4Q.stimulusWindow = sdcp(runi).endFrame - sdcp(runi).startFrame;
     params4Q.alpha = 1;
     params4Q.beta = 1;
-    params4Q.gamma = 0.1;
+    params4Q.gamma = 10;
     
-    [sdo.Q, sdo.ex1, sdo.ex2, sdo.ex3] = developQ(params4Q);
+    %sdo.Q = developQ(params4Q);
+    [sdo.Q, sdo.ex1, sdo.ex2, sdo.ex3, sdo.ex4] = developQ(params4Q);
     
     %     % Derived Time
     %     delta = 3;

@@ -12,7 +12,7 @@ addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions'))
 
 % Generated Synthetic Data
 %load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/synthDATA_batch_220.mat')
-load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/synthDATA_20200827_gRun1_batch_220.mat')
+load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/synthDATA_20200905_gRun1_batch_220.mat')
 
 % Analysed Data
 load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/M26_20180514_synthDataAnalysis_20200615_cRun4_cData.mat')
@@ -33,7 +33,7 @@ labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch)
 plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch, nMethods)
-mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
+%mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 
 dIndices = 31:1:40;
 normalize = 1;
@@ -47,7 +47,7 @@ labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch)
 plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch, nMethods)
-mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
+%mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 
 dIndices = 131:1:140;
 normalize = 1;
@@ -61,7 +61,7 @@ labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch)
 plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch, nMethods)
-mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
+%mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 
 dIndices = 141:1:150;
 normalize = 1;
@@ -75,7 +75,7 @@ labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch)
 plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch, nMethods)
-mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
+%mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 
 %% Q vs Noise
 
@@ -91,7 +91,7 @@ labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch)
 plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch, nMethods)
-mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
+%mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 
 dIndices = 211:1:220;
 normalize = 1;
@@ -105,7 +105,7 @@ labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch)
 plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch, nMethods)
-mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
+%mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 
 %% Q vs Event Widths
 
@@ -121,7 +121,7 @@ labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch)
 plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch, nMethods)
-mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
+%mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 
 dIndices = 71:1:80;
 normalize = 1;
@@ -135,7 +135,7 @@ labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch)
 plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch, nMethods)
-mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
+%mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 
 %% Q vs Imprecision
 
@@ -151,7 +151,7 @@ labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch)
 plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch, nMethods)
-mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
+%mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 
 dIndices = 91:1:100;
 normalize = 1;
@@ -165,7 +165,7 @@ labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch)
 plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch, nMethods)
-mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
+%mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 
 dIndices = 191:1:200;
 normalize = 1;
@@ -179,7 +179,7 @@ labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch)
 plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch, nMethods)
-mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
+%mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 
 dIndices = 201:1:210;
 normalize = 1;
@@ -193,4 +193,4 @@ labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch)
 plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch, nMethods)
-mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
+%mainDatasetCheck3(dIndices, sdo_batch, figureDetails)

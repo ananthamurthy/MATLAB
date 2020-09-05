@@ -1,0 +1,21 @@
+function Q = developQ(params4Q)
+
+Q = zeros(params4Q.nCells, 1);
+
+% ex1 = zeros(params4Q.nCells, 1);
+% ex2 = zeros(params4Q.nCells, 1);
+% ex3 = zeros(params4Q.nCells, 1);
+% ex4 = zeros(params4Q.nCells, 1);
+
+for cell = 1:params4Q.nCells
+    
+    Q(cell) = (params4Q.hitTrialPercent(cell)/100) ...
+        * exp(-1 * (((params4Q.alpha * params4Q.noisePercent)/(100*params4Q.eventAmplificationFactor)) ...
+        + ((params4Q.beta * std(params4Q.allEventWidths(cell, :)))/params4Q.stimulusWindow ...
+        + (params4Q.gamma * std(params4Q.pad(cell, :))/params4Q.stimulusWindow))));
+    
+%     ex1(cell) = ((params4Q.noisePercent)/(100*params4Q.eventAmplificationFactor));
+%     ex2(cell) = std(params4Q.allEventWidths(cell, :))/mean(params4Q.allEventWidths(cell, :));
+%     ex3(cell) = params4Q.imprecisionFWHM/mean(params4Q.allEventWidths(cell, :));
+%     ex4(cell) = mean(params4Q.allEventWidths(cell, :));
+end

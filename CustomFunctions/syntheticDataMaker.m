@@ -66,19 +66,24 @@ for cell = 1:nCells
             error('Unknown sdcp.trialOrder')
         end
         
-        %What size of calcium events to select?
-        if strcmpi(control.eventWidth(2), 'stddev') %One stddev worth of options
-            requiredEventWidth(cell) = std(eventLibrary_2D(cell).eventWidths);
-            actualEventWidthRange(cell, 1) = floor(max(eventLibrary_2D(cell).eventWidths) - requiredEventWidth(cell)); % Min
-            actualEventWidthRange(cell, 2) = ceil(max(eventLibrary_2D(cell).eventWidths) + requiredEventWidth(cell)); % Max
-        elseif strcmpi(control.eventWidth(2), 'same') %same option every time
-            actualEventWidthRange(cell, 1) = floor(prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1}));
-            actualEventWidthRange(cell, 2) = floor(prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1})); %NOTE: keeping max and min the same.
-        else
-            requiredEventWidth(cell) = control.eventWidth{2};
-            actualEventWidthRange(cell, 1) = floor(prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1})) - requiredEventWidth(cell); % Min
-            actualEventWidthRange(cell, 2) = ceil(prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1})) + requiredEventWidth(cell); % Max
-        end
+        %What range of calcium events to select?
+        %a = floor(control.eventWidth{2} * std(eventLibrary_2D(cell).eventWidths))
+        requiredEventWidth(cell) = control.eventWidth{2} * std(eventLibrary_2D(cell).eventWidths);
+        actualEventWidthRange(cell, 1) = floor(max(eventLibrary_2D(cell).eventWidths) - requiredEventWidth(cell)); % Min
+        actualEventWidthRange(cell, 2) = ceil(max(eventLibrary_2D(cell).eventWidths) + requiredEventWidth(cell)); % Max
+        
+        %         if strcmpi(control.eventWidth(2), 'stddev') %One stddev worth of options
+        %             requiredEventWidth(cell) = std(eventLibrary_2D(cell).eventWidths);
+        %             actualEventWidthRange(cell, 1) = floor(max(eventLibrary_2D(cell).eventWidths) - requiredEventWidth(cell)); % Min
+        %             actualEventWidthRange(cell, 2) = ceil(max(eventLibrary_2D(cell).eventWidths) + requiredEventWidth(cell)); % Max
+        %         elseif strcmpi(control.eventWidth(2), 'same') %same option every time
+        %             actualEventWidthRange(cell, 1) = floor(prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1}));
+        %             actualEventWidthRange(cell, 2) = floor(prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1})); %NOTE: keeping max and min the same.
+        %         else
+        %             requiredEventWidth(cell) = control.eventWidth{2};
+        %             actualEventWidthRange(cell, 1) = floor(prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1})) - requiredEventWidth(cell); % Min
+        %             actualEventWidthRange(cell, 2) = ceil(prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1})) + requiredEventWidth(cell); % Max
+        %         end
         
         %This section is only important for the sequential case
         %Here we need to define which frame each cell gets targetted to
@@ -102,11 +107,11 @@ for cell = 1:nCells
                     warning('No suitable events found for cell: %i. Continuing to next cell ...\n', num2str(cell));
                     break
                 end
-                eventStartIndex = randomlyPickEvent(eventIndices, eventLibrary_2D, cell);
+                [selectedEventIndex, eventStartIndex] = randomlyPickEvent(eventIndices, eventLibrary_2D, cell);
                 %Now, we pick out exactly one event per trial
-                event = DATA_2D(cell, eventStartIndex:1:eventStartIndex+actualEventWidthRange(cell, 2) - 1);
+                event = DATA_2D(cell, eventStartIndex:1:eventStartIndex+eventLibrary_2D(cell).eventWidths(selectedEventIndex) - 1);
                 
-                allEventWidths(cell, trial) = findEventWidth(event);
+                allEventWidths(cell, trial) = length(event);
                 
                 %disp('Selecting the Frame Index ...')
                 [frameIndex(cell, trial), pad(cell, trial)] = selectFrameIndex(control.eventTiming, control.startFrame, control.endFrame, control.imprecisionFWHM, control.imprecisionType, frameGroup);
