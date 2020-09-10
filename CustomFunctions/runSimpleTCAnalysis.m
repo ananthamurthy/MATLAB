@@ -7,11 +7,16 @@ skipFrames = simpleInput.skipFrames;
 THINGS TO DO:
 Use some 'tcellThreshold' to determine time cells.
 %}
-if simpleInput.getT
-    [ETH, trialAUCs, nBins] = getETH(DATA, delta, skipFrames);
-end
+
 nCells = size(DATA, 1);
 nTrials = size(DATA, 2);
+nFrames = size(DATA, 3);
+
+if simpleInput.getT
+    [ETH, trialAUCs, nBins] = getETH(DATA, delta, skipFrames);
+else
+    nBins = nFrames/simpleInput.delta;
+end
 
 %Preallocation
 hitTrial = zeros(nCells, nTrials);
