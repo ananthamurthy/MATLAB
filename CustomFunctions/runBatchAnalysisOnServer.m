@@ -194,7 +194,6 @@ for runi = sdcpStart: 1: sdcpEnd
         mCInput.delta = 3;
         mCInput.skipFrames = [];
         mCInput.trialThreshold = 25; % in %
-        mCInput.getT = 0;
         [mCOutput] = runSimpleTCAnalysis(DATA, mCInput);
         mCOutput.normQ1 = (mCOutput.Q1)/max(mCOutput.Q1);
         mCOutput.normQ2 = (mCOutput.Q2)/max(mCOutput.Q2);

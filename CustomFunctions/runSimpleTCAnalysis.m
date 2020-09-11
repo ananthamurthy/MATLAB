@@ -10,13 +10,9 @@ Use some 'tcellThreshold' to determine time cells.
 
 nCells = size(DATA, 1);
 nTrials = size(DATA, 2);
-nFrames = size(DATA, 3);
+%nFrames = size(DATA, 3);
 
-if simpleInput.getT
-    [ETH, trialAUCs, nBins] = getETH(DATA, delta, skipFrames);
-else
-    nBins = nFrames/simpleInput.delta;
-end
+[ETH, trialAUCs, nBins] = getETH(DATA, delta, skipFrames);
 
 %Preallocation
 hitTrial = zeros(nCells, nTrials);
