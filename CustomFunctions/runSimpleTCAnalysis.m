@@ -27,10 +27,8 @@ peakTrialTimeBin = nan(nCells, nTrials);
 test_cdf = [1:nBins; cdf('Uniform', 1:nBins, 1, nBins)];
 
 for cell = 1:nCells
-    if simpleInput.getT
-        % Time Vector
-        [~, peakTimeBin(cell)] = max(squeeze(ETH(cell, :)));
-    end
+    % Time Vector
+    [~, peakTimeBin(cell)] = max(squeeze(ETH(cell, :)));
     
     for trial = 1:nTrials
         m = mean(squeeze(trialAUCs(cell, trial, :)));
