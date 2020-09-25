@@ -64,7 +64,7 @@ params(job).sdcpStart = 56;
 params(job).sdcpEnd = 110;
 params(job).date = 20200923;
 params(job).gRun = 1;
-params(job).trim = 1;
+params(job).trim = 0;
 params(job).trimRun = 0;
 
 %7
