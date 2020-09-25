@@ -53,7 +53,7 @@ params(job).sdcpStart = 1;
 params(job).sdcpEnd = 55;
 params(job).date = 20200923;
 params(job).gRun = 1;
-params(job).trim = 1;
+params(job).trim = 0;
 params(job).trimRun = 0;
 
 %6
