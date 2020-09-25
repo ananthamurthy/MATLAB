@@ -1,14 +1,10 @@
 % AUTHOR: Kambadur Ananthamurthy
-% Here, 'date' refers to the date the batch analysis jobs were launched
-% Doubt I'll launch multiple batch analyses on the same day, but this can
-% be remedied by selecting an appropriate string instead of the date.
-% AUTHOR: Kambadur Ananthamurthy
 % Run this function to collect outputs from independent jobs and
 % consolidate them into one file.
-% date: Job Date
+% cDate: Harvest Date
 % cRun: Harvest Number
 
-function consolidateBatch(date, cRun)
+function consolidateBatch(cDate, cRun)
 
 tic
 HOME_DIR = '/home/bhalla/ananthamurthy';
@@ -73,7 +69,7 @@ for job = 1:length(params)
     end
 end
 
-filename = [db.mouseName '_' db.date '_synthDataAnalysis_' num2str(date) '_cRun' num2str(cRun) '_cData.mat' ];
+filename = [db.mouseName '_' db.date '_synthDataAnalysis_' num2str(cDate) '_cRun' num2str(cRun) '_cData.mat' ];
 fullPath4Save = strcat(saveFolder, filename);
 
 disp('Saving everything ...')
