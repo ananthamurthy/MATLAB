@@ -1,6 +1,6 @@
 %syntheticDataMaker
 %Written by Kambadur Ananthamurthy
-function output = syntheticDataMaker(dataset, DATA_2D, eventLibrary_2D, control)
+function output = syntheticDataMaker(dataset, DATA_2D, eventLibrary_2D, control, runi)
 
 disp('Creating synthetic data ...')
 
@@ -16,7 +16,9 @@ maxSignal = zeros(nCells, 1);
 
 %Which cells to select?
 nPutativeTimeCells = floor((control.timeCellPercent/100) * nCells);
+nOtherCells = nCells - nPutativeTimeCells;
 fprintf('... Number of Putative Time Cells: %i\n', nPutativeTimeCells)
+fprintf('... Number of Other Cells: %i\n', nOtherCells)
 if nPutativeTimeCells ~= 0
     if strcmpi(control.cellOrder, 'basic')
         ptcList = 1:nPutativeTimeCells;
@@ -33,9 +35,9 @@ else
     ocList = 1:nCells;
 end
 
-actualEventWidthRange = zeros(nCells, 2);
+eventWidthRangeInFrames = zeros(nCells, 2);
 allEventWidths = zeros(nCells, nTrials);
-requiredEventWidth = zeros(nCells, 1);
+eventWidthRangeInSD = zeros(nCells, 1);
 hitTrials = zeros(nCells, nTrials);
 hitTrialPercent = zeros(nCells, 1);
 
@@ -43,7 +45,6 @@ frameIndex = nan(nCells, nTrials);
 pad = zeros(nCells, nTrials);
 
 for cell = 1:nCells
-    %disp(cell)
     %For Putative Time Cells
     if ismember(cell, ptcList)
         if strcmpi(control.hitTrialPercentAssignment, 'fixed')
@@ -67,23 +68,9 @@ for cell = 1:nCells
         end
         
         %What range of calcium events to select?
-        %a = floor(control.eventWidth{2} * std(eventLibrary_2D(cell).eventWidths))
-        requiredEventWidth(cell) = control.eventWidth{2} * std(eventLibrary_2D(cell).eventWidths);
-        actualEventWidthRange(cell, 1) = floor(max(eventLibrary_2D(cell).eventWidths) - requiredEventWidth(cell)); % Min
-        actualEventWidthRange(cell, 2) = ceil(max(eventLibrary_2D(cell).eventWidths) + requiredEventWidth(cell)); % Max
-        
-        %         if strcmpi(control.eventWidth(2), 'stddev') %One stddev worth of options
-        %             requiredEventWidth(cell) = std(eventLibrary_2D(cell).eventWidths);
-        %             actualEventWidthRange(cell, 1) = floor(max(eventLibrary_2D(cell).eventWidths) - requiredEventWidth(cell)); % Min
-        %             actualEventWidthRange(cell, 2) = ceil(max(eventLibrary_2D(cell).eventWidths) + requiredEventWidth(cell)); % Max
-        %         elseif strcmpi(control.eventWidth(2), 'same') %same option every time
-        %             actualEventWidthRange(cell, 1) = floor(prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1}));
-        %             actualEventWidthRange(cell, 2) = floor(prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1})); %NOTE: keeping max and min the same.
-        %         else
-        %             requiredEventWidth(cell) = control.eventWidth{2};
-        %             actualEventWidthRange(cell, 1) = floor(prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1})) - requiredEventWidth(cell); % Min
-        %             actualEventWidthRange(cell, 2) = ceil(prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1})) + requiredEventWidth(cell); % Max
-        %         end
+        eventWidthRangeInSD(cell) = control.eventWidth{2} * std(eventLibrary_2D(cell).eventWidths);
+        eventWidthRangeInFrames(cell, 1) = prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1}) - eventWidthRangeInSD(cell); % Min
+        eventWidthRangeInFrames(cell, 2) = prctile(eventLibrary_2D(cell).eventWidths, control.eventWidth{1}) + eventWidthRangeInSD(cell); % Max
         
         %This section is only important for the sequential case
         %Here we need to define which frame each cell gets targetted to
@@ -100,18 +87,32 @@ for cell = 1:nCells
         end
         
         for trial = 1:nTrials
+            fprintf('>>> Dataset: %i, Cell: %i, Trial: %i ...\n', runi, cell, trial)
+            eventIndices = [];
             if hitTrials(cell, trial) == 1
-                eventIndices = find((eventLibrary_2D(cell).eventWidths >= actualEventWidthRange(cell, 1)) & ...
-                    (eventLibrary_2D(cell).eventWidths <= actualEventWidthRange(cell, 2)));
+                if control.eventWidth{2} == 0
+                    eventIndices = find(eventLibrary_2D(cell).eventWidths == eventWidthRangeInFrames(cell, 1)); %equivalently, eventWidthRangeInFrames(cell, 2)
+                elseif control.eventWidth{2} ~= 0
+                    eventIndices = find((eventLibrary_2D(cell).eventWidths >= eventWidthRangeInFrames(cell, 1)) & ...
+                        (eventLibrary_2D(cell).eventWidths <= eventWidthRangeInFrames(cell, 2)));
+                else
+                    %eventIndices = [];
+                end
+                fprintf('>>>>>> Hit trial; %i suitable event(s) found ...\n', length(eventIndices))
+                
                 if isempty(eventIndices)
-                    warning('No suitable events found for cell: %i. Continuing to next cell ...\n', num2str(cell));
+                    warning('>>>>>>>>> Continuing to next cell ...\n');
+                    hitTrials(cell, trial) = 0; %assertion
                     break
                 end
                 [selectedEventIndex, eventStartIndex] = randomlyPickEvent(eventIndices, eventLibrary_2D, cell);
+                
+                clear event %For sanity
                 %Now, we pick out exactly one event per trial
                 event = DATA_2D(cell, eventStartIndex:1:eventStartIndex+eventLibrary_2D(cell).eventWidths(selectedEventIndex) - 1);
                 
                 allEventWidths(cell, trial) = length(event);
+                %fprintf('Dataset: %i, Cell: %i, Trial: %i, Event Width: %i\n', runi, cell, trial, length(event))
                 
                 %disp('Selecting the Frame Index ...')
                 [frameIndex(cell, trial), pad(cell, trial)] = selectFrameIndex(control.eventTiming, control.startFrame, control.endFrame, control.imprecisionFWHM, control.imprecisionType, frameGroup);
@@ -148,17 +149,25 @@ for cell = 1:nCells
                 %disp(frameIndex(cell, trial) + pad(cell, trial))
                 
             elseif hitTrials(cell, trial) == 0 % For Non-Hit Trials
-                %do nothing
+                allEventWidths(cell, trial) = 0;
+                disp('>>>>>> Miss trial ...')
             else
                 error('Unknown case for hitTrial')
             end
-            
         end
+        
     elseif ismember(cell, ocList) % For Other Cells
-        %do nothing
+        allEventWidths(cell, :) = 0;
+        fprintf('>>>>>> Cell: %i is not a putative time cell ...\n', cell)
     else
         error('Unknown nature of cell')
     end
+    ht = find(hitTrials(cell, :));
+    mEW = nanmean(allEventWidths(cell, ht));
+    sdEW = nanstd(allEventWidths(cell, ht));
+    sdbymEW = sdEW/mEW;
+    fprintf('>>>>>>>>> Dataset: %i, Cell: %i, Mean EW: %.4f, Stddev EW: %.4f, Stddev/Mean: %.4f\n', runi, cell, mEW, sdEW, sdbymEW)
+    
     maxSignal(cell) = max(eventMax(cell, :));
     %fprintf('Max signal value for cell:%i is %d\n', cell, maxSignal(cell))
 end
@@ -210,7 +219,7 @@ output.maxSignal = maxSignal;
 output.ptcList = ptcList;
 output.ocList = ocList;
 output.nCells = nCells;
-output.actualEventWidth = actualEventWidthRange;
+output.actualEventWidth = eventWidthRangeInFrames;
 output.allEventWidths = allEventWidths;
 output.hitTrialPercent = hitTrialPercent;
 output.hitTrials = hitTrials;

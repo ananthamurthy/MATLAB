@@ -1,4 +1,4 @@
-function plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, mEOutput_batch, nMethods)
+function plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods)
 
 ptcList = sdo_batch(dIndices(1)).ptcList;
 ocList = sdo_batch(dIndices(1)).ocList;
@@ -12,8 +12,8 @@ for parami = 1:10
             yPTC(parami, method, :) = cData.methodA.mAOutput_batch(dIndices(parami)).Q(ptcList);
             yOC(parami, method, :) = cData.methodA.mAOutput_batch(dIndices(parami)).Q(ocList);
         elseif method == 3 %method B
-            yPTC(parami, method, :) = cData.methodB.holyData.mBOutput_batch(dIndices(parami)).Q(ptcList);
-            yOC(parami, method, :) = cData.methodB.holyData.mBOutput_batch(dIndices(parami)).Q(ocList);
+            yPTC(parami, method, :) = cData.methodB.mBOutput_batch(dIndices(parami)).Q(ptcList);
+            yOC(parami, method, :) = cData.methodB.mBOutput_batch(dIndices(parami)).Q(ocList);
         elseif method == 4 %method C1
             yPTC(parami, method, :) = cData.methodC.mCOutput_batch(dIndices(parami)).Q1(ptcList);
             yOC(parami, method, :) = cData.methodC.mCOutput_batch(dIndices(parami)).Q1(ocList);
@@ -24,8 +24,8 @@ for parami = 1:10
             yPTC(parami, method, :) = cData.methodD.mDOutput_batch(dIndices(parami)).Q(ptcList);
             yOC(parami, method, :) = cData.methodD.mDOutput_batch(dIndices(parami)).Q(ocList);
         elseif method == 7 %method E
-            yPTC(parami, method, :) = mEOutput_batch(dIndices(parami)).Q(ptcList);
-            yOC(parami, method, :) = mEOutput_batch(dIndices(parami)).Q(ocList);
+            yPTC(parami, method, :) = cData.methodE.mEOutput_batch(dIndices(parami)).Q(ptcList);
+            yOC(parami, method, :) = cData.methodE.mEOutput_batch(dIndices(parami)).Q(ocList);
         else
             error('Unknown method')
         end
@@ -42,10 +42,10 @@ x = 1:10;
 if normalize
     %     disp('Normalizing ...')
     for method = 1:nMethods
-        normValPTC = nanmax(nanmax(yPTC(:, method, :)));
+        normValPTC = nanmax(nanmax(squeeze(yPTC(:, method, :))));
         yPTC_norm(:, method, :) = yPTC(:, method, :)/normValPTC;
         
-        normValOC = nanmax(nanmax(yOC(:, method, :)));
+        normValOC = nanmax(nanmax(squeeze(yOC(:, method, :))));
         yOC_norm(:, method, :) = yOC(:, method, :)/normValOC;
     end
     
@@ -88,7 +88,7 @@ if normalize
     end
     xticks([1 2 3 4 5 6 7 8 9 10])
     xticklabels(labels.xtickscell)
-    completeTitle = strcat(labels.titleMain, ' - ', labels.titlePTC);
+    completeTitle = strcat(labels.titleMain, '-', labels.titlePTC);
     title(completeTitle)
     xlabel(labels.xtitle)
     ylabel(labels.ytitle)
@@ -123,7 +123,7 @@ if normalize
     end
     xticks([1 2 3 4 5 6 7 8 9 10])
     xticklabels(labels.xtickscell)
-    completeTitle = strcat(labels.titleMain, ' - ', labels.titleOC);
+    completeTitle = strcat(labels.titleMain, '-', labels.titleOC);
     title(completeTitle)
     xlabel(labels.xtitle)
     ylabel(labels.ytitle)
@@ -167,7 +167,7 @@ else
     end
     xticks([1 2 3 4 5 6 7 8 9 10])
     xticklabels(labels.xtickscell)
-    completeTitle = strcat(labels.titleMain, ' - ', labels.titlePTC);
+    completeTitle = strcat(labels.titleMain, '-', labels.titlePTC);
     title(completeTitle)
     xlabel(labels.xtitle)
     ylabel(labels.ytitle)
@@ -202,7 +202,7 @@ else
     end
     xticks([1 2 3 4 5 6 7 8 9 10])
     xticklabels(labels.xtickscell)
-    completeTitle = strcat(labels.titleMain, ' - ', labels.titleOC);
+    completeTitle = strcat(labels.titleMain, '-', labels.titleOC);
     title(completeTitle)
     xlabel(labels.xtitle)
     ylabel(labels.ytitle)

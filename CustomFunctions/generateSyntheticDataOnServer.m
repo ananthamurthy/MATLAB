@@ -3,13 +3,15 @@
 % generate synthetic datasets.
 % Currently uses one session of real data, but can generate synthetic
 % datasets in batch.
+% gDate: date when data generation occurred
+% gRun: run number of data generation (multiple runs could occur on the same date)
 
-function [sdo_batch, eventLibrary_2D] = generateSyntheticDataOnServer(date, gRun, workingOnServer)
+function [sdo_batch, eventLibrary_2D] = generateSyntheticDataOnServer(gDate, gRun, workingOnServer)
 
 tic
 close all
 
-if workingOnServer == 1
+if workingOnServer
     HOME_DIR = '/home/bhalla/ananthamurthy/';
 else
     HOME_DIR = '/Users/ananth/Documents/';
@@ -21,12 +23,19 @@ addpath(genpath(strcat(HOME_DIR, 'MATLAB/ImagingAnalysis/Suite2P-ananth')))
 
 %ops0.fig             = 1;
 ops0.saveData        = 1;
+ops0.diary           = 1;
 
 %figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %ops0.onlyProbeTrials = 0
 
-%diary (strcat(HOME_DIR2, '/logs/dataGenDiary'))
-%diary on
+if ops0.diary
+    if workingOnServer
+        diary (strcat(HOME_DIR, '/logs/dataGenDiary'))
+    else
+        diary (strcat(HOME_DIR2, '/logs/dataGenDiary_', num2str(gDate), '_', num2str(gRun)))
+    end
+    diary on
+end
 
 %% Load real dataset details
 make_db %Currently only for one session at a time
@@ -125,7 +134,7 @@ clear s
 
 for runi = 1:1:nDatasets
     fprintf('Currently generating dataset: %i\n', runi)
-    sdo = syntheticDataMaker(db, realProcessedData.dfbf_2D, eventLibrary_2D, sdcp(runi));
+    sdo = syntheticDataMaker(db, realProcessedData.dfbf_2D, eventLibrary_2D, sdcp(runi), runi);
     
     %Run specifics
     scurr = rng;
@@ -145,35 +154,41 @@ for runi = 1:1:nDatasets
     params4Q.pad = sdo.pad;
     params4Q.stimulusWindow = sdcp(runi).endFrame - sdcp(runi).startFrame;
     params4Q.alpha = 1;
-    params4Q.beta = 0.1;
+    params4Q.beta = 1;
     params4Q.gamma = 10;
     
     sdo.Q = developQ(params4Q);
     
-    % Derived Time
-    delta = 3;
-    skipFrames = [];
-    [ETH, ETH_3D, nbins] = getETH(sdo.syntheticDATA, delta, skipFrames);
-    %[~, derivedT] = max(ETH(sdo.ptcList,:), [], 2); % Actual Time Vector
-    [~, derivedT] = max(ETH(:,:), [], 2); % Actual Time Vector
-    sdo.T = derivedT;
-    sdo.T = zeros(nCells, 1);
+    %     % Derived Time
+    %     delta = 3;
+    %     skipFrames = [];
+    %     [ETH, ETH_3D, nbins] = getETH(sdo.syntheticDATA, delta, skipFrames);
+    %     %[~, derivedT] = max(ETH(sdo.ptcList,:), [], 2); % Actual Time Vector
+    %     [~, derivedT] = max(ETH(:,:), [], 2); % Actual Time Vector
+    %     sdo.T = derivedT;
+    
+    sdo.T = zeros(nCells, 1); %No strict need
     sdo_batch(runi) = sdo;
 end
 
 %% Save Everything
 if ops0.saveData == 1
+    disp ('Saving everything ...')
     save(strcat(saveFolder, ...
         'synthDATA_', ...
-        num2str(date), ...
+        num2str(gDate), ...
         '_gRun', num2str(gRun), ...
         '_batch_', ...
         num2str(nDatasets), ...
         '.mat'), ...
         'sdcp', 'sdo_batch', ...
         '-v7.3')
+    disp('... done!')
 end
 elapsedTime = toc;
 disp('All done!')
-disp(elapsedTime)
-%diary off
+fprintf('Elapsed Time: %.4f seconds\n', elapsedTime)
+
+if ops0.diary
+    diary off
+end

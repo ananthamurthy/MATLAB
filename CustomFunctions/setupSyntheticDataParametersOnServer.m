@@ -24,7 +24,7 @@ rng('seed', 'generator')  %See help rng for details; Typically: 'default' or 'sh
 %}
 %%
 count = 0;
-%% Synthetic Data Parameters - Batch
+% Synthetic Data Parameters - Batch
 
 %Sequential Timing
 %Time cell percents with 'basic' order
@@ -452,7 +452,7 @@ for value = 10:10:100
     sdcp(count).maxHitTrialPercent = 50;
     sdcp(count).hitTrialPercentAssignment = 'fixed';
     sdcp(count).trialOrder = 'random';
-    sdcp(count).eventWidth = {value, 1};
+    sdcp(count).eventWidth = {value, 2};
     sdcp(count).eventAmplificationFactor = 1;
     sdcp(count).eventTiming = 'random';
     sdcp(count).startFrame = 75;

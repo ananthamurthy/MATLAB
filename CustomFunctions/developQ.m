@@ -4,20 +4,27 @@ Q = zeros(params4Q.nCells, 1);
 
 for cell = 1:params4Q.nCells
     
-    htp = params4Q.hitTrialPercent(cell);
+    HTR = params4Q.hitTrialPercent(cell)/100;
+    
     a = params4Q.alpha;
-    np = params4Q.noisePercent;
+    n = params4Q.noisePercent/100;
     eaf = params4Q.eventAmplificationFactor;
+    NbyS = n/eaf;
+    
     b = params4Q.beta;
     aew = params4Q.allEventWidths(cell, :);
     ht = find(params4Q.hitTrials(cell, :));
+    sdAEW = nanstd(aew(ht)); %Only Hit Trials
+    mAEW = nanmean(aew(ht)); %Only Hit Trials
+    SDbyMEW = sdAEW/mAEW;
+    
     g = params4Q.gamma;
     p = params4Q.pad(cell, :);
+    sdp = std(p);
     sw = params4Q.stimulusWindow;
-    sdAEW = std(aew(ht)); %Only Hit Trials
-    mAEW = mean(aew(ht)); %Only Hit Trials
+    SDPbySW = sdp/sw;
     
-    Q(cell) = (htp/100) * exp(-1 * (((a * np)/(100 * eaf)) + ((b * sdAEW)/mAEW) + ((g * std(p))/sw)));
+    Q(cell) = HTR * exp(-1 * ((a * NbyS) + (b * SDbyMEW) + (g * SDPbySW)));
     
     %fprintf('All event widths for cell %i :\n', cell)
     %disp(aew)
