@@ -119,7 +119,7 @@ for value = 10:10:100
 end
 %31-40
 
-% %Max Hit Trial Percents with 'fixed' assignment, 'random' trial order
+%Max Hit Trial Percents with 'fixed' assignment, 'random' trial order
 for value = 10:10:100
     count = count + 1;
     sdcp(count).timeCellPercent = 50;
@@ -445,7 +445,7 @@ end
 %165-171
 
 %Event Widths (percentiles) with standard deviations
-for value = 10:10:100
+for value = 10:10:70
     count = count + 1;
     sdcp(count).timeCellPercent = 50;
     sdcp(count).cellOrder = 'basic';
