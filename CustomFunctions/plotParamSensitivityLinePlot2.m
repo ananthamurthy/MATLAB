@@ -1,9 +1,9 @@
-function plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods)
+function plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams)
 
 ptcList = sdo_batch(dIndices(1)).ptcList;
 ocList = sdo_batch(dIndices(1)).ocList;
 
-for parami = 1:10
+for parami = 1:nParams
     for method = 1:nMethods
         if method == 1 %orginal method
             yPTC(parami, method, :) = sdo_batch(dIndices(parami)).Q(ptcList);
@@ -37,7 +37,7 @@ for parami = 1:10
     end
 end
 
-x = 1:10;
+x = 1:nParams;
 %Normalize
 if normalize
     %     disp('Normalizing ...')
@@ -49,7 +49,7 @@ if normalize
         yOC_norm(:, method, :) = yOC(:, method, :)/normValOC;
     end
     
-    for parami = 1:10
+    for parami = 1:nParams
         for method = 1:nMethods
             yPTC_norm_median(parami, method) = nanmedian(squeeze(yPTC_norm(parami, method, :)));
             yOC_norm_median(parami, method) = nanmedian(squeeze(yOC_norm(parami, method, :)));

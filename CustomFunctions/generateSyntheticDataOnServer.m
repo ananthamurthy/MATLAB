@@ -6,7 +6,7 @@
 % gDate: date when data generation occurred
 % gRun: run number of data generation (multiple runs could occur on the same date)
 
-function [sdo_batch, eventLibrary_2D] = generateSyntheticDataOnServer(gDate, gRun, workingOnServer)
+function [sdo_batch, sdcp, eventLibrary_2D] = generateSyntheticDataOnServer(gDate, gRun, workingOnServer)
 
 tic
 close all
@@ -154,7 +154,7 @@ for runi = 1:1:nDatasets
     params4Q.pad = sdo.pad;
     params4Q.stimulusWindow = sdcp(runi).endFrame - sdcp(runi).startFrame;
     params4Q.alpha = 1;
-    params4Q.beta = 1;
+    params4Q.beta = 6;
     params4Q.gamma = 10;
     
     sdo.Q = developQ(params4Q);
@@ -166,8 +166,8 @@ for runi = 1:1:nDatasets
     %     %[~, derivedT] = max(ETH(sdo.ptcList,:), [], 2); % Actual Time Vector
     %     [~, derivedT] = max(ETH(:,:), [], 2); % Actual Time Vector
     %     sdo.T = derivedT;
-    
     sdo.T = zeros(nCells, 1); %No strict need
+    
     sdo_batch(runi) = sdo;
 end
 
