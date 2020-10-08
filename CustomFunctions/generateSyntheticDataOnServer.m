@@ -154,7 +154,7 @@ for runi = 1:1:nDatasets
     params4Q.pad = sdo.pad;
     params4Q.stimulusWindow = sdcp(runi).endFrame - sdcp(runi).startFrame;
     params4Q.alpha = 1;
-    params4Q.beta = 6;
+    params4Q.beta = 1;
     params4Q.gamma = 10;
     
     sdo.Q = developQ(params4Q);
