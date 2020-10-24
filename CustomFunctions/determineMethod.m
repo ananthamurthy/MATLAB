@@ -1,6 +1,6 @@
 % AUTHOR: Kambadur Ananthamurthy
 % The methods will always be determined in alphabetical order
-function methodList = determineMethod(runA, runB, runC, runD, runE)
+function methodList = determineMethod(runA, runB, runC, runD, runE, runF)
 
 methodList = "";
 
