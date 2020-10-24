@@ -92,15 +92,6 @@ for cell = 1:nCells
     
     b = derivedQInput.beta;
     %Find all event widths
-    eventLibrary_2D(cell).nEvents = nEvents;
-    eventLibrary_2D(cell).eventStartIndices = StartIndices;
-    eventLibrary_2D(cell).eventWidths = Widths;
-    
-    clear binaryData
-    clear Events
-    clear StartIndices
-    clear Lengths
-    
     aew = eventLibrary_2D(cell).eventWidths;
     %     sdAEW = nanstd(aew(ht)); %Only Hit Trials
     %     mAEW = nanmean(aew(ht)); %Only Hit Trials
