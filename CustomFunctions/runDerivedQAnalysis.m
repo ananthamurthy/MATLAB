@@ -7,12 +7,6 @@ nCells = size(DATA, 1);
 nTrials = size(DATA, 2);
 nFrames = size(DATA, 3);
 
-%NOTE: 'DATA' is organized as (cells, trials, frames)
-%2D DATA (cells, all frames)
-for cell = 1:nCells
-    DATA_2D(cell, :) = reshape(squeeze(DATA(cell, :, :))', 1, []);
-end
-
 %Preallocation
 hitTrials = zeros(nCells, nTrials);
 Q1 = nan(nCells, 1);
@@ -28,6 +22,13 @@ SDPbySW = nan(nCells, 1);
 p = zeros(nCells, nTrials);
 timeCells = nan(nCells, 1);
 
+%NOTE: 'DATA' is organized as (cells, trials, frames)
+%2D DATA (cells, all frames)
+for cell = 1:nCells
+    DATA_2D(cell, :) = reshape(squeeze(DATA(cell, :, :))', 1, []);
+end
+
+%Use real 2D data to curate a library
 %Preallocation - for event library
 s.nEvents = 0;
 s.eventStartIndices = [];
@@ -37,6 +38,14 @@ clear s
 cellMean = zeros(nCells, 1);
 cellStddev = zeros(nCells, 1);
 binaryData = zeros(nCells, 1);
+
+disp('>>> Scanning for calcium events ...')
+sampledCellActivity = squeeze(DATA_2D(cell, :));
+cellMean(cell) = mean(sampledCellActivity);
+cellStddev(cell) = std(sampledCellActivity);
+logicalIndices = sampledCellActivity > (cellMean(cell) + 2* cellStddev(cell));
+binaryData(logicalIndices, 1) = 1;
+minNumberOf1s = 3;
 
 %Develop Event Time Histogram (ETH) Curves
 [ETH, trialAUCs, ~] = getETH(DATA, delta, skipFrames);
@@ -69,16 +78,8 @@ for cell = 1:nCells
     noiseVar2 = estimatenoise(DATA_2D(cell, :));
     NbyS2(cell) = sqrt(noiseVar2)/maxSignal(cell);
     
-    b = derivedQInput.beta; 
+    b = derivedQInput.beta;
     %Find all event widths
-    %Use real 2D data to curate a library
-    disp('>>> Scanning for calcium events ...')
-    sampledCellActivity = squeeze(DATA_2D(cell, :));
-    cellMean(cell) = mean(sampledCellActivity);
-    cellStddev(cell) = std(sampledCellActivity);
-    logicalIndices = sampledCellActivity > (cellMean(cell) + 2* cellStddev(cell));
-    binaryData(logicalIndices, 1) = 1;
-    minNumberOf1s = 3;
     %[nEvents, StartIndices, Widths] = findConsecutiveOnes(binaryData, minNumberOf1s);
     [eventLibrary_2D(cell).nEvents, eventLibrary_2D(cell).eventStartIndices, eventLibrary_2D(cell).eventWidths] = findConsecutiveOnes(binaryData, minNumberOf1s);
     
@@ -89,8 +90,8 @@ for cell = 1:nCells
     
     disp('>>> ... done!')
     aew = eventLibrary_2D(cell).eventWidths;
-%     sdAEW = nanstd(aew(ht)); %Only Hit Trials
-%     mAEW = nanmean(aew(ht)); %Only Hit Trials
+    %     sdAEW = nanstd(aew(ht)); %Only Hit Trials
+    %     mAEW = nanmean(aew(ht)); %Only Hit Trials
     sdAEW = nanstd(aew); %All events
     mAEW = nanmean(aew); %All events
     SDbyMEW(cell) = sdAEW/mAEW;
