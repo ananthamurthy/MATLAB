@@ -38,9 +38,10 @@ cellMean = zeros(nCells, 1);
 cellStddev = zeros(nCells, 1);
 binaryData = zeros(nCells, 1);
 
+%Develop Event Time Histogram (ETH) Curves
+[ETH, trialAUCs, ~] = getETH(DATA, delta, skipFrames);
+
 for cell = 1:nCells
-    [ETH, trialAUCs, ~] = getETH(DATA, delta, skipFrames);
-    
     %Find ETH Peak
     [~, peakTimeBin(cell)] = max(ETH(cell, :));
     
