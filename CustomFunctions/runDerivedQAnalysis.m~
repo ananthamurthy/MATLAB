@@ -1,17 +1,11 @@
 function [derivedQOutput] = runDerivedQAnalysis(DATA, derivedQInput)
 
-delta = derivedQ.delta;
+delta = derivedQInput.delta;
 skipFrames = derivedQInput.skipFrames;
 
 nCells = size(DATA, 1);
 nTrials = size(DATA, 2);
-%nFrames = size(DATA, 3);
-
-%NOTE: 'DATA' is organized as (cells, trials, frames)
-%2D DATA (cells, all frames)
-for cell = 1:nCells
-    DATA_2D(cell, :) = reshape(squeeze(DATA(cell, :, :))', 1, []);
-end
+nFrames = size(DATA, 3);
 
 %Preallocation
 hitTrials = zeros(nCells, nTrials);
@@ -23,8 +17,18 @@ maxSignal = nan(nCells, 1);
 HTR = nan(nCells, 1);
 NbyS1 = nan(nCells, 1);
 NbyS2 = nan(nCells, 1);
+SDbyMEW = nan(nCells, 1);
+SDPbySW = nan(nCells, 1);
+p = zeros(nCells, nTrials);
 timeCells = nan(nCells, 1);
 
+%NOTE: 'DATA' is organized as (cells, trials, frames)
+%2D DATA (cells, all frames)
+for cell = 1:nCells
+    DATA_2D(cell, :) = reshape(squeeze(DATA(cell, :, :))', 1, []);
+end
+
+%Use real 2D data to curate a library
 %Preallocation - for event library
 s.nEvents = 0;
 s.eventStartIndices = [];
@@ -33,11 +37,20 @@ eventLibrary_2D = repmat(s, 1, nCells);
 clear s
 cellMean = zeros(nCells, 1);
 cellStddev = zeros(nCells, 1);
-binaryData = zeros(nCells, 1);
+
+disp('>>> Scanning for calcium events ...')
+sampledCellActivity = squeeze(DATA_2D(cell, :));
+cellMean(cell) = mean(sampledCellActivity);
+cellStddev(cell) = std(sampledCellActivity);
+logicalIndices = sampledCellActivity > (cellMean(cell) + 2* cellStddev(cell));
+binaryData(logicalIndices, 1) = 1;
+minNumberOf1s = 3;
+[nEvents, StartIndices, Widths] = findConsecutiveOnes(binaryData, minNumberOf1s);
+
+%Develop Event Time Histogram (ETH) Curves
+[ETH, trialAUCs, ~] = getETH(DATA, delta, skipFrames);
 
 for cell = 1:nCells
-    [ETH, trialAUCs, nBins] = getETH(DATA, delta, skipFrames);
-    
     %Find ETH Peak
     [~, peakTimeBin(cell)] = max(ETH(cell, :));
     
@@ -65,42 +78,42 @@ for cell = 1:nCells
     noiseVar2 = estimatenoise(DATA_2D(cell, :));
     NbyS2(cell) = sqrt(noiseVar2)/maxSignal(cell);
     
-    b = params4Q.beta; 
+    b = derivedQInput.beta;
     %Find all event widths
-    %Use real 2D data to curate a library
-    disp('Scanning for calcium events ...')
-    sampledCellActivity = squeeze(DATA_2D(cell, :));
-    cellMean(cell) = mean(sampledCellActivity);
-    cellStddev(cell) = std(sampledCellActivity);
-    logicalIndices = sampledCellActivity > (cellMean(cell) + 2* cellStddev(cell));
-    binaryData(logicalIndices, 1) = 1;
-    minNumberOf1s = 3;
-    %[nEvents, StartIndices, Widths] = findConsecutiveOnes(binaryData, minNumberOf1s);
-    [eventLibrary_2D(cell).nEvents, eventLibrary_2D(cell).eventStartIndices, eventLibrary_2D(cell).eventWidths] = findConsecutiveOnes(binaryData, minNumberOf1s);
+    
+    eventLibrary_2D(cell).nEvents
+        eventLibrary_2D(cell).eventStartIndices
+        eventLibrary_2D(cell).eventWidths
     
     clear binaryData
     clear Events
     clear StartIndices
     clear Lengths
     
-    disp('... done!')
+    disp('>>> ... done!')
     aew = eventLibrary_2D(cell).eventWidths;
-%     sdAEW = nanstd(aew(ht)); %Only Hit Trials
-%     mAEW = nanmean(aew(ht)); %Only Hit Trials
+    %     sdAEW = nanstd(aew(ht)); %Only Hit Trials
+    %     mAEW = nanmean(aew(ht)); %Only Hit Trials
     sdAEW = nanstd(aew); %All events
     mAEW = nanmean(aew); %All events
-    SDbyMEW = sdAEW/mAEW;
+    SDbyMEW(cell) = sdAEW/mAEW;
     
-    g = params4Q.gamma;
+    g = derivedQInput.gamma;
     %Find Imprecision or Pad (p)
     for trial = 1:nTrials
-        p(cell) = peakTimeBin(cell) - peakTrialTimeBin(cell, trial);
+        p(cell, trial) = peakTimeBin(cell) - peakTrialTimeBin(cell, trial);
     end
-    sdp = std(p);
-    sw = params4Q.stimulusWindow;
-    SDPbySW = sdp/sw;
+    sdp = std(p(cell, :));
+    %sw = derivedQInput.stimulusWindow;
+    sw = nFrames;
+    SDPbySW(cell) = sdp/sw;
     
     Q1(cell) = HTR(cell) * exp(-1 * ((a * NbyS1(cell)) + (b * SDbyMEW(cell)) + (g * SDPbySW(cell))));
     Q2(cell) = HTR(cell) * exp(-1 * ((a * NbyS2(cell)) + (b * SDbyMEW(cell)) + (g * SDPbySW(cell))));
 end
+
+derivedQOutput.Q1 = Q1;
+derivedQOutput.Q2 = Q2;
+derivedQOutput.T = peakTimeBin;
+derivedQOutput.timeCells = timeCells;
 end

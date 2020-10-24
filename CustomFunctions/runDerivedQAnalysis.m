@@ -37,7 +37,6 @@ eventLibrary_2D = repmat(s, 1, nCells);
 clear s
 cellMean = zeros(nCells, 1);
 cellStddev = zeros(nCells, 1);
-binaryData = zeros(nCells, 1);
 
 disp('>>> Scanning for calcium events ...')
 sampledCellActivity = squeeze(DATA_2D(cell, :));
@@ -46,6 +45,7 @@ cellStddev(cell) = std(sampledCellActivity);
 logicalIndices = sampledCellActivity > (cellMean(cell) + 2* cellStddev(cell));
 binaryData(logicalIndices, 1) = 1;
 minNumberOf1s = 3;
+[nEvents, StartIndices, Widths] = findConsecutiveOnes(binaryData, minNumberOf1s);
 
 %Develop Event Time Histogram (ETH) Curves
 [ETH, trialAUCs, ~] = getETH(DATA, delta, skipFrames);
@@ -80,8 +80,9 @@ for cell = 1:nCells
     
     b = derivedQInput.beta;
     %Find all event widths
-    %[nEvents, StartIndices, Widths] = findConsecutiveOnes(binaryData, minNumberOf1s);
-    [eventLibrary_2D(cell).nEvents, eventLibrary_2D(cell).eventStartIndices, eventLibrary_2D(cell).eventWidths] = findConsecutiveOnes(binaryData, minNumberOf1s);
+    eventLibrary_2D(cell).nEvents = nEvents;
+    eventLibrary_2D(cell).eventStartIndices = StartIndices;
+    eventLibrary_2D(cell).eventWidths = Widths;
     
     clear binaryData
     clear Events
