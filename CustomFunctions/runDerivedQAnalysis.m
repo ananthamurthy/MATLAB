@@ -41,7 +41,7 @@ binaryData = zeros(nCells, 1);
 
 disp('Scanning for calcium events ...')
 for cell = 1:nCells
-    sampledCellActivity = squeeze(realProcessedData.dfbf_2D(cell, :));
+    sampledCellActivity = squeeze(DATA_2D(cell, :));
     cellMean(cell) = mean(sampledCellActivity);
     cellStddev(cell) = std(sampledCellActivity);
     logicalIndices = sampledCellActivity > (cellMean(cell) + 2* cellStddev(cell));
