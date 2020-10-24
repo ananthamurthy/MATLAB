@@ -8,7 +8,7 @@
 % gRun: run number for data generation (multiple runs could happen on the
 % same day)
 
-function runBatchAnalysisOnServer(sdcpStart, sdcpEnd, runA, runB, runC, runD, runE, runF, gDate, gRun)
+function runBatchAnalysisOnServer(sdcpStart, sdcpEnd, runA, runB, runC, runD, runE, gDate, gRun)
 
 tic
 close all
@@ -327,8 +327,8 @@ if ops0.saveData
             save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodE_batch.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
         end
         
-        if runF
-            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodF_batch.mat' ], 'mFInput', 'mFOutput_batch', '-v7.3')
+        if runE
+            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodE_batch.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
         end
     end
     disp('... done!')
