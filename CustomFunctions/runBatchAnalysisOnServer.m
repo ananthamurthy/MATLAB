@@ -19,7 +19,7 @@ addpath(genpath(strcat(HOME_DIR,'/MATLAB/ImagingAnalysis'))) % Additional functi
 addpath(genpath(strcat(HOME_DIR, '/MATLAB/ImagingAnalysis/Suite2P-ananth')))
 addpath(strcat(HOME_DIR, '/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies'))
 
-methodList = determineMethod(runA, runB, runC, runD, runE);
+methodList = determineMethod(runA, runB, runC, runD, runE, runF);
 
 % % Print 6 lines of whitespace - Prevents any messages from being missed
 % for space = 1:6
@@ -305,6 +305,10 @@ if ops0.saveData
         
         if runE
             save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodE_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
+        end
+        
+        if runF
+            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodF_batch.mat' ], 'mFInput', 'mFOutput_batch', '-v7.3')
         end
     else %Real Physiology Data
         if runA
