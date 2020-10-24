@@ -23,6 +23,8 @@ maxSignal = nan(nCells, 1);
 HTR = nan(nCells, 1);
 NbyS1 = nan(nCells, 1);
 NbyS2 = nan(nCells, 1);
+SDbyMEW = nan(nCells, 1);
+SDPbySW = nan(nCells, 1);
 p = zeros(nCells, nTrials);
 timeCells = nan(nCells, 1);
 
@@ -69,7 +71,7 @@ for cell = 1:nCells
     b = derivedQInput.beta; 
     %Find all event widths
     %Use real 2D data to curate a library
-    disp('Scanning for calcium events ...')
+    disp('>>> Scanning for calcium events ...')
     sampledCellActivity = squeeze(DATA_2D(cell, :));
     cellMean(cell) = mean(sampledCellActivity);
     cellStddev(cell) = std(sampledCellActivity);
@@ -84,7 +86,7 @@ for cell = 1:nCells
     clear StartIndices
     clear Lengths
     
-    disp('... done!')
+    disp('>>> ... done!')
     aew = eventLibrary_2D(cell).eventWidths;
 %     sdAEW = nanstd(aew(ht)); %Only Hit Trials
 %     mAEW = nanmean(aew(ht)); %Only Hit Trials
@@ -100,7 +102,7 @@ for cell = 1:nCells
     sdp = std(p(cell, :));
     %sw = derivedQInput.stimulusWindow;
     sw = nFrames;
-    SDPbySW = sdp/sw;
+    SDPbySW(cell) = sdp/sw;
     
     Q1(cell) = HTR(cell) * exp(-1 * ((a * NbyS1(cell)) + (b * SDbyMEW(cell)) + (g * SDPbySW(cell))));
     Q2(cell) = HTR(cell) * exp(-1 * ((a * NbyS2(cell)) + (b * SDbyMEW(cell)) + (g * SDPbySW(cell))));
