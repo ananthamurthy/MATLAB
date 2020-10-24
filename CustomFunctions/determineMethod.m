@@ -24,6 +24,10 @@ if methodList == ""
     if runE
         methodList = strcat(methodList, "E");
     end
+    
+    if runF
+        methodList = strcat(methodList, "F");
+    end
 else
     if runB
         methodList = strcat(methodList, "-B");
@@ -39,5 +43,9 @@ else
     
     if runE
         methodList = strcat(methodList, "-E");
+    end
+    
+    if runF
+        methodList = strcat(methodList, "-F");
     end
 end
