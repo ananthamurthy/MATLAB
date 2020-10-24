@@ -90,7 +90,7 @@ for cell = 1:nCells
 %     mAEW = nanmean(aew(ht)); %Only Hit Trials
     sdAEW = nanstd(aew); %All events
     mAEW = nanmean(aew); %All events
-    SDbyMEW = sdAEW/mAEW;
+    SDbyMEW(cell) = sdAEW/mAEW;
     
     g = derivedQInput.gamma;
     %Find Imprecision or Pad (p)
