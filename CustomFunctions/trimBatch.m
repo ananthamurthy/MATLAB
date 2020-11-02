@@ -16,7 +16,7 @@ disp('... done!')
 saveFolder = strcat(ANALYSIS_DIR, '/Imaging/', db.mouseName, '/', db.date, '/');
 
 disp('Picking up details for trim ...')
-setupTrimParamsOnServer
+setupTrimParams
 disp('... done!')
 
 for job = 1:length(params)

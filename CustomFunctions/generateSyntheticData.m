@@ -6,7 +6,7 @@
 % gDate: date when data generation occurred
 % gRun: run number of data generation (multiple runs could occur on the same date)
 
-function [sdo_batch, sdcp, eventLibrary_2D] = generateSyntheticDataOnServer(gDate, gRun, workingOnServer)
+function [sdo_batch, sdcp, eventLibrary_2D] = generateSyntheticData(gDate, gRun, workingOnServer)
 
 tic
 close all
@@ -62,7 +62,7 @@ nFrames = size(realProcessedData.dfbf, 3);
 fprintf('Total cells: %i\n', nCells)
 
 %% Load synthetic dataset control parameters
-setupSyntheticDataParametersOnServer %Loads all options
+setupSyntheticDataParams %Loads all options
 %setupSyntheticDataParameters_batch
 nDatasets = length(sdcp);
 

@@ -27,7 +27,7 @@ disp('... done!')
 saveFolder = strcat(ANALYSIS_DIR, '/Imaging/', db.mouseName, '/', db.date, '/');
 
 disp('Setting up parameters for harvest ...')
-setupHarvestParamsOnServer
+setupHarvestParams
 disp('... done!')
 
 for job = 1:length(params)
