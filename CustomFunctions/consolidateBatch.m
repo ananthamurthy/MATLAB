@@ -73,6 +73,14 @@ for job = 1:length(params)
             cData.methodE.holyData.mEInput = jobData.holyData.mEInput;
             cData.methodE.holyData.mEOutput_batch(params(job).sdcpStart:params(job).sdcpEnd) = jobData.holyData.mEOutput_batch(params(job).sdcpStart:params(job).sdcpEnd);
         end
+    elseif strcmpi(params(job).methodList, 'F')
+        if ~params(job).trim
+            cData.methodF.mFInput = jobData.mFInput;
+            cData.methodF.mFOutput_batch(params(job).sdcpStart:params(job).sdcpEnd) = jobData.mFOutput_batch(params(job).sdcpStart:params(job).sdcpEnd);
+        else
+            cData.methodF.holyData.mFInput = jobData.holyData.mFInput;
+            cData.methodF.holyData.mFOutput_batch(params(job).sdcpStart:params(job).sdcpEnd) = jobData.holyData.mFOutput_batch(params(job).sdcpStart:params(job).sdcpEnd);
+        end
     else
     end
 end
