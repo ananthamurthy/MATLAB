@@ -4,11 +4,19 @@
 % cDate: Harvest Date
 % cRun: Harvest Number
 
-function consolidateBatch(cDate, cRun)
+function consolidateBatch(cDate, cRun, workingOnServer)
 
 tic
-HOME_DIR = '/home/bhalla/ananthamurthy';
-ANALYSIS_DIR = '/home/bhalla/ananthamurthy/Work/Analysis';
+
+if workingOnServer
+    HOME_DIR = '/home/bhalla/ananthamurthy/';
+    ANALYSIS_DIR = strcat(HOME_DIR, 'Work/Analysis');
+else
+    HOME_DIR = '/Users/ananth/Documents/';
+    HOME_DIR2 = '/Users/ananth/Desktop/';
+    ANALYSIS_DIR = strcat(HOME_DIR2, 'Work/Analysis');
+end
+
 addpath(strcat(HOME_DIR, '/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies'))
 addpath(genpath(strcat(HOME_DIR, '/MATLAB/CustomFunctions'))) % my custom functions
 

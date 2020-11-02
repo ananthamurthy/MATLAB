@@ -124,3 +124,15 @@ params(job).date = 20201008;
 params(job).gRun = 1;
 params(job).trim = 0;
 params(job).trimRun = 0;
+
+%% SETUP HARVEST PARAMETERS - Method F
+%12
+job = job + 1;
+params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseName, db.date);
+params(job).methodList = 'F';
+params(job).sdcpStart = 1;
+params(job).sdcpEnd = 208;
+params(job).date = 20201008;
+params(job).gRun = 1;
+params(job).trim = 0;
+params(job).trimRun = 0;

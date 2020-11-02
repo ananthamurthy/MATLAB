@@ -26,6 +26,9 @@ for parami = 1:nParams
         elseif method == 7 %method E
             yPTC(parami, method, :) = cData.methodE.mEOutput_batch(dIndices(parami)).Q(ptcList);
             yOC(parami, method, :) = cData.methodE.mEOutput_batch(dIndices(parami)).Q(ocList);
+        elseif method == 8 %method F
+            yPTC(parami, method, :) = cData.methodF.mFOutput_batch(dIndices(parami)).Q(ptcList);
+            yOC(parami, method, :) = cData.methodF.mFOutput_batch(dIndices(parami)).Q(ocList);
         else
             error('Unknown method')
         end
@@ -84,6 +87,11 @@ if normalize
         elseif method == 7
             errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
+        elseif method == 8
+            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            hold on
+        else
+            error('Unknown method')
         end
     end
     xticks([1 2 3 4 5 6 7 8 9 10])
@@ -92,7 +100,7 @@ if normalize
     title(completeTitle)
     xlabel(labels.xtitle)
     ylabel(labels.ytitle)
-    legend('Ref', 'A', 'B', 'C1', 'C2', 'D', 'E')
+    legend('Ref', 'A', 'B', 'C1', 'C2', 'D', 'E', 'F1', 'F2')
     set(gca, 'FontSize', figureDetails.fontSize-2)
     hold off
     
@@ -119,6 +127,11 @@ if normalize
         elseif method == 7
             errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
+        elseif method == 8
+            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            hold on
+        else
+            error('Unknown method')
         end
     end
     xticks([1 2 3 4 5 6 7 8 9 10])
@@ -127,7 +140,7 @@ if normalize
     title(completeTitle)
     xlabel(labels.xtitle)
     ylabel(labels.ytitle)
-    legend('Ref', 'A', 'B', 'C1', 'C2', 'D', 'E')
+    legend('Ref', 'A', 'B', 'C1', 'C2', 'D', 'E', 'F1', 'F2')
     set(gca, 'FontSize', figureDetails.fontSize-2)
     hold off
     
@@ -163,6 +176,11 @@ else
         elseif method == 7
             errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
+        elseif method == 8
+            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            hold on
+        else
+            error('Unknown method')
         end
     end
     xticks([1 2 3 4 5 6 7 8 9 10])
@@ -171,7 +189,7 @@ else
     title(completeTitle)
     xlabel(labels.xtitle)
     ylabel(labels.ytitle)
-    legend('Org', 'A', 'B', 'C1', 'C2', 'D', 'E')
+    legend('Org', 'A', 'B', 'C1', 'C2', 'D', 'E', 'F1', 'F2')
     set(gca, 'FontSize', figureDetails.fontSize-2)
     hold off
     
@@ -198,6 +216,11 @@ else
         elseif method == 7
             errorbar(yOC_median(:, method), yOC_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
+        elseif method == 8
+            errorbar(yOC_median(:, method), yOC_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            hold on
+        else
+            error('Unknown method')
         end
     end
     xticks([1 2 3 4 5 6 7 8 9 10])
@@ -206,7 +229,7 @@ else
     title(completeTitle)
     xlabel(labels.xtitle)
     ylabel(labels.ytitle)
-    legend('Org', 'A', 'B', 'C1', 'C2', 'D', 'E')
+    legend('Org', 'A', 'B', 'C1', 'C2', 'D', 'E', 'F1', 'F2')
     set(gca, 'FontSize', figureDetails.fontSize-2)
     hold off
     print(strcat('/Users/ananth/Desktop/figs/tcAnalysisPaper/linePlots_Qvs', ...

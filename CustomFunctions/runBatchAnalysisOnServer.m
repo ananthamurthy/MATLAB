@@ -8,12 +8,17 @@
 % gRun: run number for data generation (multiple runs could happen on the
 % same day)
 
-function runBatchAnalysisOnServer(sdcpStart, sdcpEnd, runA, runB, runC, runD, runE, runF, gDate, gRun)
+function runBatchAnalysisOnServer(sdcpStart, sdcpEnd, runA, runB, runC, runD, runE, runF, gDate, gRun, workingOnServer, diaryOn)
 
 tic
 close all
 
-HOME_DIR = '/home/bhalla/ananthamurthy'; % '/home/bhalla/ananthamurthy' or '/Users/ananth/Documents/'
+if workingOnServer
+    HOME_DIR = '/home/bhalla/ananthamurthy/';
+else
+    HOME_DIR = '/Users/ananth/Documents/';
+    HOME_DIR2 = '/Users/ananth/Desktop/';
+end
 addpath(genpath(strcat(HOME_DIR, '/MATLAB/CustomFunctions'))) % my custom functions
 addpath(genpath(strcat(HOME_DIR,'/MATLAB/ImagingAnalysis'))) % Additional functions
 addpath(genpath(strcat(HOME_DIR, '/MATLAB/ImagingAnalysis/Suite2P-ananth')))
@@ -21,14 +26,21 @@ addpath(strcat(HOME_DIR, '/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies'))
 
 methodList = determineMethod(runA, runB, runC, runD, runE, runF);
 
+if diaryOn
+    if workingOnServer
+        diary (strcat(HOME_DIR, '/logs/batchAnalysisDiary'))
+    else
+        diary (strcat(HOME_DIR2, '/logs/batchAnalysisDiary_', num2str(gDate), '_', num2str(gRun)))
+    end
+    diary on
+end
+
 % % Print 6 lines of whitespace - Prevents any messages from being missed
 % for space = 1:6
 %     fprintf(1, '\n');
 % end
 % clear space
 
-%diary (strcat(HOME_DIR, '/logs/analysisDiary'))
-%diary on
 %% Dataset
 make_db %Currently only for one session at a time
 fprintf('Analyzing %s_%i_%i - Date: %s\n', ...
@@ -37,7 +49,11 @@ fprintf('Analyzing %s_%i_%i - Date: %s\n', ...
     db.session, ...
     db.date)
 
-saveDirec = strcat(HOME_DIR, '/Work/Analysis/Imaging/'); % HOME_DIR or '/Users/ananth/Desktop'
+if workingOnServer
+    saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
+else
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
+end
 saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
 
 ops0.saveData                  = 1;
@@ -308,7 +324,7 @@ if ops0.saveData
         end
         
         if runF
-            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodF_batch.mat' ], 'mFInput', 'mFOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodF_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mFInput', 'mFOutput_batch', '-v7.3')
         end
     else %Real Physiology Data
         if runA
@@ -339,5 +355,9 @@ if ops0.saveData
 end
 toc
 fprintf('Complete: %i to %i by %s [date:%i gRun:%i]\n', sdcpStart, sdcpEnd, methodList, gDate, gRun);
-%diary off
+
+if diaryOn
+    diary off
+end
+
 end
