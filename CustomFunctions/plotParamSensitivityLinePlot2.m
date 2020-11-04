@@ -1,7 +1,7 @@
 function plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams)
 
-ptcList = sdo_batch(dIndices(1)).ptcList;
-ocList = sdo_batch(dIndices(1)).ocList;
+ptcList = sdo_batch(dIndices(1)).ptcList; %Putative Time Cells
+ocList = sdo_batch(dIndices(1)).ocList; %Other Cells
 
 for parami = 1:nParams
     for method = 1:nMethods
@@ -26,9 +26,12 @@ for parami = 1:nParams
         elseif method == 7 %method E
             yPTC(parami, method, :) = cData.methodE.mEOutput_batch(dIndices(parami)).Q(ptcList);
             yOC(parami, method, :) = cData.methodE.mEOutput_batch(dIndices(parami)).Q(ocList);
-        elseif method == 8 %method F
-            yPTC(parami, method, :) = cData.methodF.mFOutput_batch(dIndices(parami)).Q(ptcList);
-            yOC(parami, method, :) = cData.methodF.mFOutput_batch(dIndices(parami)).Q(ocList);
+        elseif method == 8 %method F1
+            yPTC(parami, method, :) = cData.methodF.mFOutput_batch(dIndices(parami)).Q1(ptcList);
+            yOC(parami, method, :) = cData.methodF.mFOutput_batch(dIndices(parami)).Q1(ocList);
+        elseif method == 9 %method F2
+            yPTC(parami, method, :) = cData.methodF.mFOutput_batch(dIndices(parami)).Q2(ptcList);
+            yOC(parami, method, :) = cData.methodF.mFOutput_batch(dIndices(parami)).Q2(ocList);
         else
             error('Unknown method')
         end
@@ -62,9 +65,10 @@ if normalize
         end
     end
     
+    %For Putative Time Cells
     fig1 = figure(1);
-    set(fig1,'Position',[300, 300, 1000, 500])
-    subplot(1, 2, 1)
+    set(fig1,'Position',[300, 300, 500, 500])
+    %subplot(1, 2, 1)
     for method = 1:nMethods
         if method == 1
             errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'blue', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
@@ -76,10 +80,10 @@ if normalize
             errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'red', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 4
-            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), ':cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 5
-            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), '--cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 6
             errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'yellow', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
@@ -88,7 +92,10 @@ if normalize
             errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 8
-            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), ':magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            hold on
+        elseif method == 9
+            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), '--magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         else
             error('Unknown method')
@@ -100,11 +107,18 @@ if normalize
     title(completeTitle)
     xlabel(labels.xtitle)
     ylabel(labels.ytitle)
-    legend('Ref', 'A', 'B', 'C1', 'C2', 'D', 'E', 'F1', 'F2')
+    legend('RefQ1', 'A', 'B', 'C1', 'C2', 'D', 'E', 'DerQ1', 'DerQ2')
     set(gca, 'FontSize', figureDetails.fontSize-2)
     hold off
+    print(strcat('/Users/ananth/Desktop/figs/tcAnalysisPaper/norm_linePlots_Qvs', ...
+        labels.xtitle(~isspace(labels.xtitle)), ...
+        '-', ...
+        completeTitle(~isspace(completeTitle))), ...
+        '-dpng')
     
-    subplot(1, 2, 2)
+    %For Other Cells
+    fig2 = figure(2);
+    set(fig2,'Position',[900, 300, 500, 500])
     for method = 1:nMethods
         if method == 1
             errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'blue', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
@@ -116,10 +130,10 @@ if normalize
             errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'red', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 4
-            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), ':cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 5
-            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), '--cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 6
             errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'yellow', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
@@ -128,7 +142,10 @@ if normalize
             errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 8
-            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), ':magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            hold on
+        elseif method == 9
+            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), '--magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         else
             error('Unknown method')
@@ -140,20 +157,21 @@ if normalize
     title(completeTitle)
     xlabel(labels.xtitle)
     ylabel(labels.ytitle)
-    legend('Ref', 'A', 'B', 'C1', 'C2', 'D', 'E', 'F1', 'F2')
+    legend('RefQ', 'A', 'B', 'C1', 'C2', 'D', 'E', 'DerQ1', 'DerQ2')
     set(gca, 'FontSize', figureDetails.fontSize-2)
     hold off
     
     print(strcat('/Users/ananth/Desktop/figs/tcAnalysisPaper/norm_linePlots_Qvs', ...
         labels.xtitle(~isspace(labels.xtitle)), ...
         '-', ...
-        labels.titleMain(~isspace(labels.titleMain))), ...
+        completeTitle(~isspace(completeTitle))), ...
         '-dpng')
     
 else
+    %For Putative Time Cells
     fig1 = figure(1);
-    set(fig1,'Position',[300, 300, 1000, 500])
-    subplot(1, 2, 1)
+    set(fig1,'Position',[300, 300, 500, 500])
+    %subplot(1, 2, 1)
     for method = 1:nMethods
         if method == 1
             errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'blue', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
@@ -165,10 +183,10 @@ else
             errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'red', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 4
-            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), ':cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 5
-            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), '--cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 6
             errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'yellow', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
@@ -177,7 +195,10 @@ else
             errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 8
-            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), ':magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            hold on
+        elseif method == 9
+            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), '--magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         else
             error('Unknown method')
@@ -189,11 +210,18 @@ else
     title(completeTitle)
     xlabel(labels.xtitle)
     ylabel(labels.ytitle)
-    legend('Org', 'A', 'B', 'C1', 'C2', 'D', 'E', 'F1', 'F2')
+    legend('RefQ', 'A', 'B', 'C1', 'C2', 'D', 'E', 'DerQ1', 'DerQ2')
     set(gca, 'FontSize', figureDetails.fontSize-2)
     hold off
+    print(strcat('/Users/ananth/Desktop/figs/tcAnalysisPaper/linePlots_Qvs', ...
+        labels.xtitle(~isspace(labels.xtitle)), ...
+        '-', ...
+        completeTitle(~isspace(completeTitle))), ...
+        '-dpng')
     
-    subplot(1, 2, 2)
+    %For Other Cells
+    fig2 = figure(2);
+    set(fig2,'Position',[900, 300, 500, 500])
     for method = 1:nMethods
         if method == 1
             errorbar(yOC_median(:, method), yOC_stddev(:, method), 'blue', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
@@ -205,10 +233,10 @@ else
             errorbar(yOC_median(:, method), yOC_stddev(:, method), 'red', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 4
-            errorbar(yOC_median(:, method), yOC_stddev(:, method), 'cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_median(:, method), yOC_stddev(:, method), ':cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 5
-            errorbar(yOC_median(:, method), yOC_stddev(:, method), 'magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_median(:, method), yOC_stddev(:, method), '--cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 6
             errorbar(yOC_median(:, method), yOC_stddev(:, method), 'yellow', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
@@ -217,7 +245,10 @@ else
             errorbar(yOC_median(:, method), yOC_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 8
-            errorbar(yOC_median(:, method), yOC_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_median(:, method), yOC_stddev(:, method), ':magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            hold on
+        elseif method == 9
+            errorbar(yOC_median(:, method), yOC_stddev(:, method), '--magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         else
             error('Unknown method')
@@ -229,13 +260,13 @@ else
     title(completeTitle)
     xlabel(labels.xtitle)
     ylabel(labels.ytitle)
-    legend('Org', 'A', 'B', 'C1', 'C2', 'D', 'E', 'F1', 'F2')
+    legend('RefQ', 'A', 'B', 'C1', 'C2', 'D', 'E', 'DerQ1', 'DerQ2')
     set(gca, 'FontSize', figureDetails.fontSize-2)
     hold off
     print(strcat('/Users/ananth/Desktop/figs/tcAnalysisPaper/linePlots_Qvs', ...
         labels.xtitle(~isspace(labels.xtitle)), ...
         '-', ...
-        labels.titleMain(~isspace(labels.titleMain))), ...
+        completeTitle(~isspace(completeTitle))), ...
         '-dpng')
 end
 end

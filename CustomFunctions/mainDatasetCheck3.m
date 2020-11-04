@@ -2,8 +2,8 @@ function mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 count = 0;
 for di = dIndices
     count = count + 1;
-    fig2 = figure(2);
-    set(fig2,'Position',[100, 100, 1500, 1500])
+    fig3 = figure(3);
+    set(fig3,'Position',[100, 100, 1500, 1500])
     subplot(length(dIndices), 1, count)
     checkDataset(sdo_batch(di).syntheticDATA_2D(:, :), ...
         sprintf('All Trials | Dataset: %i', di), 'Frame Number', 'Cell Number', figureDetails, 0)

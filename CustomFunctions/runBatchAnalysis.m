@@ -288,7 +288,7 @@ for runi = sdcpStart: 1: sdcpEnd
         %Method C - Simple Analysis
         mFInput.delta = 3;
         mFInput.skipFrames = [];
-        mFInput.alpha = 1;
+        mFInput.alpha = 10;
         mFInput.beta = 1;
         mFInput.gamma = 10;
         [mFOutput] = runDerivedQAnalysis(DATA, mFInput);
