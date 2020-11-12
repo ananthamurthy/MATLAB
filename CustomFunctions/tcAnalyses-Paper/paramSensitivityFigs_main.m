@@ -9,15 +9,16 @@ labels.xtitle
 labels.ytitle
 %}
 close all
-plotSyntheticData = 1;
-plotAnalysedData = 1;
+
+plotRefQ = 1;
+plotAnalysedQs = 0;
 plotDatasetCheck = 0;
 
 addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions'))
 
 %% Load Generated Synthetic Data
-if plotSyntheticData
-    gDate = 20201008; %generation date
+if plotRefQ
+    gDate = 20201107; %generation date
     gRun = 1; %generation run number
     nDatasets = 208;
     synthDataFilePath = sprintf('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/synthDATA_%i_gRun%i_batch_%i.mat', gDate, gRun, nDatasets);
@@ -25,8 +26,8 @@ if plotSyntheticData
 end
 
 %% Load Analysed Data
-if plotAnalysedData
-    cDate = 20201102; %consolidation date
+if plotAnalysedQs
+    cDate = 20201104; %consolidation date
     cRun = 1; %consolidation run number
     analysisFilePath = sprintf('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/M26_20180514_synthDataAnalysis_%i_cRun%i_cData.mat', cDate, cRun);
     load(analysisFilePath)
@@ -39,7 +40,7 @@ end
 dIndices = 21:1:30;
 normalize = 1;
 nParams = 10;
-if plotAnalysedData
+if plotAnalysedQs
     nMethods = 9;
 else
     nMethods = 1;
@@ -60,7 +61,7 @@ end
 dIndices = 31:1:40;
 normalize = 1;
 nParams = 10;
-if plotAnalysedData
+if plotAnalysedQs
     nMethods = 9;
 else
     nMethods = 1;
@@ -81,7 +82,7 @@ end
 dIndices = 125:1:134;
 normalize = 1;
 nParams = 10;
-if plotAnalysedData
+if plotAnalysedQs
     nMethods = 9;
 else
     nMethods = 1;
@@ -102,7 +103,7 @@ end
 dIndices = 135:1:144;
 normalize = 1;
 nParams = 10;
-if plotAnalysedData
+if plotAnalysedQs
     nMethods = 9;
 else
     nMethods = 1;
@@ -125,7 +126,7 @@ end
 dIndices = 95:1:104;
 normalize = 1;
 nParams = 10;
-if plotAnalysedData
+if plotAnalysedQs
     nMethods = 9;
 else
     nMethods = 1;
@@ -146,7 +147,7 @@ end
 dIndices = 199:1:208;
 normalize = 1;
 nParams = 10;
-if plotAnalysedData
+if plotAnalysedQs
     nMethods = 9;
 else
     nMethods = 1;
@@ -170,7 +171,7 @@ end
 dIndices = 61:1:67;
 normalize = 1;
 nParams = 7;
-if plotAnalysedData
+if plotAnalysedQs
     nMethods = 9;
 else
     nMethods = 1;
@@ -192,7 +193,7 @@ end
 dIndices = 68:1:74;
 normalize = 1;
 nParams = 7;
-if plotAnalysedData
+if plotAnalysedQs
     nMethods = 9;
 else
     nMethods = 1;
@@ -213,7 +214,7 @@ end
 dIndices = 165:1:171;
 normalize = 1;
 nParams = 7;
-if plotAnalysedData
+if plotAnalysedQs
     nMethods = 9;
 else
     nMethods = 1;
@@ -234,7 +235,7 @@ end
 dIndices = 172:1:178;
 normalize = 1;
 nParams = 7;
-if plotAnalysedData
+if plotAnalysedQs
     nMethods = 9;
 else
     nMethods = 1;
@@ -257,7 +258,7 @@ end
 dIndices = 75:1:84;
 normalize = 1;
 nParams = 10;
-if plotAnalysedData
+if plotAnalysedQs
     nMethods = 9;
 else
     nMethods = 1;
@@ -278,7 +279,7 @@ end
 dIndices = 85:1:94;
 normalize = 1;
 nParams = 10;
-if plotAnalysedData
+if plotAnalysedQs
     nMethods = 9;
 else
     nMethods = 1;
@@ -299,7 +300,7 @@ end
 dIndices = 179:1:188;
 normalize = 1;
 nParams = 10;
-if plotAnalysedData
+if plotAnalysedQs
     nMethods = 9;
 else
     nMethods = 1;
@@ -320,7 +321,7 @@ end
 dIndices = 189:1:198;
 normalize = 1;
 nParams = 10;
-if plotAnalysedData
+if plotAnalysedQs
     nMethods = 9;
 else
     nMethods = 1;

@@ -177,13 +177,13 @@ if ~strcmpi(control.noise, 'none')
     for cell = 1:nCells
         if ismember(cell, ptcList)
             %disp(cell)
-            ceil2zero = 1;
+            ceil2zero = 0;
             % Generate noise
             noiseComponent(cell, :) = squeeze(generateNoise(maxSignal(cell), control.noise, control.noisePercent, nFrames, ceil2zero));
             
             % Add noise
             for trial = 1:nTrials
-                syntheticDATA(cell, trial, :) = squeeze(syntheticDATA(cell, trial, :)) + noiseComponent(cell, :)';
+                syntheticDATA(cell, trial, :) = squeeze(syntheticDATA(cell, trial, :))' + noiseComponent(cell, :); %Why transpose?
             end
             
         elseif ismember(cell, ocList)

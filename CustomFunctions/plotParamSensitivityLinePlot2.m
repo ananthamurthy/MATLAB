@@ -3,43 +3,43 @@ function plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetail
 ptcList = sdo_batch(dIndices(1)).ptcList; %Putative Time Cells
 ocList = sdo_batch(dIndices(1)).ocList; %Other Cells
 
-for parami = 1:nParams
+for param = 1:nParams
     for method = 1:nMethods
         if method == 1 %orginal method
-            yPTC(parami, method, :) = sdo_batch(dIndices(parami)).Q(ptcList);
-            yOC(parami, method, :) = sdo_batch(dIndices(parami)).Q(ocList);
+            yPTC(param, method, :) = sdo_batch(dIndices(param)).Q(ptcList);
+            yOC(param, method, :) = sdo_batch(dIndices(param)).Q(ocList);
         elseif method == 2 %method A
-            yPTC(parami, method, :) = cData.methodA.mAOutput_batch(dIndices(parami)).Q(ptcList);
-            yOC(parami, method, :) = cData.methodA.mAOutput_batch(dIndices(parami)).Q(ocList);
+            yPTC(param, method, :) = cData.methodA.mAOutput_batch(dIndices(param)).Q(ptcList);
+            yOC(param, method, :) = cData.methodA.mAOutput_batch(dIndices(param)).Q(ocList);
         elseif method == 3 %method B
-            yPTC(parami, method, :) = cData.methodB.mBOutput_batch(dIndices(parami)).Q(ptcList);
-            yOC(parami, method, :) = cData.methodB.mBOutput_batch(dIndices(parami)).Q(ocList);
+            yPTC(param, method, :) = cData.methodB.mBOutput_batch(dIndices(param)).Q(ptcList);
+            yOC(param, method, :) = cData.methodB.mBOutput_batch(dIndices(param)).Q(ocList);
         elseif method == 4 %method C1
-            yPTC(parami, method, :) = cData.methodC.mCOutput_batch(dIndices(parami)).Q1(ptcList);
-            yOC(parami, method, :) = cData.methodC.mCOutput_batch(dIndices(parami)).Q1(ocList);
+            yPTC(param, method, :) = cData.methodC.mCOutput_batch(dIndices(param)).Q1(ptcList);
+            yOC(param, method, :) = cData.methodC.mCOutput_batch(dIndices(param)).Q1(ocList);
         elseif method == 5 %method C2
-            yPTC(parami, method, :) = cData.methodC.mCOutput_batch(dIndices(parami)).Q2(ptcList);
-            yOC(parami, method, :) = cData.methodC.mCOutput_batch(dIndices(parami)).Q2(ocList);
+            yPTC(param, method, :) = cData.methodC.mCOutput_batch(dIndices(param)).Q2(ptcList);
+            yOC(param, method, :) = cData.methodC.mCOutput_batch(dIndices(param)).Q2(ocList);
         elseif method == 6 %method D
-            yPTC(parami, method, :) = cData.methodD.mDOutput_batch(dIndices(parami)).Q(ptcList);
-            yOC(parami, method, :) = cData.methodD.mDOutput_batch(dIndices(parami)).Q(ocList);
+            yPTC(param, method, :) = cData.methodD.mDOutput_batch(dIndices(param)).Q(ptcList);
+            yOC(param, method, :) = cData.methodD.mDOutput_batch(dIndices(param)).Q(ocList);
         elseif method == 7 %method E
-            yPTC(parami, method, :) = cData.methodE.mEOutput_batch(dIndices(parami)).Q(ptcList);
-            yOC(parami, method, :) = cData.methodE.mEOutput_batch(dIndices(parami)).Q(ocList);
+            yPTC(param, method, :) = cData.methodE.mEOutput_batch(dIndices(param)).Q(ptcList);
+            yOC(param, method, :) = cData.methodE.mEOutput_batch(dIndices(param)).Q(ocList);
         elseif method == 8 %method F1
-            yPTC(parami, method, :) = cData.methodF.mFOutput_batch(dIndices(parami)).Q1(ptcList);
-            yOC(parami, method, :) = cData.methodF.mFOutput_batch(dIndices(parami)).Q1(ocList);
+            yPTC(param, method, :) = cData.methodF.mFOutput_batch(dIndices(param)).Q1(ptcList);
+            yOC(param, method, :) = cData.methodF.mFOutput_batch(dIndices(param)).Q1(ocList);
         elseif method == 9 %method F2
-            yPTC(parami, method, :) = cData.methodF.mFOutput_batch(dIndices(parami)).Q2(ptcList);
-            yOC(parami, method, :) = cData.methodF.mFOutput_batch(dIndices(parami)).Q2(ocList);
+            yPTC(param, method, :) = cData.methodF.mFOutput_batch(dIndices(param)).Q2(ptcList);
+            yOC(param, method, :) = cData.methodF.mFOutput_batch(dIndices(param)).Q2(ocList);
         else
             error('Unknown method')
         end
-        yPTC_median(parami, method) = nanmedian(yPTC(parami, method, :));
-        yOC_median(parami, method) = nanmedian(yOC(parami, method, :));
+        yPTC_median(param, method) = nanmedian(yPTC(param, method, :));
+        yOC_median(param, method) = nanmedian(yOC(param, method, :));
         
-        yPTC_stddev(parami, method) = nanstd(squeeze(yPTC(parami, method, :)));
-        yOC_stddev(parami, method) = nanstd(squeeze(yOC(parami, method, :)));
+        yPTC_stddev(param, method) = nanstd(squeeze(yPTC(param, method, :)));
+        yOC_stddev(param, method) = nanstd(squeeze(yOC(param, method, :)));
     end
 end
 
@@ -55,13 +55,13 @@ if normalize
         yOC_norm(:, method, :) = yOC(:, method, :)/normValOC;
     end
     
-    for parami = 1:nParams
+    for param = 1:nParams
         for method = 1:nMethods
-            yPTC_norm_median(parami, method) = nanmedian(squeeze(yPTC_norm(parami, method, :)));
-            yOC_norm_median(parami, method) = nanmedian(squeeze(yOC_norm(parami, method, :)));
+            yPTC_norm_median(param, method) = nanmedian(squeeze(yPTC_norm(param, method, :)));
+            yOC_norm_median(param, method) = nanmedian(squeeze(yOC_norm(param, method, :)));
             
-            yPTC_norm_stddev(parami, method) = nanstd(squeeze(yPTC_norm(parami, method, :)));
-            yOC_norm_stddev(parami, method) = nanstd(squeeze(yOC_norm(parami, method, :)));
+            yPTC_norm_stddev(param, method) = nanstd(squeeze(yPTC_norm(param, method, :)));
+            yOC_norm_stddev(param, method) = nanstd(squeeze(yOC_norm(param, method, :)));
         end
     end
     

@@ -6,7 +6,7 @@
 % gDate: date when data generation occurred
 % gRun: run number of data generation (multiple runs could occur on the same date)
 
-function [sdo_batch, sdcp, eventLibrary_2D] = generateSyntheticData(gDate, gRun, workingOnServer)
+function [sdo_batch] = generateSyntheticData(gDate, gRun, workingOnServer)
 
 tic
 close all
@@ -26,7 +26,7 @@ ops0.saveData        = 1;
 ops0.diary           = 1;
 
 %figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
-%ops0.onlyProbeTrials = 0
+ops0.onlyProbeTrials = 0;
 
 if ops0.diary
     if workingOnServer
@@ -141,7 +141,7 @@ for runi = 1:1:nDatasets
     sdo.scurr = scurr; %Saves current status of randomseed
     sdo.endTime = datestr(now,'mm-dd-yyyy_HH-MM');
     
-    % Develop Quality (Q)
+    % Develop Reference Quality (Q)
     params4Q.nCells = nCells;
     params4Q.hitTrialPercent = sdo.hitTrialPercent;
     params4Q.noisePercent = sdcp(runi).noisePercent;
@@ -157,7 +157,7 @@ for runi = 1:1:nDatasets
     params4Q.beta = 1;
     params4Q.gamma = 10;
     
-    sdo.Q = developQ(params4Q);
+    sdo.Q = developRefQ(params4Q);
     
     %     % Derived Time
     %     delta = 3;

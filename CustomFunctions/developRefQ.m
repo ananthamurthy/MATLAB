@@ -1,4 +1,4 @@
-function Q = developQ(params4Q)
+function Q = developRefQ(params4Q)
 
 Q = zeros(params4Q.nCells, 1);
 
@@ -10,6 +10,7 @@ for cell = 1:params4Q.nCells
     n = params4Q.noisePercent/100;
     eaf = params4Q.eventAmplificationFactor;
     NbyS = n/eaf;
+    fprintf('Cell: %i - n = %d, NbyS = %d\n', cell, n, NbyS)
     
     b = params4Q.beta;
     aew = params4Q.allEventWidths(cell, :);
