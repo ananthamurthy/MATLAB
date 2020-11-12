@@ -8,7 +8,7 @@
 % gRun: run number for data generation (multiple runs could happen on the
 % same day)
 
-function runBatchAnalysis(sdcpStart, sdcpEnd, runA, runB, runC, runD, runE, runF, gDate, gRun, workingOnServer, diaryOn)
+function emptyOutput = runBatchAnalysis(sdcpStart, sdcpEnd, runA, runB, runC, runD, runE, runF, gDate, gRun, workingOnServer, diaryOn)
 
 tic
 close all
@@ -355,6 +355,7 @@ if ops0.saveData
 end
 toc
 fprintf('Complete: %i to %i by %s [date:%i gRun:%i]\n', sdcpStart, sdcpEnd, methodList, gDate, gRun);
+emptyOutput = [];
 
 if diaryOn
     diary off
