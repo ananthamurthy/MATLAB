@@ -12,9 +12,9 @@ end
 
 [X, X0, Y, Yfit_actual, ~, testingTrials] = createDataMatrix4Classification(DATA, svmInput);
 
-mustBeNonnegative(X)
-mustBeNonnegative(X0)
-mustBeNonnegative(Y)
+% mustBeNonnegative(X)
+% mustBeNonnegative(X0)
+% mustBeNonnegative(Y)
 
 svmOutput.X = X;
 svmOutput.X0 = X0;

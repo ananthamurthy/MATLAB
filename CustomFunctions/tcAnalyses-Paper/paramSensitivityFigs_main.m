@@ -11,8 +11,11 @@ labels.ytitle
 close all
 
 plotRefQ = 1;
-plotAnalysedQs = 0;
+plotAnalysedQs = 1;
 plotDatasetCheck = 0;
+updateMethodF = 1;
+
+useNames = 1;
 
 addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions'))
 
@@ -34,6 +37,17 @@ if plotAnalysedQs
 else
     cData = [];
 end
+
+if updateMethodF
+    gDate = 20201107; %generation date
+    gRun = 1; %generation run number
+    nDatasets = 208;
+    analysedDataFilePath = strcat('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/', ...
+        'M26_20180514_synthDataAnalysis_20201106_gRun1_methodF_batch_1-208.mat');
+    load(analysedDataFilePath)
+    cData.methodF.mFInput = mFInput;
+    cData.methodF.mFOutput_batch = mFOutput_batch;
+end
 %% Q vs HTR
 
 %dIndices = 1:1:10;
@@ -53,7 +67,7 @@ labels.xtitle = 'Fixed Hit Trial Ratio (%)';
 labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 2, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
-plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams)
+plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames)
 if plotDatasetCheck
     mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 end
@@ -74,7 +88,7 @@ labels.xtitle = 'Randomized Hit Trial Ratio (%)';
 labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
-plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams)
+plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames)
 if plotDatasetCheck
     mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 end
@@ -95,7 +109,7 @@ labels.xtitle = 'Fixed Hit Trial Ratio (%)';
 labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
-plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams)
+plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames)
 if plotDatasetCheck
     mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 end
@@ -116,7 +130,7 @@ labels.xtitle = 'Randomized Hit Trial Ratio (%)';
 labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
-plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams)
+plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames)
 if plotDatasetCheck
     mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 end
@@ -139,7 +153,7 @@ labels.xtitle = 'Gaussian Noise (%)';
 labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
-plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams)
+plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames)
 if plotDatasetCheck
     mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 end
@@ -160,7 +174,7 @@ labels.xtitle = 'Gaussian Noise (%)';
 labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
-plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams)
+plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames)
 if plotDatasetCheck
     mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 end
@@ -184,7 +198,7 @@ labels.xtitle = 'Fixed Event Width Percentile';
 labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
-plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams)
+plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames)
 if plotDatasetCheck
     mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 end
@@ -206,7 +220,7 @@ labels.xtitle = sprintf('Variable Event Width Percentile (%i stddev)', sdcp(68).
 labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
-plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams)
+plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames)
 if plotDatasetCheck
     mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 end
@@ -227,7 +241,7 @@ labels.xtitle = 'Fixed Event Width Percentile';
 labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
-plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams)
+plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames)
 if plotDatasetCheck
     mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 end
@@ -248,7 +262,7 @@ labels.xtitle = sprintf('Variable Event Width Percentile (%i stddev)', sdcp(172)
 labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
-plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams)
+plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames)
 if plotDatasetCheck
     mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 end
@@ -271,7 +285,7 @@ labels.xtitle = 'Uniform Imprecision FWHM (frames)';
 labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
-plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams)
+plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames)
 if plotDatasetCheck
     mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 end
@@ -292,7 +306,7 @@ labels.xtitle = 'Normal Imprecision FWHM (frames)';
 labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
-plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams)
+plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames)
 if plotDatasetCheck
     mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 end
@@ -313,7 +327,7 @@ labels.xtitle = 'Uniform Imprecision FWHM (frames)';
 labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
-plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams)
+plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames)
 if plotDatasetCheck
     mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 end
@@ -334,7 +348,7 @@ labels.xtitle = 'Normal Imprecision FWHM (frames)';
 labels.ytitle = 'Normalized Quality';
 figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
-plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams)
+plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames)
 if plotDatasetCheck
     mainDatasetCheck3(dIndices, sdo_batch, figureDetails)
 end

@@ -1,4 +1,4 @@
-function plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams)
+function plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames)
 
 ptcList = sdo_batch(dIndices(1)).ptcList; %Putative Time Cells
 ocList = sdo_batch(dIndices(1)).ocList; %Other Cells
@@ -107,7 +107,11 @@ if normalize
     title(completeTitle)
     xlabel(labels.xtitle)
     ylabel(labels.ytitle)
-    legend('RefQ1', 'A', 'B', 'C1', 'C2', 'D', 'E', 'DerQ1', 'DerQ2')
+    if useNames
+        legend('RefQ', 'R2B', 'TI', 'C1', 'C2', 'PCA', 'SVM', 'DerQ1', 'DerQ2')
+    else
+        legend('RefQ', 'A', 'B', 'C1', 'C2', 'D', 'E', 'DerQ1', 'DerQ2')
+    end
     set(gca, 'FontSize', figureDetails.fontSize-2)
     hold off
     print(strcat('/Users/ananth/Desktop/figs/tcAnalysisPaper/norm_linePlots_Qvs', ...
@@ -157,7 +161,11 @@ if normalize
     title(completeTitle)
     xlabel(labels.xtitle)
     ylabel(labels.ytitle)
-    legend('RefQ', 'A', 'B', 'C1', 'C2', 'D', 'E', 'DerQ1', 'DerQ2')
+    if useNames
+        legend('RefQ', 'R2B', 'TI', 'C1', 'C2', 'PCA', 'SVM', 'DerQ1', 'DerQ2')
+    else
+        legend('RefQ', 'A', 'B', 'C1', 'C2', 'D', 'E', 'DerQ1', 'DerQ2')
+    end
     set(gca, 'FontSize', figureDetails.fontSize-2)
     hold off
     
