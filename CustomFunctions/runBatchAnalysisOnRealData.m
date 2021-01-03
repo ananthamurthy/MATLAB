@@ -274,64 +274,76 @@ for runi = 1: 1: nDatasets
         mFOutput_batch(runi) = mFOutput;
         %save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_methodC.mat' ], 'mCInput', 'mCOutput')
     end
+    %% Save Data
+    if ops0.saveData
+        disp('Saving everything ...')
+        if ops0.loadSyntheticData
+            if runA
+                save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodA_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mAInput', 'mAOutput_batch', '-v7.3')
+            end
+            
+            if runB
+                save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodB_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mBInput', 'mBOutput_batch', '-v7.3')
+            end
+            
+            if runC
+                save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodC_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mCInput', 'mCOutput_batch', '-v7.3')
+            end
+            
+            if runD
+                save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodD_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mDInput', 'mDOutput_batch', '-v7.3')
+            end
+            
+            if runE
+                save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodE_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
+            end
+            
+            if runF
+                save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodF_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mFInput', 'mFOutput_batch', '-v7.3')
+            end
+        else %Real Physiology Data
+            if runA
+                save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_realDataAnalysis_methodA_batch.mat' ], 'mAInput', 'mAOutput_batch', '-v7.3')
+            end
+            
+            if runB
+                save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_realDataAnalysis_methodB_batch.mat' ], 'mBInput', 'mBOutput_batch', '-v7.3')
+            end
+            
+            if runC
+                save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_realDataAnalysis_methodC_batch.mat' ], 'mCInput', 'mCOutput_batch', '-v7.3')
+            end
+            
+            if runD
+                save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_realDataAnalysis_methodD_batch.mat' ], 'mDInput', 'mDOutput_batch', '-v7.3')
+            end
+            
+            if runE
+                save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_realDataAnalysis_methodE_batch.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
+            end
+            
+            if runF
+                save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_realDataAnalysis_methodF_batch.mat' ], 'mFInput', 'mFOutput_batch', '-v7.3')
+            end
+        end
+        disp('... done!')
+    end
 end
 
-%% Save Data
-if ops0.saveData
-    disp('Saving everything ...')
-    if ops0.loadSyntheticData
-        if runA
-            save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodA_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mAInput', 'mAOutput_batch', '-v7.3')
-        end
-        
-        if runB
-            save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodB_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mBInput', 'mBOutput_batch', '-v7.3')
-        end
-        
-        if runC
-            save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodC_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mCInput', 'mCOutput_batch', '-v7.3')
-        end
-        
-        if runD
-            save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodD_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mDInput', 'mDOutput_batch', '-v7.3')
-        end
-        
-        if runE
-            save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodE_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
-        end
-        
-        if runF
-            save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodF_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mFInput', 'mFOutput_batch', '-v7.3')
-        end
-    else %Real Physiology Data
-        if runA
-            save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_realDataAnalysis_' num2str(gDate) '_methodA_batch.mat' ], 'mAInput', 'mAOutput_batch', '-v7.3')
-        end
-        
-        if runB
-            save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_realDataAnalysis_' num2str(gDate) '_methodB_batch.mat' ], 'mBInput', 'mBOutput_batch', '-v7.3')
-        end
-        
-        if runC
-            save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_realDataAnalysis_' num2str(gDate) '_methodC_batch.mat' ], 'mCInput', 'mCOutput_batch', '-v7.3')
-        end
-        
-        if runD
-            save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_realDataAnalysis_' num2str(gDate) '_methodD_batch.mat' ], 'mDInput', 'mDOutput_batch', '-v7.3')
-        end
-        
-        if runE
-            save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_realDataAnalysis_' num2str(gDate) '_methodE_batch.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
-        end
-        
-        if runF
-            save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_realDataAnalysis_' num2str(gDate) '_methodF_batch.mat' ], 'mFInput', 'mFOutput_batch', '-v7.3')
-        end
-    end
-    disp('... done!')
+if ops0.loadSyntheticData
+    fprintf('Complete: %i to %i by %s [date:%i gRun:%i]\n', ...
+        sdcpStart, ...
+        sdcpEnd, ...
+        methodList, ...
+        gDate, ...
+        gRun);
+else
+    fprintf('Complete: %s-%s\n', ...
+        dbase(runi).mouseName, ...
+        dbase(runi).date);
 end
+
 toc
-fprintf('Complete: %i to %i by %s [date:%i gRun:%i]\n', sdcpStart, sdcpEnd, methodList, gDate, gRun);
 emptyOutput = [];
 
 if diaryOn
