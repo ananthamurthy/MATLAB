@@ -1,7 +1,9 @@
-function plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames)
+function sensitivity = plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames)
 
 ptcList = sdo_batch(dIndices(1)).ptcList; %Putative Time Cells
 ocList = sdo_batch(dIndices(1)).ocList; %Other Cells
+
+sensitivity = zeros(nMethods, 2);
 
 for param = 1:nParams
     for method = 1:nMethods
@@ -100,6 +102,11 @@ if normalize
         else
             error('Unknown method')
         end
+        
+        %Summarize
+        Z = yPTC_norm_median;
+        cellType = 1;
+        sensitivity = summarize(Z, cellType, nMethods, nParams);
     end
     xticks([1 2 3 4 5 6 7 8 9 10])
     xticklabels(labels.xtickscell)
@@ -115,6 +122,21 @@ if normalize
     set(gca, 'FontSize', figureDetails.fontSize-2)
     hold off
     print(strcat('/Users/ananth/Desktop/figs/tcAnalysisPaper/norm_linePlots_Qvs', ...
+        labels.xtitle(~isspace(labels.xtitle)), ...
+        '-', ...
+        completeTitle(~isspace(completeTitle))), ...
+        '-dpng')
+    
+    %Summary - Putative Time Cells
+    fig4 = figure(4);
+    set(fig4,'Position',[300, 300, 900, 500])
+    X = sensitivity(:, 1);
+    bar(X,'BaseValue',0)
+    title(strcat(completeTitle, '-', labels.xtitle))
+    xlabel('Methods')
+    ylabel('Sensitivity')
+    set(gca, 'FontSize', figureDetails.fontSize-2)
+    print(strcat('/Users/ananth/Desktop/figs/tcAnalysisPaper/sensitivity_Qvs', ...
         labels.xtitle(~isspace(labels.xtitle)), ...
         '-', ...
         completeTitle(~isspace(completeTitle))), ...
@@ -154,6 +176,12 @@ if normalize
         else
             error('Unknown method')
         end
+        
+%         %Summarize
+%         Z = yOC_norm_median;
+%         cellType = 2;
+%         sensitivity = summarize(Z, cellType, nMethods, nParams);
+        
     end
     xticks([1 2 3 4 5 6 7 8 9 10])
     xticklabels(labels.xtickscell)
@@ -174,6 +202,20 @@ if normalize
         '-', ...
         completeTitle(~isspace(completeTitle))), ...
         '-dpng')
+    
+%     %Summary - Other Cells
+%     fig5 = figure(5);
+%     set(fig5,'Position',[900, 300, 500, 500])
+%     X = sensitivity(:, 2);
+%     bar(X,'BaseValue',0)
+%     title(completeTitle)
+%     xlabel('Methods')
+%     ylabel('Sensitivity')
+%     print(strcat('/Users/ananth/Desktop/figs/tcAnalysisPaper/sensitivity_Qvs', ...
+%         labels.xtitle(~isspace(labels.xtitle)), ...
+%         '-', ...
+%         completeTitle(~isspace(completeTitle))), ...
+%         '-dpng')
     
 else
     %For Putative Time Cells
@@ -211,7 +253,13 @@ else
         else
             error('Unknown method')
         end
+        
+        %Summarize
+        Z = yPTC_median;
+        cellType = 1;
+        sensitivity = summarize(Z, cellType, nMethods, nParams); 
     end
+    
     xticks([1 2 3 4 5 6 7 8 9 10])
     xticklabels(labels.xtickscell)
     completeTitle = strcat(labels.titleMain, '-', labels.titlePTC);
@@ -222,6 +270,21 @@ else
     set(gca, 'FontSize', figureDetails.fontSize-2)
     hold off
     print(strcat('/Users/ananth/Desktop/figs/tcAnalysisPaper/linePlots_Qvs', ...
+        labels.xtitle(~isspace(labels.xtitle)), ...
+        '-', ...
+        completeTitle(~isspace(completeTitle))), ...
+        '-dpng')
+    
+    %Summary - Putative Time Cells
+    fig4 = figure(4);
+    set(fig4,'Position',[300, 300, 900, 500])
+    X = sensitivity(:, 1);
+    bar(X,'BaseValue',0)
+    title(strcat(completeTitle, '-', labels.xtitle))
+    xlabel('Methods')
+    ylabel('Sensitivity')
+    set(gca, 'FontSize', figureDetails.fontSize-2)
+    print(strcat('/Users/ananth/Desktop/figs/tcAnalysisPaper/sensitivity_Qvs', ...
         labels.xtitle(~isspace(labels.xtitle)), ...
         '-', ...
         completeTitle(~isspace(completeTitle))), ...
@@ -261,6 +324,11 @@ else
         else
             error('Unknown method')
         end
+        
+        %Summarize
+        Z = yOC_median;
+        cellType = 2;
+        sensitivity = summarize(Z, cellType, nMethods, nParams);
     end
     xticks([1 2 3 4 5 6 7 8 9 10])
     xticklabels(labels.xtickscell)
@@ -276,5 +344,19 @@ else
         '-', ...
         completeTitle(~isspace(completeTitle))), ...
         '-dpng')
+    
+%     %Summary - Other Cells
+%     fig6 = figure(6);
+%     set(fig6,'Position',[900, 300, 500, 500])
+%     X = sensitivity(:, 2);
+%     bar(X,'BaseValue',0)
+%     title(completeTitle)
+%     xlabel('Methods')
+%     ylabel('Sensitivity')
+%     print(strcat('/Users/ananth/Desktop/figs/tcAnalysisPaper/sensitivity_Qvs', ...
+%         labels.xtitle(~isspace(labels.xtitle)), ...
+%         '-', ...
+%         completeTitle(~isspace(completeTitle))), ...
+%         '-dpng')
 end
 end

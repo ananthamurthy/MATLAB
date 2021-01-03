@@ -3,7 +3,8 @@ function trialDetails = getTrialDetails(dataset)
 %disp('Getting trial details ...')
 trialDetails.nFrames = dataset.nFrames;
 
-trialDetails.frameRate          = round((dataset.nFrames/dataset.trialDuration),1);
+%trialDetails.frameRate          = round((dataset.nFrames/dataset.trialDuration),1);
+trialDetails.frameRate          = dataset.samplingRate;
 trialDetails.preDuration        = 8.0000; %in seconds
 trialDetails.csDuration         = 0.0500; %in seconds
 trialDetails.usDuration         = 0.0500; %in seconds
