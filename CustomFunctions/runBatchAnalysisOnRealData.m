@@ -30,7 +30,7 @@ if diaryOn
     if workingOnServer
         diary (strcat(HOME_DIR, '/logs/batchAnalysisDiary'))
     else
-        diary (strcat(HOME_DIR2, '/logs/batchAnalysisDiary_', num2str(gDate), '_', num2str(gRun)))
+        diary (strcat(HOME_DIR2, '/logs/batchAnalysisDiary'))
     end
     diary on
 end
@@ -42,7 +42,7 @@ end
 % clear space
 
 %% Dataset
-nDatasets = 2;
+nDatasets = 1;
 
 if workingOnServer
     saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
@@ -262,7 +262,7 @@ for runi = 1: 1: nDatasets
     % ----
     
     if runF
-        %Method C - Simple Analysis
+        %Method F - Parametric Equation
         mFInput.delta = 3;
         mFInput.skipFrames = [];
         mFInput.alpha = 10;

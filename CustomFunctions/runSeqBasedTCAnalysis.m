@@ -112,6 +112,8 @@ seqAnalysisOutput.d1 = dx ./ dt;
 
 seqAnalysisOutput.dx = dx;
 seqAnalysisOutput.dt = dt;
+
+%Generate ETH
 if seqAnalysisInput.getT
     [ETH, ~, ~] = getETH(DATA, seqAnalysisInput.delta, seqAnalysisInput.skipFrames);
 end
@@ -125,12 +127,15 @@ for cell = 1:nCells
     corrCoeffMatrix2b2 = corrcoef(seqAnalysisOutput.d1, DATA_2D(cell, 2:end)'); %pads smaller vector with 0s
     seqAnalysisOutput.Q(cell, 1) = corrCoeffMatrix2b2(1,2);
     
+    %Get Peak Time bin from ETH
     if seqAnalysisInput.getT
         %Time Vector
         [~, peakTimeBin(cell)] = max(squeeze(ETH(cell, :)));
     end
 end
-
 seqAnalysisOutput.T = peakTimeBin;
-seqAnalysisOutput.timeCells = [];
+
+threshold = graythresh(seqAnalysisOutput.Q); %Otsu's method
+seqAnalysisOutput.timeCells = seqAnalysisOutput.Q > threshold;
+
 end

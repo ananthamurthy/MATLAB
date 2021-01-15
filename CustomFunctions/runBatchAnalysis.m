@@ -95,7 +95,8 @@ clear s
 s.Q1 = [];
 s.Q2 = [];
 s.T = [];
-s.timeCells = [];
+s.timeCells1 = [];
+s.timeCells2 = [];
 s.normQ1 = [];
 s.normQ2 = [];
 mCOutput_batch = repmat(s, 1, nDatasets);
@@ -205,6 +206,8 @@ for runi = sdcpStart: 1: sdcpEnd
         mBInput.labelShuffle = 'off';
         mBInput.distribution4Bayes = 'mvmn';
         mBInput.saveModel = 0;
+        mBInput.nIterations = 1000;
+        mBInput.threshold = 99; %in %
         if ~mBInput.saveModel
             try
                 mBOutput_batch = rmfield(mBOutput_batch, 'Mdl');
@@ -223,7 +226,8 @@ for runi = sdcpStart: 1: sdcpEnd
         %Method C - Simple Analysis
         mCInput.delta = 3;
         mCInput.skipFrames = [];
-        mCInput.trialThreshold = 25; % in %
+        mCInput.nIterations = 1000;
+        mCInput.threshold = 99; %in %
         [mCOutput] = runSimpleTCAnalysis(DATA, mCInput);
         mCOutput.normQ1 = (mCOutput.Q1)/max(mCOutput.Q1);
         mCOutput.normQ2 = (mCOutput.Q2)/max(mCOutput.Q2);
@@ -241,7 +245,7 @@ for runi = sdcpStart: 1: sdcpEnd
         mDInput.nSamples = 5; %for Gaussian Kernel
         mDInput.automatic = 1; %for selecting P; logical
         mDInput.timeVector = (1:db.nFrames*size(DATA,2)) * (1/db.samplingRate); %in seconds; %For derivative
-        mDInput.getT = 0;
+        mDInput.getT = 1;
         [mDOutput] = runSeqBasedTCAnalysis(DATA, mDInput);
         mDOutput.normQ = (mDOutput.Q) ./max(mDOutput.Q);
         mDOutput_batch(runi) = mDOutput;
@@ -278,6 +282,7 @@ for runi = sdcpStart: 1: sdcpEnd
             end
         end
         [mEOutput] = runSVMClassification(DATA, mEInput);
+        mEOutput.normQ = (mEOutput.Q) ./max(mEOutput.Q);
         mEOutput_batch(runi) = mEOutput;
         %save([saveFolder db.mouseName '_' db.date '_methodE.mat' ], 'mEInput', 'mEOutput')
     end
@@ -285,7 +290,7 @@ for runi = sdcpStart: 1: sdcpEnd
     % ----
     
     if runF
-        %Method C - Simple Analysis
+        %Method F - Derived Parametric Equations
         mFInput.delta = 3;
         mFInput.skipFrames = [];
         mFInput.alpha = 10;
@@ -295,7 +300,7 @@ for runi = sdcpStart: 1: sdcpEnd
         mFOutput.normQ1 = (mFOutput.Q1)/max(mFOutput.Q1);
         mFOutput.normQ2 = (mFOutput.Q2)/max(mFOutput.Q2);
         mFOutput_batch(runi) = mFOutput;
-        %save([saveFolder db.mouseName '_' db.date '_methodC.mat' ], 'mCInput', 'mCOutput')
+        %save([saveFolder db.mouseName '_' db.date '_methodF.mat' ], 'mFInput', 'mFOutput')
     end
 end
 

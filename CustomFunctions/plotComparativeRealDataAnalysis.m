@@ -1,3 +1,5 @@
+load('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/M26_comparativeRealDataAnalysis_20210103_cRun1_cData.mat')
+
 normalize = 0;
 
 figureDetails = compileFigureDetails(20, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
@@ -198,7 +200,7 @@ else
                 'FontWeight', 'bold')
         else
         end
-        xlabel('Method F2 - DayA', ...
+        xlabel('Method F1 - DayA', ...
             'FontSize', figureDetails.fontSize, ...
             'FontWeight', 'bold')
         set(gca,'FontSize', figureDetails.fontSize-3)
@@ -293,7 +295,7 @@ else
         elseif count == 6
             y = cData(2).methodF.mFOutput_batch(2).Q2;
             scatter(x, y, 'k');
-            ylabel('Method F2 - DayB', ...
+            ylabel('Method F1 - DayB', ...
                 'FontSize', figureDetails.fontSize, ...
                 'FontWeight', 'bold')
         else

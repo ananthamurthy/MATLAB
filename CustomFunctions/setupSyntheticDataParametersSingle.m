@@ -23,27 +23,24 @@ Random Seed
 rng('seed', 'generator')  %See help rng for details; Typically: 'default' or 'shuffle'
 %}
 %%
-count = 0;
-%% Synthetic Data Parameters - Batch
+i = 0;
+%% Synthetic Data Parameters
 
-%Max Hit Trial Percents with 'fixed' assignment
-for value = 10:10:100
-    count = count + 1;
-    sdcp(count).timeCellPercent = 50;
-    sdcp(count).cellOrder = 'basic';
-    sdcp(count).maxHitTrialPercent = value;
-    sdcp(count).hitTrialPercentAssignment = 'fixed';
-    sdcp(count).trialOrder = 'basic';
-    sdcp(count).eventWidth = {100, 'same'};
-    sdcp(count).eventAmplificationFactor = 1;
-    sdcp(count).eventTiming = 'sequential';
-    sdcp(count).startFrame = 75;
-    sdcp(count).endFrame = 150;
-    sdcp(count).imprecisionFWHM = 0;
-    sdcp(count).imprecisionType = 'none';
-    sdcp(count).noise = 'gaussian';
-    sdcp(count).noisePercent = 50;
-    sdcp(count).randomseed = 'default';
-    sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
-    rng(sdcp(count).randomseed)
-end
+i = i + 1;
+sdcp(i).timeCellPercent = 100;
+sdcp(i).cellOrder = 'basic';
+sdcp(i).maxHitTrialPercent = 25;
+sdcp(i).hitTrialPercentAssignment = 'random';
+sdcp(i).trialOrder = 'random';
+sdcp(i).eventWidth = {70, 3};
+sdcp(i).eventAmplificationFactor = 1;
+sdcp(i).eventTiming = 'sequential';
+sdcp(i).startFrame = 75;
+sdcp(i).endFrame = 150;
+sdcp(i).imprecisionFWHM = 5;
+sdcp(i).imprecisionType = 'uniform';
+sdcp(i).noise = 'gaussian';
+sdcp(i).noisePercent = 20;
+sdcp(i).randomseed = 'shuffle';
+sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
+rng(sdcp(i).randomseed)

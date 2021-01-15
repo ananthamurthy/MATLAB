@@ -3,14 +3,11 @@ nCells = size(DATA, 1);
 %nTrials = size(DATA, 2);
 nFrames = size(DATA, 3);
 
-nIterations = williamInput.nIterations;
-threshold = williamInput.threshold;
-
 %Preallocations
 MI = nan(nCells,1);
 Isec = nan(nCells,1);
 Ispk = nan(nCells,1);
-Ispk_rand = nan(nCells, nIterations);
+Ispk_rand = nan(nCells, n
 Itime = nan(nCells,size(DATA,3),1);
 timeCells = nan(nCells, 1);
 %time = nan(nCells, 1);
@@ -22,20 +19,9 @@ end
 
 %Generate circularly shifted randomized data
 for i = 1:williamInput.nIterations
-    randDATA = generateRandData(DATA);
-    %Calculate Temporal Information
+    randDATA = generateRandData(DATA, nShiftFrames);
     for cell = 1:nCells
-        [~, ~, Ispk_rand(cell, i), ~] = tempInfoOneNeuron(squeeze(randDATA(cell, :, :)));
-    end
-end
-
-%Classify Time Cells
-for cell = 1:nCells
-    score = (sum(Ispk_rand(cell, (Ispk(cell)>Ispk_rand(cell, :))))/williamInput.nIterations)*100;
-    if score > williamInput.threshold
-        timeCells(cell) = 1;
-    else
-        timeCells(cell) = 0;
+        [~, ~, Ispk_rand(cell, i), ~] = tempInfoOneNeuron(squeeze(DATA(cell,:,:)));
     end
 end
 

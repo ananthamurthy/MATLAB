@@ -60,7 +60,7 @@ end
 
 %Generate circularly shifted randomized data
 for i = 1:simpleInput.nIterations
-    randDATA = generateRandData(DATA);
+    randDATA = generateRandData(DATA, nShiftFrames);
     
     [ETH_rand, trialAUCs_rand, ~] = getETH(randDATA, delta, skipFrames);
     
@@ -89,27 +89,20 @@ for i = 1:simpleInput.nIterations
         Q1_rand(cell, i) = (sum(squeeze(hitTrial_rand(cell, :, i)))/nTrials) * ksstat_rand(cell, i); %Q1 = hit trial ratio * ksstat
         
         % Develop Q2
-        meanTimedPeak = mean(trialAUCs_rand(cell, :, peakTimeBin_rand(cell, i)));
-        stdTimedPeak = std(trialAUCs_rand(cell, :, peakTimeBin_rand(cell, i)));
+        meanTimedPeak = mean(trialAUCs_rand(cell, :, peakTimeBin(cell)));
+        stdTimedPeak = std(trialAUCs_rand(cell, :, peakTimeBin(cell)));
         Q2_rand(cell, i) = meanTimedPeak/stdTimedPeak;
     end
+    
 end
 
 %Classify Time Cells
 for cell = 1:nCells
-    score1 = (sum(Q1(cell)>Q1_rand(cell, :))/simpleInput.nIterations)*100;
-    score2 = (sum(Q2(cell)>Q2_rand(cell, :))/simpleInput.nIterations)*100;
-    
-    if score1 > simpleInput.threshold
-        timeCells1(cell) = 1;
+    score = (sum()/simpleInput.nIterations)*100;
+    if score > simpleInput.threshold
+        timeCells(cell) = 1;
     else
-        timeCells1(cell) = 0;
-    end
-    
-    if score2 > simpleInput.threshold
-        timeCells2(cell) = 1;
-    else
-        timeCells2(cell) = 0;
+        timeCells(cell) = 0;
     end
 end
 
