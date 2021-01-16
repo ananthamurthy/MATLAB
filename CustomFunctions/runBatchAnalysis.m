@@ -293,6 +293,7 @@ for runi = sdcpStart: 1: sdcpEnd
         %Method F - Derived Parametric Equations
         mFInput.delta = 3;
         mFInput.skipFrames = [];
+        mFInput.nIterations = 1000;
         mFInput.alpha = 10;
         mFInput.beta = 1;
         mFInput.gamma = 10;
