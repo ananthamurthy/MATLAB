@@ -21,7 +21,7 @@ for cell = 1:nCells
 end
 
 %Generate circularly shifted randomized data
-for i = 1:williamInput.nIterations
+for i = 1:nIterations
     randDATA = generateRandData(DATA);
     %Calculate Temporal Information
     for cell = 1:nCells
@@ -32,13 +32,15 @@ end
 %Classify Time Cells
 for cell = 1:nCells
     score = (sum(Ispk_rand(cell, (Ispk(cell)>Ispk_rand(cell, :))))/williamInput.nIterations)*100;
-    if score > williamInput.threshold
+    if score > threshold
         timeCells(cell) = 1;
     else
         timeCells(cell) = 0;
     end
 end
+williamOutput.timeCells = timeCells;
 
+%Get Time from Network Activity using Bayesian Learning
 [X, X0, Y, Yfit_actual, trainingTrials, testingTrials] = createDataMatrix4Bayes(DATA, williamInput);
 
 %mustBeNonnegative(X)
@@ -75,6 +77,4 @@ williamOutput.YfitDiff = williamOutput.Yfit - Yfit_actual;
 williamOutput.Yfit_2D = reshape(williamOutput.Yfit, [length(testingTrials), nFrames]);
 williamOutput.Yfit_actual_2D = reshape(williamOutput.Yfit_actual, [length(testingTrials), nFrames]);
 williamOutput.YfitDiff_2D = reshape(williamOutput.YfitDiff, [length(testingTrials), nFrames]);
-
-williamOutput.timeCells = timeCells;
 end

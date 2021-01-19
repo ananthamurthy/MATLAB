@@ -12,3 +12,7 @@ function randDATA = generateRandData(DATA)
         end
     end
 end
+
+%%Things to do
+%Truly protect calcium events by looking at the peak and then using
+%a protection window around it.

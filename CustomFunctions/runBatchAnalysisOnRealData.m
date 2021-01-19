@@ -83,7 +83,10 @@ clear s
 s.Q1 = [];
 s.Q2 = [];
 s.T = [];
-s.timeCells = [];
+s.timeCells1 = [];
+s.timeCells2 = [];
+s.timeCells3 = [];
+s.timeCells4 = [];
 s.normQ1 = [];
 s.normQ2 = [];
 mCOutput_batch = repmat(s, 1, nDatasets);
@@ -115,6 +118,7 @@ s.YfitDiff_2D = [];
 s.Q_2D = [];
 s.T = [];
 s.timeCells = [];
+s.normQ = [];
 mEOutput_batch = repmat(s, 1, nDatasets);
 clear s
 
@@ -122,7 +126,8 @@ clear s
 s.Q1 = [];
 s.Q2 = [];
 s.T = [];
-s.timeCells = [];
+s.timeCells1 = [];
+s.timeCells2 = [];
 s.normQ1 = [];
 s.normQ2 = [];
 mFOutput_batch = repmat(s, 1, nDatasets);

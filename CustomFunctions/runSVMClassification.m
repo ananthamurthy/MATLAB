@@ -1,8 +1,8 @@
 function [svmOutput] = runSVMClassification(DATA, svmInput)
 
 nCells = size(DATA, 1);
-nTrials = size(DATA, 2);
-nFrames = size(DATA, 3);
+%nTrials = size(DATA, 2);
+%nFrames = size(DATA, 3);
 
 %Gaussian Smoothing
 if svmInput.gaussianSmoothing
@@ -66,5 +66,9 @@ if svmInput.getT
     end
 end
 svmOutput.T = peakTimeBin;
-svmOutput.timeCells = [];
+
+thresholdOtsu = graythresh(Q); %Otsu's method
+timeCells = Q > thresholdOtsu;
+
+svmOutput.timeCells = timeCells;
 end

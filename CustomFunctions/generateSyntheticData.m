@@ -56,9 +56,11 @@ saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
 
 %% Load processed dF/F data for dataset
 realProcessedData = load(strcat(saveFolder, db.mouseName, '_', db.date, '.mat'));
-nCells = size(realProcessedData.dfbf, 1);
-nTrials = size(realProcessedData.dfbf, 2);
-nFrames = size(realProcessedData.dfbf, 3);
+DATA = realProcessedData.dfbf;
+DATA_2D = realProcessedData.dfbf_2D;
+nCells = size(DATA, 1);
+nTrials = size(DATA, 2);
+nFrames = size(DATA, 3);
 fprintf('Total cells: %i\n', nCells)
 
 %% Load synthetic dataset control parameters
@@ -68,47 +70,7 @@ nDatasets = length(sdcp);
 
 %% Organize Library of Calcium Events
 %Cell specific curation of the calcium event library
-%Check to see if the library exits
-if isfile(strcat(saveFolder, db.mouseName, '_', db.date, '_eventLibrary_2D.mat'))
-    disp('Loading existing event library ...')
-    filepath = strcat(saveFolder, db.mouseName, '_', db.date, '_eventLibrary_2D.mat');
-    load(filepath)
-    disp('... done!')
-else
-    %Use real 2D data
-    cellMean = zeros(nCells, 1);
-    cellStddev = zeros(nCells, 1);
-    binaryData = zeros(nCells, 1);
-    
-    disp('Basic scan for calcium events ...')
-    
-    %Preallocation
-    s.nEvents = 0;
-    s.eventStartIndices = [];
-    s.eventWidths = [];
-    eventLibrary_2D = repmat(s, 1, nCells);
-    clear s
-    
-    for cell = 1:nCells
-        sampledCellActivity = squeeze(realProcessedData.dfbf_2D(cell, :));
-        cellMean(cell) = mean(sampledCellActivity);
-        cellStddev(cell) = std(sampledCellActivity);
-        logicalIndices = sampledCellActivity > (cellMean(cell) + 2* cellStddev(cell));
-        binaryData(logicalIndices, 1) = 1;
-        minNumberOf1s = 3;
-        [nEvents, StartIndices, Width] = findConsecutiveOnes(binaryData, minNumberOf1s);
-        eventLibrary_2D(cell).nEvents = nEvents;
-        eventLibrary_2D(cell).eventStartIndices = StartIndices;
-        eventLibrary_2D(cell).eventWidths = Width;
-        
-        clear binaryData
-        clear Events
-        clear StartIndices
-        clear Lengths
-    end
-    save(strcat(saveFolder, db.mouseName, '_', db.date, '_eventLibrary_2D.mat'), 'eventLibrary_2D')
-    disp('... library curated and saved!')
-end
+eventLibrary_2D = curateLibrary(db, saveFolder, DATA_2D);
 
 %% Generate synthetic dataset(s)
 %Preallocation
@@ -134,7 +96,7 @@ clear s
 
 for runi = 1:1:nDatasets
     fprintf('Currently generating dataset: %i\n', runi)
-    sdo = syntheticDataMaker(db, realProcessedData.dfbf_2D, eventLibrary_2D, sdcp(runi), runi);
+    sdo = syntheticDataMaker(db, DATA_2D, eventLibrary_2D, sdcp(runi), runi);
     
     %Run specifics
     scurr = rng;
