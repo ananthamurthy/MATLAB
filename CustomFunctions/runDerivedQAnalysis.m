@@ -16,8 +16,11 @@ randQ1 = nan(nCells, nIterations);
 randQ2 = nan(nCells, nIterations);
 
 %Generate circularly shifted randomized data
+controls.startFrame = derivedQInput.startFrame;
+controls.endFrame = derivedQInput.endFrame;
+
 for i = 1:nIterations
-    randDATA = generateRandData(DATA);
+    randDATA = generateRandData(DATA, controls);
     [randQ1(:, i), randQ2(:, i)] = derivedQAnalysis(randDATA);
 end
 

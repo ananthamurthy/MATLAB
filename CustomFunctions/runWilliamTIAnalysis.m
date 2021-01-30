@@ -21,8 +21,11 @@ for cell = 1:nCells
 end
 
 %Generate circularly shifted randomized data
+controls.startFrame = williamInput.startFrame;
+controls.endFrame = williamInput.endFrame;
+
 for i = 1:nIterations
-    randDATA = generateRandData(DATA);
+    randDATA = generateRandData(DATA, controls);
     %Calculate Temporal Information
     for cell = 1:nCells
         [~, ~, Ispk_rand(cell, i), ~] = tempInfoOneNeuron(squeeze(randDATA(cell, :, :)));

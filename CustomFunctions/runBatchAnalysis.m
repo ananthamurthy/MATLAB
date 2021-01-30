@@ -211,6 +211,8 @@ for runi = sdcpStart: 1: sdcpEnd
         mBInput.distribution4Bayes = 'mvmn';
         mBInput.saveModel = 0;
         mBInput.nIterations = 1000;
+        mBInput.startFrame = 75;
+        mBInput.nIterations = 1000;
         mBInput.threshold = 99; %in %
         if ~mBInput.saveModel
             try

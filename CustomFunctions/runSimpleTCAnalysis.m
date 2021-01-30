@@ -14,8 +14,11 @@ randQ2 = nan(nCells, nIterations);
 [peakTimeBin, Q1, Q2] = simpleAnalysis(DATA, simpleInput);
 
 %Generate circularly shifted randomized data
+controls.startFrame = simpleInput.startFrame;
+controls.endFrame = simpleInput.endFrame;
+
 for i = 1:nIterations
-    randDATA = generateRandData(DATA);
+    randDATA = generateRandData(DATA, controls);
     [~, ~, randQ1(:, i), randQ2(:, i)] = simpleAnalysis(randDATA, simpleInput);
 end
 
