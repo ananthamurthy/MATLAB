@@ -1,5 +1,9 @@
 function [stcaOutput] = runSimpleTCAnalysis(DATA, simpleInput)
 
+nCells = size(DATA, 1);
+%nTrials = size(DATA, 2);
+%nFrames = size(DATA, 3);
+
 nIterations = simpleInput.nIterations;
 threshold1 = simpleInput.threshold;
 
