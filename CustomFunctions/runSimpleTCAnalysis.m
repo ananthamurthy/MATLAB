@@ -23,7 +23,7 @@ controls.endFrame = simpleInput.endFrame;
 
 for i = 1:nIterations
     randDATA = generateRandData(DATA, controls);
-    [~, ~, randQ1(:, i), randQ2(:, i)] = simpleAnalysis(randDATA, simpleInput);
+    [~, randQ1(:, i), randQ2(:, i)] = simpleAnalysis(randDATA, simpleInput);
 end
 
 %Classify Time Cells
