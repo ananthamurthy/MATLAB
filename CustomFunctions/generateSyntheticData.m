@@ -70,8 +70,16 @@ nDatasets = length(sdcp);
 
 %% Organize Library of Calcium Events
 %Cell specific curation of the calcium event library
-eventLibrary_2D = curateLibrary(db, saveFolder, DATA_2D);
-
+%Check to see if the library exits, else create
+if isfile(strcat(saveFolder, dbase.mouseName, '_', dbase.date, '_eventLibrary_2D.mat'))
+    disp('Loading existing event library ...')
+    filepath = strcat(saveFolder, dbase.mouseName, '_', dbase.date, '_eventLibrary_2D.mat');
+    eventLibrary_2D = load(filepath);
+    disp('... done!')
+else
+    eventLibrary_2D = curateLibrary(DATA_2D);
+end
+save(strcat(saveFolder, dbase.mouseName, '_', dbase.date, '_eventLibrary_2D.mat'), 'eventLibrary_2D')
 %% Generate synthetic dataset(s)
 %Preallocation
 s.syntheticDATA = zeros(nCells, nTrials, nFrames);

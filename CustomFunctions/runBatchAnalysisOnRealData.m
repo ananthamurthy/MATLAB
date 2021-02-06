@@ -276,6 +276,7 @@ for runi = 1: 1: nDatasets
     
     if runF
         %Method F - Parametric Equation
+        %%%ADD DB as INPUT.
         mFInput.delta = 3;
         mFInput.skipFrames = [];
         mFInput.alpha = 10;
@@ -285,6 +286,8 @@ for runi = 1: 1: nDatasets
         mFInput.endFrame = 130;
         mFInput.nIterations = 1000;
         mFInput.threshold = 99; %in %
+        mFInput.dbase = dbase(runi);
+        mFInput.saveFolder = saveFolder;
         [mFOutput] = runDerivedQAnalysis(DATA, mFInput);
         mFOutput.normQ1 = (mFOutput.Q1)/max(mFOutput.Q1);
         mFOutput.normQ2 = (mFOutput.Q2)/max(mFOutput.Q2);

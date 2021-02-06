@@ -10,7 +10,7 @@ nCells = size(DATA, 1);
 timeCells1 = nan(nCells, 1);
 timeCells2 = nan(nCells, 1);
 
-[Q1, Q2] = derivedQAnalysis(DATA, derivedQInput);
+[~, Q1, Q2] = derivedQAnalysis(DATA, derivedQInput);
 
 randQ1 = nan(nCells, nIterations);
 randQ2 = nan(nCells, nIterations);
@@ -18,10 +18,11 @@ randQ2 = nan(nCells, nIterations);
 %Generate circularly shifted randomized data
 controls.startFrame = derivedQInput.startFrame;
 controls.endFrame = derivedQInput.endFrame;
+%controls.dbase = derivedQInput.dbase;
 
 for i = 1:nIterations
     randDATA = generateRandData(DATA, controls);
-    [randQ1(:, i), randQ2(:, i)] = derivedQAnalysis(randDATA);
+    [randQ1(:, i), randQ2(:, i)] = derivedQAnalysis(randDATA, derivedQInput);
 end
 
 %Classify Time Cells

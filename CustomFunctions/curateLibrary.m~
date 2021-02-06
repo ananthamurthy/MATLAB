@@ -36,4 +36,7 @@ for cell = 1:nCells
     clear StartIndices
     clear Lengths
 end
+save(strcat(saveFolder, dbase.mouseName, '_', dbase.date, '_eventLibrary_2D.mat'), 'eventLibrary_2D')
+%disp('... library curated and saved!')
+%end
 end
