@@ -33,7 +33,7 @@ end
 %Use real 2D data to curate a library
 dbase = derivedQInput.dbase;
 saveFolder = derivedQInput.saveFolder;
-eventLibrary_2D = curateLibrary(dbase, saveFolder, DATA_2D);
+eventLibrary_2D = curateLibrary(DATA_2D);
 
 %Develop Event Time Histogram (ETH) Curves
 [ETH, trialAUCs, ~] = getETH(DATA, delta, skipFrames);
