@@ -31,8 +31,8 @@ for cell = 1:nCells
 end
 
 %Use real 2D data to curate a library
-dbase = derivedQInput.dbase;
-saveFolder = derivedQInput.saveFolder;
+%dbase = derivedQInput.dbase;
+%saveFolder = derivedQInput.saveFolder;
 eventLibrary_2D = curateLibrary(DATA_2D);
 
 %Develop Event Time Histogram (ETH) Curves

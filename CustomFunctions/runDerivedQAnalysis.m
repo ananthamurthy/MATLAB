@@ -10,7 +10,7 @@ nCells = size(DATA, 1);
 timeCells1 = nan(nCells, 1);
 timeCells2 = nan(nCells, 1);
 
-[~, Q1, Q2] = derivedQAnalysis(DATA, derivedQInput);
+[peakTimeBin, Q1, Q2] = derivedQAnalysis(DATA, derivedQInput);
 
 randQ1 = nan(nCells, nIterations);
 randQ2 = nan(nCells, nIterations);
@@ -21,6 +21,7 @@ controls.endFrame = derivedQInput.endFrame;
 %controls.dbase = derivedQInput.dbase;
 
 for i = 1:nIterations
+    fprintf('>>> Randomized dataset: %i of %i ...', i, nIterations)
     randDATA = generateRandData(DATA, controls);
     [randQ1(:, i), randQ2(:, i)] = derivedQAnalysis(randDATA, derivedQInput);
 end
@@ -41,6 +42,11 @@ for cell = 1:nCells
     else
         timeCells2(cell) = 0;
     end
+    
+    threshold1 = graythresh(Q1); %Otsu's method
+    threshold2 = graythresh(Q2); %Otsu's method
+    timeCells3 = Q1 > threshold1;
+    timeCells4 = Q1 > threshold2;
 end
 
 derivedQOutput.Q1 = Q1;
@@ -48,4 +54,6 @@ derivedQOutput.Q2 = Q2;
 derivedQOutput.T = peakTimeBin;
 derivedQOutput.timeCells1 = timeCells1;
 derivedQOutput.timeCells2 = timeCells2;
+derivedQOutput.timeCells3 = timeCells3;
+derivedQOutput.timeCells4 = timeCells4;
 end

@@ -9,7 +9,7 @@ threshold1 = simpleInput.threshold;
 
 %Preallocation
 timeCells1 = nan(nCells, 1);
-timeCells2 = nan(nCells, 2);
+timeCells2 = nan(nCells, 1);
 %timeCells3 = nan(nCells, 1);
 %timeCells4 = nan(nCells, 2);
 randQ1 = nan(nCells, nIterations);

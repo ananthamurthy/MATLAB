@@ -130,6 +130,8 @@ end
 %all_scores = [all_scores, [rb_ratio_vec; rrb_ratio_vec_final] ];        %matrix containing ridge to background ratios
 
 mehrabOutput.Q = (rb_ratio_vec./rrb_ratio_vec_final)'; %Important to transpose
-mehrabOutput.T = pki + CS_onset_frame;
+timeCells(mehrabOutput.Q > 1) = 1;
+timeCells(mehrabOutput.Q < 1) = 0;
 mehrabOutput.timeCells = timeCells;
+mehrabOutput.T = pki + CS_onset_frame;
 end
