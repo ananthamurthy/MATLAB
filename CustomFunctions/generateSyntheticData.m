@@ -38,7 +38,7 @@ if ops0.diary
 end
 
 %% Load real dataset details
-make_db %Currently only for one session at a time
+make_dbase %Currently only for one session at a time
 
 fprintf('Reference Dataset - %s_%i_%i | Date: %s\n', ...
     db.mouseName, ...

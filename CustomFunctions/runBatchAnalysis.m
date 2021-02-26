@@ -42,19 +42,19 @@ end
 % clear space
 
 %% Dataset
-make_db %Currently only for one session at a time
+make_dbase %Currently only for one session at a time
 fprintf('Analyzing %s_%i_%i - Date: %s\n', ...
-    db.mouseName, ...
-    db.sessionType, ...
-    db.session, ...
-    db.date)
+    dbase.mouseName, ...
+    dbase.sessionType, ...
+    dbase.session, ...
+    dbase.date)
 
 if workingOnServer
     saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
 else
     saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
 end
-saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
+saveFolder = strcat(saveDirec, dbase.mouseName, '/', dbase.date, '/');
 
 ops0.saveData                  = 1;
 ops0.onlyProbeTrials           = 0;
@@ -168,9 +168,9 @@ for runi = sdcpStart: 1: sdcpEnd
         myData.baselines = zeros(size(sdo_batch(runi).syntheticDATA)); %initialization
     else
         %Load processed data (processed dfbf for dataset/session)
-        myData = load([saveFolder db.mouseName '_' db.date '.mat']);
+        myData = load([saveFolder dbase.mouseName '_' dbase.date '.mat']);
     end
-    trialDetails = getTrialDetails(db);
+    trialDetails = getTrialDetails(dbase);
     
     %Significant-Only Traces
     if ops0.doSigOnly
@@ -200,7 +200,7 @@ for runi = sdcpStart: 1: sdcpEnd
         [mAOutput] = runMehrabR2BAnalysis(DATA, mAInput, trialDetails);
         mAOutput.normQ = (mAOutput.Q)/max(mAOutput.Q(~isinf(mAOutput.Q)));
         mAOutput_batch(runi) = mAOutput;
-        %save([saveFolder db.mouseName '_' db.date '_methodA.mat' ], 'mAInput', 'mAOutput')
+        %save([saveFolder dbase.mouseName '_' dbase.date '_methodA.mat' ], 'mAInput', 'mAOutput')
     end
     
     % ----
@@ -226,7 +226,7 @@ for runi = sdcpStart: 1: sdcpEnd
         [mBOutput] = runWilliamTIAnalysis(DATA, mBInput);
         mBOutput.normQ = (mBOutput.Q)/max(mBOutput.Q);
         mBOutput_batch(runi) = mBOutput;
-        %save([saveFolder db.mouseName '_' db.date '_methodB.mat' ], 'mBInput', 'mBOutput')
+        %save([saveFolder dbase.mouseName '_' dbase.date '_methodB.mat' ], 'mBInput', 'mBOutput')
     end
     
     % ----
@@ -240,7 +240,7 @@ for runi = sdcpStart: 1: sdcpEnd
         mCOutput.normQ1 = (mCOutput.Q1)/max(mCOutput.Q1);
         mCOutput.normQ2 = (mCOutput.Q2)/max(mCOutput.Q2);
         mCOutput_batch(runi) = mCOutput;
-        %save([saveFolder db.mouseName '_' db.date '_methodC.mat' ], 'mCInput', 'mCOutput')
+        %save([saveFolder dbase.mouseName '_' db.date '_methodC.mat' ], 'mCInput', 'mCOutput')
     end
     
     % ----
@@ -252,12 +252,12 @@ for runi = sdcpStart: 1: sdcpEnd
         mDInput.gaussianSmoothing = 1; %logical
         mDInput.nSamples = 5; %for Gaussian Kernel
         mDInput.automatic = 1; %for selecting P; logical
-        mDInput.timeVector = (1:db.nFrames*size(DATA,2)) * (1/db.samplingRate); %in seconds; %For derivative
+        mDInput.timeVector = (1:dbase.nFrames*size(DATA,2)) * (1/dbase.samplingRate); %in seconds; %For derivative
         mDInput.getT = 1;
         [mDOutput] = runSeqBasedTCAnalysis(DATA, mDInput);
         mDOutput.normQ = (mDOutput.Q) ./max(mDOutput.Q);
         mDOutput_batch(runi) = mDOutput;
-        %save([saveFolder db.mouseName '_' db.date '_methodD.mat' ], 'mDInput', 'mDOutput')
+        %save([saveFolder dbase.mouseName '_' dbase.date '_methodD.mat' ], 'mDInput', 'mDOutput')
     end
     
     % ----
@@ -292,7 +292,7 @@ for runi = sdcpStart: 1: sdcpEnd
         [mEOutput] = runSVMClassification(DATA, mEInput);
         mEOutput.normQ = (mEOutput.Q) ./max(mEOutput.Q);
         mEOutput_batch(runi) = mEOutput;
-        %save([saveFolder db.mouseName '_' db.date '_methodE.mat' ], 'mEInput', 'mEOutput')
+        %save([saveFolder dbase.mouseName '_' dbase.date '_methodE.mat' ], 'mEInput', 'mEOutput')
     end
     
     % ----
@@ -309,7 +309,7 @@ for runi = sdcpStart: 1: sdcpEnd
         mFOutput.normQ1 = (mFOutput.Q1)/max(mFOutput.Q1);
         mFOutput.normQ2 = (mFOutput.Q2)/max(mFOutput.Q2);
         mFOutput_batch(runi) = mFOutput;
-        %save([saveFolder db.mouseName '_' db.date '_methodF.mat' ], 'mFInput', 'mFOutput')
+        %save([saveFolder dbase.mouseName '_' dbase.date '_methodF.mat' ], 'mFInput', 'mFOutput')
     end
 end
 
@@ -318,51 +318,51 @@ if ops0.saveData
     disp('Saving everything ...')
     if ops0.loadSyntheticData
         if runA
-            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodA_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mAInput', 'mAOutput_batch', '-v7.3')
+            save([saveFolder dbase.mouseName '_' dbase.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodA_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mAInput', 'mAOutput_batch', '-v7.3')
         end
         
         if runB
-            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodB_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mBInput', 'mBOutput_batch', '-v7.3')
+            save([saveFolder dbase.mouseName '_' dbase.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodB_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mBInput', 'mBOutput_batch', '-v7.3')
         end
         
         if runC
-            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodC_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mCInput', 'mCOutput_batch', '-v7.3')
+            save([saveFolder dbase.mouseName '_' dbase.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodC_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mCInput', 'mCOutput_batch', '-v7.3')
         end
         
         if runD
-            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodD_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mDInput', 'mDOutput_batch', '-v7.3')
+            save([saveFolder dbase.mouseName '_' dbase.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodD_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mDInput', 'mDOutput_batch', '-v7.3')
         end
         
         if runE
-            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodE_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
+            save([saveFolder dbase.mouseName '_' dbase.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodE_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
         end
         
         if runF
-            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodF_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mFInput', 'mFOutput_batch', '-v7.3')
+            save([saveFolder dbase.mouseName '_' dbase.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodF_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mFInput', 'mFOutput_batch', '-v7.3')
         end
     else %Real Physiology Data
         if runA
-            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodA_batch.mat' ], 'mAInput', 'mAOutput_batch', '-v7.3')
+            save([saveFolder dbase.mouseName '_' dbase.date '_realDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodA_batch.mat' ], 'mAInput', 'mAOutput_batch', '-v7.3')
         end
         
         if runB
-            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodB_batch.mat' ], 'mBInput', 'mBOutput_batch', '-v7.3')
+            save([saveFolder dbase.mouseName '_' dbase.date '_realDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodB_batch.mat' ], 'mBInput', 'mBOutput_batch', '-v7.3')
         end
         
         if runC
-            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodC_batch.mat' ], 'mCInput', 'mCOutput_batch', '-v7.3')
+            save([saveFolder dbase.mouseName '_' dbase.date '_realDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodC_batch.mat' ], 'mCInput', 'mCOutput_batch', '-v7.3')
         end
         
         if runD
-            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodD_batch.mat' ], 'mDInput', 'mDOutput_batch', '-v7.3')
+            save([saveFolder dbase.mouseName '_' dbase.date '_realDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodD_batch.mat' ], 'mDInput', 'mDOutput_batch', '-v7.3')
         end
         
         if runE
-            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodE_batch.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
+            save([saveFolder dbase.mouseName '_' dbase.date '_realDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodE_batch.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
         end
         
         if runF
-            save([saveFolder db.mouseName '_' db.date '_realDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodF_batch.mat' ], 'mFInput', 'mFOutput_batch', '-v7.3')
+            save([saveFolder dbase.mouseName '_' dbase.date '_realDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodF_batch.mat' ], 'mFInput', 'mFOutput_batch', '-v7.3')
         end
     end
     disp('... done!')
