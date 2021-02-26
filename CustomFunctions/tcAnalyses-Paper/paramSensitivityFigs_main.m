@@ -55,6 +55,8 @@ expCase_rnd = 0;
 X_rnd_PC = zeros(9, 7); % (nMethods, nExpCases)
 %% Q vs HTR
 
+figureDetails = compileFigureDetails(16, 2, 10, 2, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+
 %dIndices = 1:1:10;
 dIndices = 21:1:30;
 expCase_seq = expCase_seq + 1
@@ -71,7 +73,7 @@ labels.titlePTC = 'Putative Time Cells';
 labels.titleOC = 'Other Time Cells';
 labels.xtitle = 'Fixed Hit Trial Ratio (%)';
 labels.ytitle = 'Normalized Quality';
-figureDetails = compileFigureDetails(16, 2, 10, 2, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+%figureDetails = compileFigureDetails(16, 2, 10, 2, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
 sensitivity = plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames);
 if plotDatasetCheck
@@ -95,7 +97,7 @@ labels.titlePTC = 'Putative Time Cells';
 labels.titleOC = 'Other Time Cells';
 labels.xtitle = 'Randomized Hit Trial Ratio (%)';
 labels.ytitle = 'Normalized Quality';
-figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+%figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
 sensitivity = plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames);
 if plotDatasetCheck
@@ -119,7 +121,7 @@ labels.titlePTC = 'Putative Time Cells';
 labels.titleOC = 'Other Time Cells';
 labels.xtitle = 'Fixed Hit Trial Ratio (%)';
 labels.ytitle = 'Normalized Quality';
-figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+%figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
 sensitivity = plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames);
 if plotDatasetCheck
@@ -143,7 +145,7 @@ labels.titlePTC = 'Putative Time Cells';
 labels.titleOC = 'Other Time Cells';
 labels.xtitle = 'Randomized Hit Trial Ratio (%)';
 labels.ytitle = 'Normalized Quality';
-figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+%figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
 sensitivity = plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames);
 if plotDatasetCheck
@@ -168,7 +170,7 @@ labels.titlePTC = 'Putative Time Cells';
 labels.titleOC = 'Other Time Cells';
 labels.xtitle = 'Gaussian Noise (%)';
 labels.ytitle = 'Normalized Quality';
-figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+%figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
 sensitivity = plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames);
 if plotDatasetCheck
@@ -192,7 +194,7 @@ labels.titlePTC = 'Putative Time Cells';
 labels.titleOC = 'Other Time Cells';
 labels.xtitle = 'Gaussian Noise (%)';
 labels.ytitle = 'Normalized Quality';
-figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+%figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
 sensitivity = plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames);
 if plotDatasetCheck
@@ -218,7 +220,7 @@ labels.titlePTC = 'Putative Time Cells';
 labels.titleOC = 'Other Time Cells';
 labels.xtitle = 'Fixed Event Width Percentile';
 labels.ytitle = 'Normalized Quality';
-figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+%figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
 sensitivity = plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames);
 if plotDatasetCheck
@@ -243,7 +245,7 @@ labels.titlePTC = 'Putative Time Cells';
 labels.titleOC = 'Other Time Cells';
 labels.xtitle = sprintf('Variable Event Width Percentile (%i stddev)', sdcp(68).eventWidth{2});
 labels.ytitle = 'Normalized Quality';
-figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+%figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
 sensitivity = plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames);
 if plotDatasetCheck
@@ -267,7 +269,7 @@ labels.titlePTC = 'Putative Time Cells';
 labels.titleOC = 'Other Time Cells';
 labels.xtitle = 'Fixed Event Width Percentile';
 labels.ytitle = 'Normalized Quality';
-figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+%figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
 sensitivity = plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames);
 if plotDatasetCheck
@@ -291,7 +293,7 @@ labels.titlePTC = 'Putative Time Cells';
 labels.titleOC = 'Other Time Cells';
 labels.xtitle = sprintf('Variable Event Width Percentile (%i stddev)', sdcp(172).eventWidth{2});
 labels.ytitle = 'Normalized Quality';
-figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+%figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
 sensitivity = plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames);
 if plotDatasetCheck
@@ -317,7 +319,7 @@ labels.titlePTC = 'Putative Time Cells';
 labels.titleOC = 'Other Time Cells';
 labels.xtitle = 'Uniform Imprecision FWHM (frames)';
 labels.ytitle = 'Normalized Quality';
-figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+%figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
 sensitivity = plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames);
 if plotDatasetCheck
@@ -365,7 +367,7 @@ labels.titlePTC = 'Putative Time Cells';
 labels.titleOC = 'Other Time Cells';
 labels.xtitle = 'Uniform Imprecision FWHM (frames)';
 labels.ytitle = 'Normalized Quality';
-figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+%figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
 sensitivity = plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames);
 if plotDatasetCheck
@@ -389,7 +391,7 @@ labels.titlePTC = 'Putative Time Cells';
 labels.titleOC = 'Other Time Cells';
 labels.xtitle = 'Normal Imprecision FWHM (frames)';
 labels.ytitle = 'Normalized Quality';
-figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+%figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %plotParamSensitivity(dIndices, normalize, labels, figureDetails, sdo_batch, cData)
 sensitivity = plotParamSensitivityLinePlot2(dIndices, normalize, labels, figureDetails, sdo_batch, cData, nMethods, nParams, useNames);
 if plotDatasetCheck
@@ -404,7 +406,8 @@ fig5 = figure(5);
 set(fig5,'Position',[200, 200, 1600, 900])
 subplot(1, 2, 1)
 imagesc(squeeze(X_seq_PC/max(max(X_seq_PC))));
-colormap('jet')
+%colormap(figureDetails.colormap)
+colormap('inferno')
 title('Sequential Activity')
 %xlabel('Experiment Cases')
 xticks([1 2 3 4 5 6 7])
@@ -422,12 +425,13 @@ set(gca, 'FontSize', figureDetails.fontSize+7)
 % print('/Users/ananth/Desktop/figs/tcAnalysisPaper/sensitivityAnalyses-Seq', ...
 %     '-dpng')
 
-%Summary - Sequence Experiments - Putative Time Cells
+%Summary - Sequence Experiments - Other Cells
 %fig6 = figure(6);
 %set(fig6,'Position',[300, 300, 800, 900])
 subplot(1, 2, 2)
 imagesc(squeeze(X_rnd_PC/max(max(X_seq_PC))));
-colormap('jet')
+%colormap(figureDetails.colormap)
+colormap('inferno')
 title('Random Activity')
 %xlabel('Experiment Cases')
 xticks([1 2 3 4 5 6 7])

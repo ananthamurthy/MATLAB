@@ -22,6 +22,7 @@ controls.startFrame = simpleInput.startFrame;
 controls.endFrame = simpleInput.endFrame;
 
 for i = 1:nIterations
+    fprintf('>>> Randomized dataset: %i of %i ...\n', i, nIterations)
     randDATA = generateRandData(DATA, controls);
     [~, randQ1(:, i), randQ2(:, i)] = simpleAnalysis(randDATA, simpleInput);
 end

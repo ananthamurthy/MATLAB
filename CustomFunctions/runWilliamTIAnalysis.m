@@ -25,6 +25,7 @@ controls.startFrame = williamInput.startFrame;
 controls.endFrame = williamInput.endFrame;
 
 for i = 1:nIterations
+    fprintf('>>> Randomized dataset: %i of %i ...\n', i, nIterations)
     randDATA = generateRandData(DATA, controls);
     %Calculate Temporal Information
     for cell = 1:nCells

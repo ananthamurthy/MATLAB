@@ -5,7 +5,9 @@ normalize = 0;
 figureDetails = compileFigureDetails(20, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 
 fig1 = figure(1);
-set(fig1,'Position',[200,200,1600, 400])
+set(fig1,'Position',[200,200,1600,200])
+
+C = distinguishable_colors(6);
 
 if normalize == 1
     %day1
@@ -14,37 +16,43 @@ if normalize == 1
         x = cData(1).methodF.mFOutput_batch(1).normQ1;
         if count == 1
             y = cData(1).methodA.mAOutput_batch(1).normQ;
-            scatter(x, y, 'b');
+            %scatter(x, y, 'b');
+            scatter(x, y, 'color', C(count, :));
             ylabel('Method A - DayA', ...
                 'FontSize', figureDetails.fontSize, ...
                 'FontWeight', 'bold')
         elseif count == 2
             y = cData(1).methodB.mBOutput_batch(1).normQ;
-            scatter(x, y, 'g');
+            %scatter(x, y, 'g');
+            scatter(x, y, 'color', C(count, :));
             ylabel('Method B - DayA', ...
                 'FontSize', figureDetails.fontSize, ...
                 'FontWeight', 'bold')
         elseif count == 3
             y = cData(1).methodC.mCOutput_batch(1).normQ1;
-            scatter(x, y, 'r');
+            %scatter(x, y, 'r');
+            scatter(x, y, 'color', C(count, :));
             ylabel('Method C1 - DayA', ...
                 'FontSize', figureDetails.fontSize, ...
                 'FontWeight', 'bold')
         elseif count == 4
             y = cData(1).methodC.mCOutput_batch(1).normQ2;
-            scatter(x, y, 'm');
+            %scatter(x, y, 'm');
+            scatter(x, y, 'color', C(count, :));
             ylabel('Method C2 - DayA', ...
                 'FontSize', figureDetails.fontSize, ...
                 'FontWeight', 'bold')
         elseif count == 5
             y = cData(1).methodD.mDOutput_batch(1).normQ;
-            scatter(x, y, 'y');
+            %scatter(x, y, 'y');
+            scatter(x, y, 'color', C(count, :));
             ylabel('Method D - DayA', ...
                 'FontSize', figureDetails.fontSize, ...
                 'FontWeight', 'bold')
         elseif count == 6
             y = cData(1).methodF.mFOutput_batch(1).normQ2;
-            scatter(x, y, 'k');
+            %scatter(x, y, 'k');
+            scatter(x, y, 'color', C(count, :));
             ylabel('Method F1-DayA', ...
                 'FontSize', figureDetails.fontSize, ...
                 'FontWeight', 'bold')

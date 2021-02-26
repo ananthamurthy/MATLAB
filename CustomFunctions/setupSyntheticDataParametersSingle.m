@@ -27,20 +27,20 @@ i = 0;
 %% Synthetic Data Parameters
 
 i = i + 1;
-sdcp(i).timeCellPercent = 100;
+sdcp(i).timeCellPercent = 50;
 sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 25;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'random';
-sdcp(i).eventWidth = {70, 3};
+sdcp(i).maxHitTrialPercent = 100;
+sdcp(i).hitTrialPercentAssignment = 'fixed';
+sdcp(i).trialOrder = 'basic';
+sdcp(i).eventWidth = {100, 1};
 sdcp(i).eventAmplificationFactor = 1;
 sdcp(i).eventTiming = 'sequential';
 sdcp(i).startFrame = 75;
 sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 5;
+sdcp(i).imprecisionFWHM = 0;
 sdcp(i).imprecisionType = 'uniform';
 sdcp(i).noise = 'gaussian';
 sdcp(i).noisePercent = 20;
-sdcp(i).randomseed = 'shuffle';
+sdcp(i).randomseed = 'default';
 sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
 rng(sdcp(i).randomseed)

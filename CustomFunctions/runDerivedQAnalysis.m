@@ -21,7 +21,7 @@ controls.endFrame = derivedQInput.endFrame;
 %controls.dbase = derivedQInput.dbase;
 
 for i = 1:nIterations
-    fprintf('>>> Randomized dataset: %i of %i ...', i, nIterations)
+    fprintf('>>> Randomized dataset: %i of %i ...\n', i, nIterations)
     randDATA = generateRandData(DATA, controls);
     [randQ1(:, i), randQ2(:, i)] = derivedQAnalysis(randDATA, derivedQInput);
 end

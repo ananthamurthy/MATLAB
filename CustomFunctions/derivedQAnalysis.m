@@ -62,11 +62,11 @@ for cell = 1:nCells
     
     noiseVar1 = evar(DATA_2D(cell, :));
     NbyS1(cell) = sqrt(noiseVar1)/maxSignal(cell);
-    fprintf('1>Cell: %i - Noise1 = %d, NbyS1 = %d\n', cell, noiseVar1, NbyS1(cell))
+    %fprintf('1>Cell: %i - Noise1 = %d, NbyS1 = %d\n', cell, noiseVar1, NbyS1(cell))
     
     noiseVar2 = estimatenoise(DATA_2D(cell, :));
     NbyS2(cell) = sqrt(noiseVar2)/maxSignal(cell);
-    fprintf('2>Cell: %i - Noise2 = %d, NbyS2 = %d\n', cell, noiseVar2, NbyS2(cell))
+    %fprintf('2>Cell: %i - Noise2 = %d, NbyS2 = %d\n', cell, noiseVar2, NbyS2(cell))
     
     b = derivedQInput.beta;
     %Find all event widths

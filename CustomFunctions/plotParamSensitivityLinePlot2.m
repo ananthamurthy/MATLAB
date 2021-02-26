@@ -4,6 +4,7 @@ ptcList = sdo_batch(dIndices(1)).ptcList; %Putative Time Cells
 ocList = sdo_batch(dIndices(1)).ocList; %Other Cells
 
 sensitivity = zeros(nMethods, 2);
+C = distinguishable_colors(9);
 
 for param = 1:nParams
     for method = 1:nMethods
@@ -73,31 +74,31 @@ if normalize
     %subplot(1, 2, 1)
     for method = 1:nMethods
         if method == 1
-            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'blue', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 2
-            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'green', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 3
-            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'red', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 4
-            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), ':cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 5
-            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), '--cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 6
-            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'yellow', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 7
-            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 8
-            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), ':magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 9
-            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), '--magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_norm_median(:, method), yPTC_norm_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         else
             error('Unknown method')
@@ -147,31 +148,31 @@ if normalize
     set(fig2,'Position',[900, 300, 500, 500])
     for method = 1:nMethods
         if method == 1
-            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'blue', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 2
-            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'green', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 3
-            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'red', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 4
-            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), ':cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 5
-            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), '--cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 6
-            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'yellow', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 7
-            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 8
-            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), ':magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 9
-            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), '--magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_norm_median(:, method), yOC_norm_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         else
             error('Unknown method')
@@ -224,31 +225,31 @@ else
     %subplot(1, 2, 1)
     for method = 1:nMethods
         if method == 1
-            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'blue', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 2
-            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'green', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 3
-            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'red', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 4
-            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), ':cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 5
-            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), '--cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 6
-            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'yellow', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 7
-            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 8
-            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), ':magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 9
-            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), '--magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yPTC_median(:, method), yPTC_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         else
             error('Unknown method')
@@ -295,31 +296,31 @@ else
     set(fig2,'Position',[900, 300, 500, 500])
     for method = 1:nMethods
         if method == 1
-            errorbar(yOC_median(:, method), yOC_stddev(:, method), 'blue', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_median(:, method), yOC_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 2
-            errorbar(yOC_median(:, method), yOC_stddev(:, method), 'green', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_median(:, method), yOC_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 3
-            errorbar(yOC_median(:, method), yOC_stddev(:, method), 'red', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_median(:, method), yOC_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 4
-            errorbar(yOC_median(:, method), yOC_stddev(:, method), ':cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_median(:, method), yOC_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 5
-            errorbar(yOC_median(:, method), yOC_stddev(:, method), '--cyan', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_median(:, method), yOC_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 6
-            errorbar(yOC_median(:, method), yOC_stddev(:, method), 'yellow', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_median(:, method), yOC_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 7
-            errorbar(yOC_median(:, method), yOC_stddev(:, method), 'black', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_median(:, method), yOC_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 8
-            errorbar(yOC_median(:, method), yOC_stddev(:, method), ':magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_median(:, method), yOC_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         elseif method == 9
-            errorbar(yOC_median(:, method), yOC_stddev(:, method), '--magenta', 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
+            errorbar(yOC_median(:, method), yOC_stddev(:, method), 'color', C(method, :), 'LineWidth', figureDetails.lineWidth, 'MarkerSize', figureDetails.markerSize);
             hold on
         else
             error('Unknown method')
