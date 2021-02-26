@@ -104,7 +104,7 @@ clear s
 
 for runi = 1:1:nDatasets
     fprintf('Currently generating dataset: %i\n', runi)
-    sdo = syntheticDataMaker(db, DATA_2D, eventLibrary_2D, sdcp(runi), runi);
+    sdo = syntheticDataMaker(dbase, DATA_2D, eventLibrary_2D, sdcp(runi), runi);
     
     %Run specifics
     scurr = rng;
