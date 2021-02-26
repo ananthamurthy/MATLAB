@@ -41,10 +41,10 @@ end
 make_dbase %Currently only for one session at a time
 
 fprintf('Reference Dataset - %s_%i_%i | Date: %s\n', ...
-    db.mouseName, ...
-    db.sessionType, ...
-    db.session, ...
-    db.date)
+    dbase.mouseName, ...
+    dbase.sessionType, ...
+    dbase.session, ...
+    dbase.date)
 
 if workingOnServer
     saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
@@ -52,10 +52,10 @@ else
     saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
 end
 
-saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
+saveFolder = strcat(saveDirec, dbase.mouseName, '/', dbase.date, '/');
 
 %% Load processed dF/F data for dataset
-realProcessedData = load(strcat(saveFolder, db.mouseName, '_', db.date, '.mat'));
+realProcessedData = load(strcat(saveFolder, dbase.mouseName, '_', dbase.date, '.mat'));
 DATA = realProcessedData.dfbf;
 DATA_2D = realProcessedData.dfbf_2D;
 nCells = size(DATA, 1);
